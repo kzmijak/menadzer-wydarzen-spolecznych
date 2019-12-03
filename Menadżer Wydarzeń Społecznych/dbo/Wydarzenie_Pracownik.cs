@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Wydarzenie_Pracownik
+    class Wydarzenie_Pracownik : IJoiningTable
     {
         public int idwydarzenia { get; set; }
         public int idpracownika { get; set; }

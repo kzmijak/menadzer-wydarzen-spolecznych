@@ -4,8 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    interface DatabaseObject
+    interface IJoiningTable
     {
-        int id { get; set; }
     }
 }

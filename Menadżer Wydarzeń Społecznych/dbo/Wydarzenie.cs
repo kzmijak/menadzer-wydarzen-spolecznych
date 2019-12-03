@@ -9,7 +9,6 @@ namespace MWS.dbo
     class Wydarzenie: DatabaseObject
     {
         public int id { get; set; }
-        public int foreign_id { get; set; }
         public string nazwa { get; set; }
         public string opis { get; set; }
         public string miejsce { get; set; }

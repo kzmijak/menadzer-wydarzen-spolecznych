@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MWS.Procedures
 {
-    interface DatabaseObjectProcedures: DatabaseObject
+    interface DatabaseObjectProcedures
     {
         void Insert(DatabaseObject dbobject);
         void Update(DatabaseObject dbobject_old, DatabaseObject dbobject_new);

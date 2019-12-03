@@ -22,10 +22,10 @@ namespace MWS.Procedures
 
         public void Update(DatabaseObject dbobject_old, DatabaseObject dbobject_new)
         {
-            (dbobject_new as Wydarzenie).foreign_id = (dbobject_old as Wydarzenie).id;
+            dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wydarzenie_Update @nazwa, @opis, @miejsce, @dzien, @godzina, @budzet, @foreign_id", dbobject_new);
+                connection.Execute("dbo.Wydarzenie_Update @id, @nazwa, @opis, @miejsce, @dzien, @godzina, @budzet", dbobject_new);
             }
         }
 
@@ -43,7 +43,7 @@ namespace MWS.Procedures
             {
                 foreach (Wydarzenie w in connection.Query<Wydarzenie>("dbo.Wydarzenie_Select"))
                 {
-                    if (w.id == (dbobject as Wydarzenie).id)
+                    if (w.id == dbobject.id)
                         return w;
                 }
             }

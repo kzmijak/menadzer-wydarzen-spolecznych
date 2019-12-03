@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MWS.dbo;
 using MWS.Lines;
 
 namespace MWS.Pages
@@ -34,7 +35,7 @@ namespace MWS.Pages
                         login.Content = "Login: ";
                         DisplayAdapter.Refresh(this);
                     }
-                    login.Content += " " + Console.ReadLine();
+                    login.Content += Console.ReadLine();
                     DisplayAdapter.Refresh(this);
                     break;
                 case 2:
@@ -43,11 +44,17 @@ namespace MWS.Pages
                         password.Content = "Haslo: ";
                         DisplayAdapter.Refresh(this);
                     }
-                    password.Content += " " + Console.ReadLine();
+                    password.Content += Console.ReadLine();
                     DisplayAdapter.Refresh(this);
                     break;
                 case 3:
-                    throw new NotImplementedException();
+                    Logowanie log = new Logowanie
+                    {
+                        login = login.Content.Substring(7),
+                        haslo = password.Content.Substring(7)
+                    };
+                    if (DataAccess.Logowanie.CheckCredentials(log) == 0)
+                        DisplayAdapter.Display(new LoginError(new LoginSponsor()));
                     break;
                 case 4:
                     DisplayAdapter.Display(new Login());
