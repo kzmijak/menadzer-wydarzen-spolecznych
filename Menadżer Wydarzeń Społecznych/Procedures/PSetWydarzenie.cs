@@ -5,11 +5,11 @@ using System.Text;
 using Dapper;
 using System.Data;
 using System.Linq;
-
+using MWS.Pages;
 
 namespace MWS.Procedures
 {
-    class PSetWydarzenie: DatabaseObjectProcedures
+    class PSetWydarzenie : DatabaseObjectProcedures
     {
         public void Insert(DatabaseObject dbobject)
         {
@@ -41,7 +41,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                foreach(Wydarzenie w in connection.Query<Wydarzenie>("dbo.Wydarzenie_Select"))
+                foreach (Wydarzenie w in connection.Query<Wydarzenie>("dbo.Wydarzenie_Select"))
                 {
                     if (w.id == (dbobject as Wydarzenie).id)
                         return w;
@@ -65,7 +65,6 @@ namespace MWS.Procedures
             {
                 return connection.Query<Wydarzenie>("dbo.Wydarzenie_Select").Cast<DatabaseObject>().ToList();
             }
-            
         }
     }
 }

@@ -16,7 +16,7 @@ namespace MWS
             Display(new Login());   
         }
 
-        private static void Select(int v)
+        public static void Select(int v)
         {
             try
             {
