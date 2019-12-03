@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Menadżer_Wydarzeń_Społecznych.Lines;
-using Menadżer_Wydarzeń_Społecznych.Pages;
+using MWS.dbo;
+using MWS.Lines;
+using MWS.Pages;
 
-namespace Menadżer_Wydarzeń_Społecznych.Pages
+namespace MWS.Pages
 {
     class Login : Page
     {
@@ -16,9 +17,9 @@ namespace Menadżer_Wydarzeń_Społecznych.Pages
             Line.LastIndex = 0;
 
             this.Contents.Add(new StaticLine("THIS IS THE INITIAL LOGIN PAGE"));
-            this.Contents.Add(new ActiveLine("Test message"));
-            this.Contents.Add(new ActiveLine("Open different page"));
-            this.Contents.Add(new ActiveLine("Test user input"));
+            this.Contents.Add(new ActiveLine("Add record to the database"));
+            this.Contents.Add(new StaticLine("Update a record from the database"));
+            this.Contents.Add(new ActiveLine("Delete a record from the database"));
         }
         
         public void React(Line line)
@@ -26,7 +27,21 @@ namespace Menadżer_Wydarzeń_Społecznych.Pages
             switch(line.Index)
             {
                 case 1:
-                    Console.WriteLine("Success");
+                    Wydarzenie w = new Wydarzenie();
+                    this.Contents.Add(new StaticLine("Name: "));
+                    w.nazwa = Console.ReadLine();
+                    this.Contents.Add(new StaticLine("Description: "));
+                    w.opis = Console.ReadLine();
+                    this.Contents.Add(new StaticLine("Place: "));
+                    w.miejsce = Console.ReadLine();
+                    this.Contents.Add(new StaticLine("Day: "));
+                    w.dzien = DateTime.Parse(Console.ReadLine());
+                    this.Contents.Add(new StaticLine("Hour: "));
+                    w.godzina = TimeSpan.Parse(Console.ReadLine());
+                    this.Contents.Add(new StaticLine("Budget: "));
+                    w.budzet = Int32.Parse(Console.ReadLine());
+                    DataAccess.Wydarzenie.Insert(w);
+                    Console.WriteLine("DONE");
                     break;
                 case 2:
                     DisplayAdapter.Display(new OtherPage());

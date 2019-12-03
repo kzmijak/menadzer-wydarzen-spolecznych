@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Menadżer_Wydarzeń_Społecznych.Pages;
-using Menadżer_Wydarzeń_Społecznych.Lines;
+using MWS.Pages;
+using MWS.Lines;
 
-namespace Menadżer_Wydarzeń_Społecznych
+namespace MWS
 {
     class DisplayAdapter
     {
@@ -13,7 +13,7 @@ namespace Menadżer_Wydarzeń_Społecznych
 
         static void Main(string[] args)
         {
-            Display(new Login());
+            Display(new Login());   
         }
 
         private static void Select(int v)
@@ -24,6 +24,13 @@ namespace Menadżer_Wydarzeń_Społecznych
                 {
                     (CurrentLine as ActiveLine).Toggle();
                     CurrentLine = CurrentPage.Contents[CurrentLine.Index + v];
+                    (CurrentLine as ActiveLine).Toggle();
+                    Refresh(CurrentPage);
+                }
+                else if(CurrentPage.Contents[CurrentLine.Index + 2*v] is ActiveLine && CurrentPage.Contents[CurrentLine.Index + 2*v] != null)
+                {
+                    (CurrentLine as ActiveLine).Toggle();
+                    CurrentLine = CurrentPage.Contents[CurrentLine.Index + 2*v];
                     (CurrentLine as ActiveLine).Toggle();
                     Refresh(CurrentPage);
                 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Menadżer_Wydarzeń_Społecznych.Lines;
+using MWS.Lines;
 
-namespace Menadżer_Wydarzeń_Społecznych.Pages
+namespace MWS.Pages
 {
     class OtherPage : Page
     {
