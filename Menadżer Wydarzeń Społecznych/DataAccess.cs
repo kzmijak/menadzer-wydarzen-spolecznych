@@ -18,6 +18,7 @@ namespace MWS
         public static PSetPlatnosc Platnosc { get; set; } = new PSetPlatnosc();
         public static PSetPracownik Pracownik { get; set; } = new PSetPracownik();
         public static PSetUczestnik Uczestnik { get; set; } = new PSetUczestnik();
+        public static PSetSponsor Sponsor { get; set; } = new PSetSponsor();
         public static PSetWydarzenie Wydarzenie { get; set; } = new PSetWydarzenie();
 
         public static JPSetPracownik_Pracownik Pracownik_Pracownik { get; set; } = new JPSetPracownik_Pracownik();

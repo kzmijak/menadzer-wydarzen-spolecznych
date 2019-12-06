@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Dapper;
+using MWS.dbo;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Dapper;
-using MWS.dbo;
 
 namespace MWS.Procedures
 {
-    class PSetPracownik : DatabaseObjectProcedures
+    class PSetSponsor: DatabaseObjectProcedures
     {
         public void Delete(DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Pracownik_Delete @id", dbobject);
+                connection.Execute("dbo.Sponsor_Delete @id", dbobject);
             }
         }
 
@@ -22,7 +22,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<Pracownik>("dbo.Pracownik_GetCollection").Cast<DatabaseObject>().ToList();
+                return connection.Query<DatabaseObject>("dbo.Sponsor_GetCollection").ToList();
             }
         }
 
@@ -30,7 +30,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Pracownik>("dbo.Pracownik_GetRecord @stanowisko, @wynagrodzenie", dbobject);//new { stanowisko = (dbobject as Pracownik).stanowisko, wynagrodzenie = (dbobject as Pracownik).wynagrodzenie });
+                return connection.QuerySingle<Sponsor>("dbo.Sponsor_GetRecord @id", dbobject);
             }
         }
 
@@ -38,7 +38,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle("dbo.Pracownik_GetRecord @id", new { id });
+                return connection.QuerySingle<Sponsor>("dbo.Sponsor_GetRecord @id", new { id });
             }
         }
 
@@ -46,7 +46,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Pracownik>("dbo.Pracownik_Insert @stanowisko, @wynagrodzenie", dbobject);
+                return connection.QuerySingle<Sponsor>("dbo.Sponsor_Insert @nazwa", dbobject);
             }
         }
 
@@ -55,7 +55,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Pracownik_Update @id, @stanowisko, @wynagrodzenie", dbobject_new);
+                connection.Execute("dbo.Sponsor_Update @id, @nazwa", dbobject_new);
             }
         }
     }

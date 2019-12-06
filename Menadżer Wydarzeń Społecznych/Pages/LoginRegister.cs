@@ -1,0 +1,387 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using MWS.dbo;
+using MWS.Lines;
+
+namespace MWS.Pages
+{
+    class LoginRegister : Page, DatabaseObject
+    {
+        public int id { get; set; }
+        public List<Line> Contents { get; set; }
+        public Page caller { get; set; }
+        
+        public string login { get; set; }
+        public string haslo { get; set; }
+        public string haslo2 { get; set; }
+        public int idpracownika { get; set; }
+        public int idsponsora { get; set; }
+        public int iduczestnika { get; set; }
+        public string imie { get; set; }
+        public string nazwisko { get; set; }
+        public string telefon { get; set; }
+        public string email { get; set; }
+        public string miejscowosc { get; set; }
+        public string nrdomu { get; set; }
+        public string miasto { get; set; }
+        public string poczta { get; set; }
+        public string ulica { get; set; }
+        public string stanowisko { get; set; }
+        public string nazwa { get; set; }
+        public int fid { get; set; }
+
+        LoginRegister() { }
+
+        public LoginRegister(Page caller, StaticLine note = null, LoginRegister update = null)
+        {
+            if(update is null)
+                update = new LoginRegister();
+
+            Contents = new List<Line>(21);
+            this.caller = caller;
+            Line.LastIndex = 0;
+
+            login = update.login;
+            haslo = update.haslo;
+            haslo2 = update.haslo2;
+            idpracownika = update.idpracownika;
+            idsponsora = update.idsponsora;
+            iduczestnika = update.iduczestnika;
+            imie = update.imie;
+            nazwisko = update.nazwisko;
+            telefon = update.telefon;
+            email = update.email;
+            miejscowosc = update.miejscowosc;
+            nrdomu = update.nrdomu;
+            miasto = update.miasto;
+            poczta = update.poczta;
+            ulica = update.ulica;
+            stanowisko = update.stanowisko;
+            nazwa = update.nazwa;
+            fid = update.fid;
+
+            Contents.Add(new StaticLine("REJESTRACJA UŻYTKOWNIKA"));                   //0
+            Contents.Add(new StaticLine("Dane logowania"));                            //1
+            Contents.Add(new ActiveLine("Login: \t\t" + login));                  //2
+            Contents.Add(new ActiveLine("Hasło: \t\t" + encode(haslo)));          //3
+            Contents.Add(new ActiveLine("Powtórz hasło: \t" + encode(haslo2))); //4
+
+            if(!(caller is LoginSponsor))
+            {
+                Contents.Add(new StaticLine("Dane kontaktowe"));                //5
+                Contents.Add(new ActiveLine("Imię: \t\t" + imie));                //6
+                Contents.Add(new ActiveLine("Nazwisko: \t" + nazwisko));        //7
+                Contents.Add(new ActiveLine("Telefon: \t" + telefon));          //8
+                Contents.Add(new ActiveLine("Email: \t\t" + email));              //9
+                Contents.Add(new ActiveLine("Miejscowość: \t" + miejscowosc));  //10
+                Contents.Add(new ActiveLine("Numer domu: \t" + nrdomu));        //11
+                Contents.Add(new ActiveLine("Miasto: \t" + miasto));            //12
+                Contents.Add(new ActiveLine("Poczta: \t" + poczta));            //13
+                Contents.Add(new ActiveLine("Ulica: \t\t" + ulica));              //14
+            }
+            if(caller is LoginPracownik)
+            {
+                Contents.Add(new ActiveLine("Stanowisko: \t" + update.stanowisko));    //P:15
+            }
+            if(caller is LoginSponsor)
+            {
+                Contents.Add(new ActiveLine("Nazwa organizacji: \t" + update.nazwa));  //S:5
+            }
+            Contents.Add(new StaticLine(""));                                   //S:P :U
+            Contents.Add(new ActiveLine("Zarejestruj"));                        //6:16:15
+            Contents.Add(new ActiveLine("Cofnij zmiany"));                      //7:17:16
+            Contents.Add(new ActiveLine("Anuluj"));                             //8:18:17
+
+            if (!(note is null))
+                this.Contents.Add(note);
+        }
+        
+        public void React(Line line)
+        {
+            if (caller is LoginPracownik)
+                pracownik(line.Index);
+            if (caller is LoginSponsor)
+                sponsor(line.Index);
+            if (caller is LoginUczestnik)
+                uczestnik(line.Index);
+        }
+
+        private static string encode(string s)
+        {
+            string coded = "";
+            if(s != null)
+                foreach (char c in s)
+                    coded += "*";
+            return coded;
+        }
+
+        private void pracownik(int i)
+        {
+            switch(i)
+            {
+                case 2:
+                    login = Console.ReadLine();
+                    break;
+                case 3:
+                    haslo = Console.ReadLine();
+                    break;
+                case 4:
+                    haslo2 = Console.ReadLine();
+                    break;
+                case 6:
+                    imie = Console.ReadLine();
+                    break;
+                case 7:
+                    nazwisko = Console.ReadLine();
+                    break;
+                case 8:
+                    telefon = Console.ReadLine();
+                    break;
+                case 9:
+                    email = Console.ReadLine();
+                    break;
+                case 10:
+                    miejscowosc = Console.ReadLine();
+                    break;
+                case 11:
+                    nrdomu = Console.ReadLine();
+                    break;
+                case 12:
+                    miasto = Console.ReadLine();
+                    break;
+                case 13:
+                    poczta = Console.ReadLine();
+                    break;
+                case 14:
+                    ulica = Console.ReadLine();
+                    break;
+                case 15:
+                    stanowisko = Console.ReadLine();
+                    break;
+                case 17:
+                    if (!(login is null) && !(String.IsNullOrEmpty(haslo)) && haslo == haslo2)
+                    {
+                        Pracownik pracownik = new Pracownik
+                        {
+                            stanowisko = this.stanowisko
+                        };
+
+                        pracownik = DataAccess.Pracownik.Insert(pracownik) as Pracownik;
+                        Console.WriteLine(pracownik.id);
+
+                        Logowanie login = new Logowanie
+                        {
+                            login = this.login,
+                            haslo = this.haslo,
+                            idpracownika = pracownik.id
+                        };
+
+                        DataAccess.Logowanie.Insert(login);
+
+                        Kontakt kontakt = new Kontakt
+                        {
+                            imie = this.imie,
+                            nazwisko = this.nazwisko,
+                            telefon = this.telefon,
+                            email = this.email,
+                            miejscowosc = this.miejscowosc,
+                            nrdomu = this.nrdomu,
+                            miasto = this.miasto,
+                            poczta = this.poczta,
+                            ulica = this.ulica,
+                            idpracownika = pracownik.id
+                        };
+
+                        DataAccess.Kontakt.Insert(kontakt);
+
+                        DisplayAdapter.Display(new LoginPracownik(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
+                    }
+                    else
+                    {
+                        StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
+                        haslo = null;
+                        haslo2 = null;
+                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                    }
+                    break;
+                case 18:
+                    DisplayAdapter.Display(new LoginRegister(caller, null, null));
+                    break;
+                case 19:
+                    DisplayAdapter.Display(new Login());
+                    break;
+            }
+            DisplayAdapter.Display(new LoginRegister(caller, null, this), DisplayAdapter.CurrentLine);
+        }
+
+        private void uczestnik(int i)
+        {
+            switch (i)
+            {
+                case 2:
+                    login = Console.ReadLine();
+                    break;
+                case 3:
+                    haslo = Console.ReadLine();
+                    break;
+                case 4:
+                    haslo2 = Console.ReadLine();
+                    break;
+                case 6:
+                    imie = Console.ReadLine();
+                    break;
+                case 7:
+                    nazwisko = Console.ReadLine();
+                    break;
+                case 8:
+                    telefon = Console.ReadLine();
+                    break;
+                case 9:
+                    email = Console.ReadLine();
+                    break;
+                case 10:
+                    miejscowosc = Console.ReadLine();
+                    break;
+                case 11:
+                    nrdomu = Console.ReadLine();
+                    break;
+                case 12:
+                    miasto = Console.ReadLine();
+                    break;
+                case 13:
+                    poczta = Console.ReadLine();
+                    break;
+                case 14:
+                    ulica = Console.ReadLine();
+                    break;
+                case 16:
+                    if (!(login is null) && !(String.IsNullOrEmpty(haslo)) && haslo == haslo2)
+                    {
+                        var rnd = new Random();
+                        Uczestnik uczestnik = new Uczestnik { fid = rnd.Next(10000,99999) };
+
+                        uczestnik = DataAccess.Uczestnik.Insert(uczestnik) as Uczestnik;
+
+                        Logowanie login = new Logowanie
+                        {
+                            login = this.login,
+                            haslo = this.haslo,
+                            iduczestnika = uczestnik.id
+                        };
+
+                        DataAccess.Logowanie.Insert(login);
+
+                        Kontakt kontakt = new Kontakt
+                        {
+                            imie = this.imie,
+                            nazwisko = this.nazwisko,
+                            telefon = this.telefon,
+                            email = this.email,
+                            miejscowosc = this.miejscowosc,
+                            nrdomu = this.nrdomu,
+                            miasto = this.miasto,
+                            poczta = this.poczta,
+                            ulica = this.ulica,
+                            iduczestnika = uczestnik.id
+                        };
+
+                        DataAccess.Kontakt.Insert(kontakt);
+
+                        DisplayAdapter.Display(new LoginUczestnik(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
+                    }
+                    else
+                    {
+                        StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
+                        haslo = null;
+                        haslo2 = null;
+                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                    }
+                    break;
+                case 17:
+                    DisplayAdapter.Display(new LoginRegister(caller, null, null));
+                    break;
+                case 18:
+                    DisplayAdapter.Display(new Login());
+                    break;
+            }
+            DisplayAdapter.Display(new LoginRegister(caller, null, this), DisplayAdapter.CurrentLine);
+        }
+
+        private void sponsor(int i)
+        {
+            switch (i)
+            {
+                case 2:
+                    login = Console.ReadLine();
+                    break;
+                case 3:
+                    haslo = Console.ReadLine();
+                    break;
+                case 4:
+                    haslo2 = Console.ReadLine();
+                    break;
+                case 5:
+                    nazwa = Console.ReadLine();
+                    break;
+                case 7:
+                    if (!(login is null) && !(String.IsNullOrEmpty(haslo)) && haslo == haslo2)
+                    {
+                        Sponsor sponsor = new Sponsor
+                        {
+                            nazwa = this.nazwa
+                        };
+
+                        sponsor = DataAccess.Sponsor.Insert(sponsor) as Sponsor;
+
+                        Logowanie login = new Logowanie
+                        {
+                            login = this.login,
+                            haslo = this.haslo,
+                            idsponsora = sponsor.id
+                        };
+
+                        DataAccess.Logowanie.Insert(login);
+
+                        DisplayAdapter.Display(new LoginSponsor(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
+                    }
+                    else
+                    {
+                        StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
+                        haslo = null;
+                        haslo2 = null;
+                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                    }
+                    break;
+                case 8:
+                    DisplayAdapter.Display(new LoginRegister(caller, null, null));
+                    break;
+                case 9:
+                    DisplayAdapter.Display(new Login());
+                    break;
+            }
+            DisplayAdapter.Display(new LoginRegister(caller, null, this), DisplayAdapter.CurrentLine);
+        }
+
+
+
+
+        private void Reset()
+        {
+            login = "";
+            haslo = "";
+            haslo2 = "";
+            nazwisko = "";
+            telefon = "";
+            email = "";
+            miejscowosc = "";
+            nrdomu = "";
+            miasto = "";
+            poczta = "";
+            ulica = "";
+            stanowisko = "";
+            nazwa = "";
+            DisplayAdapter.Refresh(this);
+        }
+    }
+}

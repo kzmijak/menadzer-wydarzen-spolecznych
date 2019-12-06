@@ -1,22 +1,52 @@
-﻿using MWS.dbo;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Dapper;
 using System.Data;
 using System.Linq;
-using MWS.Pages;
+using System.Text;
+using Dapper;
+using MWS.dbo;
 
 namespace MWS.Procedures
 {
     class PSetWydarzenie : DatabaseObjectProcedures
     {
-        public void Insert(DatabaseObject dbobject)
+        public void Delete(DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wydarzenie_Insert @nazwa, @opis, @miejsce, @dzien, @godzina, @budzet",
-                                   dbobject);
+                connection.Execute("dbo.Wydarzenie_Delete @id", dbobject);
+            }
+        }
+
+        public List<DatabaseObject> GetCollection()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
+            {
+                return connection.Query<DatabaseObject>("dbo.Wydarzenie_GetCollection").ToList();
+            }
+        }
+
+        public DatabaseObject GetRecord(DatabaseObject dbobject)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
+            {
+                return connection.QuerySingle<Wydarzenie>("dbo.Wydarzenie_GetRecord @id", dbobject);
+            }
+        }
+
+        public DatabaseObject GetRecordById(int id)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
+            {
+                return connection.QuerySingle<Wydarzenie>("dbo.Wydarzenie_GetRecord @id", new { id });
+            }
+        }
+
+        public DatabaseObject Insert(DatabaseObject dbobject)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
+            {
+                return connection.QuerySingle<Wydarzenie>("dbo.Wydarzenie_Insert @nazwa, @opis, @miejsce, @dzien, @godzina, @budzet", dbobject);
             }
         }
 
@@ -26,44 +56,6 @@ namespace MWS.Procedures
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
                 connection.Execute("dbo.Wydarzenie_Update @id, @nazwa, @opis, @miejsce, @dzien, @godzina, @budzet", dbobject_new);
-            }
-        }
-
-        public void Delete(DatabaseObject dbobject)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
-            {
-                connection.Execute("dbo.Wydarzenie_Delete @id", dbobject);
-            }
-        }
-
-        public DatabaseObject GetRecord(DatabaseObject dbobject)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
-            {
-                foreach (Wydarzenie w in connection.Query<Wydarzenie>("dbo.Wydarzenie_Select"))
-                {
-                    if (w.id == dbobject.id)
-                        return w;
-                }
-            }
-            return null;
-        }
-
-        public DatabaseObject GetRecordById(int id)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
-            {
-                var output = connection.Query<Wydarzenie>("dbo.Wydarzenie_GetRecord @id", new { id }).ToList()[0];
-                return output;
-            }
-        }
-
-        public List<DatabaseObject> GetCollection()
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
-            {
-                return connection.Query<Wydarzenie>("dbo.Wydarzenie_Select").Cast<DatabaseObject>().ToList();
             }
         }
     }

@@ -12,7 +12,7 @@ namespace MWS.Pages
         public ActiveLine login { get; set; }
         public ActiveLine password { get; set; }
 
-        public LoginSponsor()
+        public LoginSponsor(StaticLine note = null)
         {
             Contents = new List<Line>(5);
             Line.LastIndex = 0;
@@ -22,7 +22,11 @@ namespace MWS.Pages
             Contents.Add(login);
             Contents.Add(password);
             Contents.Add(new ActiveLine("Zaloguj"));
+            Contents.Add(new ActiveLine("Zarejestruj"));
             Contents.Add(new ActiveLine("Powrot"));
+
+            if (!(note is null))
+                this.Contents.Add(note);
         }
 
         public void React(Line line)
@@ -54,9 +58,12 @@ namespace MWS.Pages
                         haslo = password.Content.Substring(7)
                     };
                     if (DataAccess.Logowanie.CheckCredentials(log) == 0)
-                        DisplayAdapter.Display(new LoginError(new LoginSponsor()));
+                        DisplayAdapter.Display(new LoginSponsor(new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
                     break;
                 case 4:
+                    DisplayAdapter.Display(new LoginRegister(new LoginSponsor()));
+                    break;
+                case 5:
                     DisplayAdapter.Display(new Login());
                     break;
             }

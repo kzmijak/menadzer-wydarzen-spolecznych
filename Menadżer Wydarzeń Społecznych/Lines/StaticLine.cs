@@ -6,11 +6,11 @@ namespace MWS.Lines
 {
     class StaticLine: Line
     {
-        public StaticLine(string Content)
+        public StaticLine(string Content, ConsoleColor color = ConsoleColor.Yellow)
         {
             this.Content = Content;
             this.Index = LastIndex;
-            this.Color = ConsoleColor.Yellow;
+            this.Color = color;
             this.Background = ConsoleColor.Black;
             Line.LastIndex++;
         }

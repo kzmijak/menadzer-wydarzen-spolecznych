@@ -11,17 +11,21 @@ namespace MWS.Pages
     {
         public List<Line> Contents { get; set; }
         
-        public Login()
+        public Login(StaticLine note = null)
         {
             this.Contents = new List<Line>(10);
             Line.LastIndex = 0;
 
             this.Contents.Add(new StaticLine("MENDAŻER WYDARZEŃ SPOŁECZNYCH"));
             this.Contents.Add(new StaticLine("Logowanie użytkownika"));
-            this.Contents.Add(new ActiveLine("Zaloguj jako pracownik"));
-            this.Contents.Add(new ActiveLine("Zaloguj jako sponsor"));
-            this.Contents.Add(new ActiveLine("Zaloguj jako uczestnik"));
+            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako pracownik"));
+            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako sponsor"));
+            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako uczestnik"));
+            
+            if (!(note is null))
+                this.Contents.Add(note);
         }
+
         
         public void React(Line line)
         {

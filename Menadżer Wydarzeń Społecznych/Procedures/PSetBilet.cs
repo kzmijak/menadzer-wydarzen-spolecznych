@@ -30,7 +30,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.Bilet_GetRecord @id", dbobject).ToList()[0];
+                return connection.QuerySingle<Bilet>("dbo.Bilet_GetRecord @id", dbobject);
             }
         }
 
@@ -38,15 +38,15 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.Bilet_GetRecord @id", new { id }).ToList()[0];
+                return connection.QuerySingle<Bilet>("dbo.Bilet_GetRecord @id", new { id });
             }
         }
 
-        public void Insert(DatabaseObject dbobject)
+        public DatabaseObject Insert(DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Bilet_Insert @nazwa, @cena, @opis", dbobject);
+                return connection.QuerySingle<Bilet>("dbo.Bilet_Insert @nazwa, @cena, @opis", dbobject);
             }
         }
 

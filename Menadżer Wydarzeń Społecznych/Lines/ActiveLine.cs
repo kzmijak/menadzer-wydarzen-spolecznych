@@ -8,15 +8,16 @@ namespace MWS.Lines
     {
         public bool Selected { get; set; }
 
-        public ActiveLine(string Content)
+        public ActiveLine(string Content, ConsoleColor color = ConsoleColor.White)
         {
             this.Content = Content;
             this.Index = LastIndex;
             this.Selected = false;
-            this.Color = ConsoleColor.White;
+            this.Color = color;
             this.Background = ConsoleColor.Black;
             Line.LastIndex++;
         }
+
 
         public void Toggle()
         {

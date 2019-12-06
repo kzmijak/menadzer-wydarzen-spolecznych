@@ -7,7 +7,7 @@ namespace MWS.Procedures
 {
     interface DatabaseObjectProcedures
     {
-        void Insert(DatabaseObject dbobject);
+        DatabaseObject Insert(DatabaseObject dbobject);
         void Update(DatabaseObject dbobject_old, DatabaseObject dbobject_new);
         void Delete(DatabaseObject dbobject);
         DatabaseObject GetRecord(DatabaseObject dbobject);

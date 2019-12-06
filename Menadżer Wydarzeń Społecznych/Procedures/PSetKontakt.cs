@@ -38,15 +38,15 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.Kontakt_GetRecord @id", new { id }).ToList()[0];
+                return connection.QuerySingle<Kontakt>("dbo.Kontakt_GetRecord @id", new { id });
             }
         }
 
-        public void Insert(DatabaseObject dbobject)
+        public DatabaseObject Insert(DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Kontakt_Insert @imie, @nazwisko, @telefon, @email, @miejscowosc, @nrdomu, @miast, @poczta, @ulica, @idpracownika, @iduczestnika", dbobject);
+                return connection.QuerySingle<Kontakt>("dbo.Kontakt_Insert @imie, @nazwisko, @telefon, @email, @miejscowosc, @nrdomu, @miasto, @poczta, @ulica, @idpracownika, @iduczestnika", dbobject);
             }
         }
 
@@ -55,7 +55,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Kontakt_Update @id, @imie, @nazwisko, @telefon, @email, @miejscowosc, @nrdomu, @miast, @poczta, @ulica, @idpracownika, @iduczestnika", dbobject_new);
+                connection.QuerySingle<Kontakt>("dbo.Kontakt_Update @id, @imie, @nazwisko, @telefon, @email, @miejscowosc, @nrdomu, @miast, @poczta, @ulica, @idpracownika, @iduczestnika", dbobject_new);
             }
         }
     }

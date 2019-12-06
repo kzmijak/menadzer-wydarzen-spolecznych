@@ -16,35 +16,51 @@ namespace MWS
             Display(new Login());   
         }
 
-        public static void Select(int v)
+        public static void FindNextValidLine(Line currentline, int direction)
         {
-            try
+            int lineChecked = currentline.Index;
+            do
             {
-                if (CurrentPage.Contents[CurrentLine.Index + v] is ActiveLine && CurrentPage.Contents[CurrentLine.Index + v]!=null)
+                if (lineChecked + direction < 0)
                 {
-                    (CurrentLine as ActiveLine).Toggle();
-                    CurrentLine = CurrentPage.Contents[CurrentLine.Index + v];
+                    if (CurrentPage.Contents[CurrentPage.Contents.Count - 1] is ActiveLine)
+                    {
+                        CurrentLine = CurrentPage.Contents[CurrentPage.Contents.Count - 1];
+                        (CurrentLine as ActiveLine).Toggle();
+                        Refresh(CurrentPage);
+                        break;
+                    }
+                    else
+                        lineChecked = CurrentPage.Contents.Count;
+                }
+                else if (lineChecked + direction == CurrentPage.Contents.Count)
+                {
+                    if (CurrentPage.Contents[0] is ActiveLine)
+                    {
+                        CurrentLine = CurrentPage.Contents[0];
+                        (CurrentLine as ActiveLine).Toggle();
+                        Refresh(CurrentPage);
+                        break;
+                    }
+                    else
+                        lineChecked = 0;
+                }
+                else if (CurrentPage.Contents[lineChecked + direction] is ActiveLine)
+                {
+                    CurrentLine = CurrentPage.Contents[lineChecked + direction];
                     (CurrentLine as ActiveLine).Toggle();
                     Refresh(CurrentPage);
+                    break;
                 }
-                else if(CurrentPage.Contents[CurrentLine.Index + 2*v] is ActiveLine && CurrentPage.Contents[CurrentLine.Index + 2*v] != null)
-                {
-                    (CurrentLine as ActiveLine).Toggle();
-                    CurrentLine = CurrentPage.Contents[CurrentLine.Index + 2*v];
-                    (CurrentLine as ActiveLine).Toggle();
-                    Refresh(CurrentPage);
-                }
+                lineChecked += direction;
             }
-            catch(ArgumentOutOfRangeException)
-            {
-                return;
-            }
+            while (true);
         }
 
-        public static void Display(Page Page)
+        public static void Display(Page Page, Line cl = null)
         {
-            CurrentLine = null;
-            CurrentPage = null;
+            CurrentPage = Page;
+            CurrentLine = cl;
             Refresh(Page);
             while (true)
             {
@@ -56,11 +72,13 @@ namespace MWS
                         break;
 
                     case ConsoleKey.UpArrow:
-                        Select(-1);
+                        (CurrentLine as ActiveLine).Toggle();
+                        FindNextValidLine(CurrentLine, -1);
                         break;
 
                     case ConsoleKey.DownArrow:
-                        Select(1);
+                        (CurrentLine as ActiveLine).Toggle();
+                        FindNextValidLine(CurrentLine, 1);
                         break;
                 }
             }
@@ -72,7 +90,7 @@ namespace MWS
             CurrentPage = Page;
             foreach(Line Line in Page.Contents)
             {
-                if (Line is ActiveLine && CurrentLine == null)
+                if (Line is ActiveLine && CurrentLine is null)
                 {
                     (Line as ActiveLine).Toggle();
                     CurrentLine = Line;
@@ -86,7 +104,7 @@ namespace MWS
             }
         }
 
-        public static void GetCurrentLine()
+        /*public static void GetCurrentLine()
         {
             foreach (Line line in CurrentPage.Contents)
             {
@@ -96,7 +114,7 @@ namespace MWS
                         CurrentLine = line;
                     }
             }
-        }
+        }*/
 
         public static void Trigger()
         {

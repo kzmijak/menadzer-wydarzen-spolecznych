@@ -16,7 +16,7 @@ namespace MWS.dbo
         public string miasto { get; set; }
         public string poczta { get; set; }
         public string ulica { get; set; }
-        public int idpracownika { get; set; }
-        public int iduczestnika { get; set; }
+        public int idpracownika { get; set; } = 0;
+        public int iduczestnika { get; set; } = 0;
     }
 }
