@@ -10,5 +10,6 @@ namespace MWS.dbo
         public string nazwa { get; set; }
         public decimal cena { get; set; }
         public string opis { get; set; }
+        
     }
 }

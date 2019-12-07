@@ -8,14 +8,11 @@ namespace MWS.Pages
 {
     class LoginPracownik : Page
     {
-        public List<Line> Contents { get; set; }
         public ActiveLine login { get; set; }
         public ActiveLine password { get; set; }
 
-        public LoginPracownik(StaticLine note = null)
+        public LoginPracownik(StaticLine note = null) : base(note)
         {
-            Contents = new List<Line>(5);
-            Line.LastIndex = 0;
             Contents.Add(new StaticLine("LOGOWANIE PRACOWNIKA"));
             login = new ActiveLine("Login: ");
             password = new ActiveLine("Haslo: ");
@@ -29,7 +26,7 @@ namespace MWS.Pages
                 this.Contents.Add(note);
         }
 
-        public void React(Line line)
+        public override void React(Line line)
         {
             switch (line.Index)
             {
@@ -57,8 +54,15 @@ namespace MWS.Pages
                         login = login.Content.Substring(7),
                         haslo = password.Content.Substring(7)
                     };
-                    if (DataAccess.Logowanie.CheckCredentials(log) == 0)
+                    log = DataAccess.Logowanie.CheckCredentials(log) as Logowanie;
+                    if (log is null)
                         DisplayAdapter.Display(new LoginPracownik(new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
+                    else
+                    {
+                        if (log.pracownik.stanowisko.ToLower() == "Organizator".ToLower())
+                            DisplayAdapter.Display(new PanelOrganizatora(log));
+
+                    }
                     break;
                 case 4:
                     DisplayAdapter.Display(new LoginRegister(new LoginPracownik()));

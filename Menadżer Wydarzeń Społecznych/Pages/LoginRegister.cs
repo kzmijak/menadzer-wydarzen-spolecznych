@@ -9,7 +9,6 @@ namespace MWS.Pages
     class LoginRegister : Page, DatabaseObject
     {
         public int id { get; set; }
-        public List<Line> Contents { get; set; }
         public Page caller { get; set; }
         
         public string login { get; set; }
@@ -33,14 +32,12 @@ namespace MWS.Pages
 
         LoginRegister() { }
 
-        public LoginRegister(Page caller, StaticLine note = null, LoginRegister update = null)
+        public LoginRegister(Page caller, StaticLine note = null, LoginRegister update = null): base(note)
         {
             if(update is null)
                 update = new LoginRegister();
-
-            Contents = new List<Line>(21);
+            
             this.caller = caller;
-            Line.LastIndex = 0;
 
             login = update.login;
             haslo = update.haslo;
@@ -97,7 +94,7 @@ namespace MWS.Pages
                 this.Contents.Add(note);
         }
         
-        public void React(Line line)
+        public override void React(Line line)
         {
             if (caller is LoginPracownik)
                 pracownik(line.Index);

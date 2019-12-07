@@ -5,9 +5,14 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    interface Page
+    abstract class Page
     {
-        List<Line> Contents { get; set; }
-        void React(Line line);
+        public List<Line> Contents { get; set; }
+        public Page(StaticLine note = null)
+        {
+            Contents = new List<Line>(31);
+            Line.LastIndex = 0;
+        }
+        public virtual void React(Line line) {}
     }
 }

@@ -59,12 +59,11 @@ namespace MWS.Procedures
             }
         }
 
-        public int CheckCredentials(DatabaseObject databaseObject)
+        public DatabaseObject CheckCredentials(DatabaseObject databaseObject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                var ls = connection.Query<Logowanie>("dbo.Logowanie_CheckCredentials @login, @haslo", databaseObject).ToList();
-                return ls.Count;
+                return connection.QuerySingle<Logowanie>("dbo.Logowanie_CheckCredentials @login, @haslo", databaseObject);
             }
         }
     }
