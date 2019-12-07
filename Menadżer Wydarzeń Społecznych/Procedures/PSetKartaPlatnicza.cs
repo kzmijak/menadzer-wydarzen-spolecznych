@@ -30,7 +30,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecord @id", dbobject);
+                return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecord @wlasciciel, @numer, @wygasniecie, @kbezpiecz, @kontak", dbobject);
             }
         }
 
@@ -38,7 +38,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecord @id", new { id });
+                return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecordById @id", new { id });
             }
         }
 

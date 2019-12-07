@@ -30,7 +30,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Logowanie>("dbo.Logowanie_GetRecord @id", dbobject);
+                return connection.QuerySingle<Logowanie>("dbo.Logowanie_GetRecord @login, @haslo, @idpracownika, @idsponsora, @iduczestnika", dbobject);
             }
         }
 
@@ -38,7 +38,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Logowanie>("dbo.Logowanie_GetRecord @id", new { id });
+                return connection.QuerySingle<Logowanie>("dbo.Logowanie_GetRecordById @id", new { id });
             }
         }
 
@@ -63,7 +63,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Logowanie>("dbo.Logowanie_CheckCredentials @login, @haslo", databaseObject);
+                try
+                {
+                    return connection.QuerySingle<Logowanie>("dbo.Logowanie_CheckCredentials @login, @haslo", databaseObject);
+                }
+                catch(InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
     }

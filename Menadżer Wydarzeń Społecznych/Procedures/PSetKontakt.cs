@@ -30,7 +30,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.Kontakt_GetRecord @id", dbobject).ToList()[0];
+                return connection.Query<DatabaseObject>("dbo.Kontakt_GetRecord @imie, @nazwisko, @telefon, @email, @miejscowosc, @nrdomu, @miasto, @poczta, @ulica, @idpracownika, @iduczestnika", dbobject).ToList()[0];
             }
         }
 
@@ -38,7 +38,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Kontakt>("dbo.Kontakt_GetRecord @id", new { id });
+                return connection.QuerySingle<Kontakt>("dbo.Kontakt_GetRecordById @id", new { id });
             }
         }
 

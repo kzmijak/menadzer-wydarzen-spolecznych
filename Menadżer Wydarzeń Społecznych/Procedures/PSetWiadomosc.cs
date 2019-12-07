@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Dapper;
+using MWS.dbo;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Dapper;
-using MWS.dbo;
 
 namespace MWS.Procedures
 {
-    class PSetPlatnosc : DatabaseObjectProcedures
+    class PSetWniosek: DatabaseObjectProcedures
     {
         public void Delete(DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Platnosc_Delete @id", dbobject);
+                connection.Execute("dbo.Wniosek_Delete @id", dbobject);
             }
         }
 
@@ -22,7 +22,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.Platnosc_GetCollection").ToList();
+                return connection.Query<DatabaseObject>("dbo.Wniosek_GetCollection").ToList();
             }
         }
 
@@ -30,7 +30,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Platnosc>("dbo.Platnosc_GetRecord @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecord @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
             }
         }
 
@@ -38,7 +38,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Platnosc>("dbo.Platnosc_GetRecordById @id", new { id });
+                return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecordById @id", new { id });
             }
         }
 
@@ -46,7 +46,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Platnosc>("dbo.Platnosc_Insert @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
             }
         }
 
@@ -55,7 +55,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Platnosc_Update @id, @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject_new);
+                connection.Execute("dbo.Wniosek_Update @id, @idpracownika, @idwydarzenia, @kwota, @zatwierdzone", dbobject_new);
             }
         }
     }

@@ -38,7 +38,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle("dbo.Pracownik_GetRecord @id", new { id });
+                return connection.QuerySingle<Pracownik>("dbo.Pracownik_GetRecordById @id", new { id });
             }
         }
 
