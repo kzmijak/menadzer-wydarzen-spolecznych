@@ -11,7 +11,7 @@ namespace MWS.Pages
         public ActiveLine login { get; set; }
         public ActiveLine password { get; set; }
 
-        public LoginSponsor(StaticLine note = null): base(note)
+        public LoginSponsor(StaticLine note = null): base()
         {
             Contents.Add(new StaticLine("LOGOWANIE SPONSORA"));
             login = new ActiveLine("Login: ");
@@ -55,11 +55,11 @@ namespace MWS.Pages
                         haslo = password.Content.Substring(7)
                     };
                     log = DataAccess.Logowanie.CheckCredentials(log) as Logowanie;
-                    if (log is null)
+                    if (log is null || !(log.owner is Sponsor))
                         DisplayAdapter.Display(new LoginSponsor(new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
                     else
                     {
-
+                        DisplayAdapter.Display(new PanelSponsora(log));
                     }
                     break;
                 case 4:

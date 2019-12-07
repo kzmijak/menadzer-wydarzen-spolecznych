@@ -7,7 +7,6 @@ namespace MWS.dbo
 {
     class KartaPlatnicza : DatabaseObject
     {
-        public int id { get; set; }
         public int wlasciciel { get; set; }
         public string numer { get; set; }
         public string wygasniecie { get; set; }

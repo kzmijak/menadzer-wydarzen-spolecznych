@@ -6,7 +6,6 @@ namespace MWS.dbo
 {
     class Wiadomosc: DatabaseObject
     {
-        public int id { get; set; }
         public int idpracownika { get; set; } = 0;
         public int idpracownika2 { get; set; } = 0;
         public int idsponsora { get; set; } = 0;

@@ -6,7 +6,6 @@ namespace MWS.dbo
 {
     class Kontakt : DatabaseObject
     {
-        public int id { get; set; }
         public string imie { get; set; }
         public string nazwisko { get; set; }
         public string telefon { get; set; }

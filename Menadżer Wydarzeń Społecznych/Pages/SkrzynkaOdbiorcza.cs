@@ -8,7 +8,7 @@ namespace MWS.Pages
 {
     class SkrzynkaOdbiorcza : Panel
     {
-        public SkrzynkaOdbiorcza(Logowanie logowanie, StaticLine note = null): base(logowanie, note)
+        public SkrzynkaOdbiorcza(Logowanie logowanie, StaticLine note = null): base(logowanie)
         {
         }
 

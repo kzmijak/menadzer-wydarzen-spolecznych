@@ -6,15 +6,15 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class Ustawienia : Panel
+    class PanelWydarzenieInterakcja : Panel
     {
-        public Ustawienia(Logowanie logowanie, StaticLine note = null): base(logowanie)
+        public PanelWydarzenieInterakcja(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null): base(logowanie)
         {
+
         }
 
         public override void React(Line line)
         {
-            throw new NotImplementedException();
         }
     }
 }

@@ -6,7 +6,6 @@ namespace MWS.dbo
 {
     class Platnosc : DatabaseObject
     {
-        public int id { get; set; }
         public int idkarty { get; set; }
         public int idadresata { get; set; }
         public decimal kwota { get; set; }

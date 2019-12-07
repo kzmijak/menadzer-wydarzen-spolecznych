@@ -6,7 +6,7 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class LoginRegister : Page, DatabaseObject
+    class LoginRegister : Page
     {
         public int id { get; set; }
         public Page caller { get; set; }
@@ -28,11 +28,11 @@ namespace MWS.Pages
         public string ulica { get; set; }
         public string stanowisko { get; set; }
         public string nazwa { get; set; }
-        public int fid { get; set; }
+        public int fid { get; set; } 
 
         LoginRegister() { }
 
-        public LoginRegister(Page caller, StaticLine note = null, LoginRegister update = null): base(note)
+        public LoginRegister(Page caller, StaticLine note = null, LoginRegister update = null): base()
         {
             if(update is null)
                 update = new LoginRegister();
@@ -115,6 +115,8 @@ namespace MWS.Pages
 
         private void pracownik(int i)
         {
+            nazwa = "placeholder";
+
             switch(i)
             {
                 case 2:
@@ -157,7 +159,7 @@ namespace MWS.Pages
                     stanowisko = Console.ReadLine();
                     break;
                 case 17:
-                    if (!(login is null) && !(String.IsNullOrEmpty(haslo)) && haslo == haslo2)
+                    if (haslo == haslo2 && DbHelper.IsAnyNullOrEmpty(this) == false)
                     {
                         Pracownik pracownik = new Pracownik
                         {
@@ -194,6 +196,11 @@ namespace MWS.Pages
 
                         DisplayAdapter.Display(new LoginPracownik(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }
+                    else if (DbHelper.IsAnyNullOrEmpty(this) == true)
+                    {
+                        StaticLine warning = new StaticLine("Uzupełnij brakujące pola tekstowe.", ConsoleColor.Red);
+                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                    }
                     else
                     {
                         StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
@@ -214,6 +221,9 @@ namespace MWS.Pages
 
         private void uczestnik(int i)
         {
+            nazwa = "placeholder";
+            stanowisko = "placeholder";
+
             switch (i)
             {
                 case 2:
@@ -253,7 +263,7 @@ namespace MWS.Pages
                     ulica = Console.ReadLine();
                     break;
                 case 16:
-                    if (!(login is null) && !(String.IsNullOrEmpty(haslo)) && haslo == haslo2)
+                    if (haslo == haslo2 && DbHelper.IsAnyNullOrEmpty(this) == false)
                     {
                         var rnd = new Random();
                         Uczestnik uczestnik = new Uczestnik { fid = rnd.Next(10000,99999) };
@@ -287,6 +297,11 @@ namespace MWS.Pages
 
                         DisplayAdapter.Display(new LoginUczestnik(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }
+                    else if (DbHelper.IsAnyNullOrEmpty(this) == true)
+                    {
+                        StaticLine warning = new StaticLine("Uzupełnij brakujące pola tekstowe.", ConsoleColor.Red);
+                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                    }
                     else
                     {
                         StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
@@ -307,6 +322,17 @@ namespace MWS.Pages
 
         private void sponsor(int i)
         {
+            imie = "placeholder";
+            nazwisko = "placeholder";
+            telefon = "placeholder";
+            email = "placeholder";
+            miejscowosc = "placeholder";
+            nrdomu = "placeholder";
+            miasto = "placeholder";
+            poczta = "placeholder";
+            ulica = "placeholder";
+            stanowisko = "placeholder";
+
             switch (i)
             {
                 case 2:
@@ -322,7 +348,7 @@ namespace MWS.Pages
                     nazwa = Console.ReadLine();
                     break;
                 case 7:
-                    if (!(login is null) && !(String.IsNullOrEmpty(haslo)) && haslo == haslo2)
+                    if (haslo == haslo2 && DbHelper.IsAnyNullOrEmpty(this) == false)
                     {
                         Sponsor sponsor = new Sponsor
                         {
@@ -342,6 +368,11 @@ namespace MWS.Pages
 
                         DisplayAdapter.Display(new LoginSponsor(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }
+                    else if (DbHelper.IsAnyNullOrEmpty(this) == false)
+                    {
+                        StaticLine warning = new StaticLine("Uzupełnij brakujące pola tekstowe.", ConsoleColor.Red);
+                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                    }
                     else
                     {
                         StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
@@ -358,27 +389,6 @@ namespace MWS.Pages
                     break;
             }
             DisplayAdapter.Display(new LoginRegister(caller, null, this), DisplayAdapter.CurrentLine);
-        }
-
-
-
-
-        private void Reset()
-        {
-            login = "";
-            haslo = "";
-            haslo2 = "";
-            nazwisko = "";
-            telefon = "";
-            email = "";
-            miejscowosc = "";
-            nrdomu = "";
-            miasto = "";
-            poczta = "";
-            ulica = "";
-            stanowisko = "";
-            nazwa = "";
-            DisplayAdapter.Refresh(this);
         }
     }
 }

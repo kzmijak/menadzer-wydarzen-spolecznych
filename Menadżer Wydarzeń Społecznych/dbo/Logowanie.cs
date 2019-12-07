@@ -5,8 +5,7 @@ using System.Text;
 namespace MWS.dbo
 {
     class Logowanie : DatabaseObject
-    {
-        public int id { get; set; }
+    { 
         public string login { get; set; }
         public string haslo { get; set; }
         public int idpracownika { get; set; } = 0;
@@ -17,11 +16,11 @@ namespace MWS.dbo
         {
             get
             {
-                if (idpracownika != 0)
+                if (idpracownika > 0)
                     return pracownik;
-                if (idsponsora != 0)
-                    return owner;
-                if (iduczestnika != 0)
+                if (idsponsora > 0)
+                    return sponsor;
+                if (iduczestnika > 0)
                     return uczestnik;
                 else return null;
             }

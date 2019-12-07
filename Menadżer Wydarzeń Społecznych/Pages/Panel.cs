@@ -11,7 +11,7 @@ namespace MWS.Pages
     {
         public Logowanie logowanie { get; set; }
 
-        public Panel(Logowanie logowanie, StaticLine note = null): base(note)
+        public Panel(Logowanie logowanie): base()
         {
             this.logowanie = logowanie;
         }

@@ -8,5 +8,6 @@ namespace MWS.dbo
     {
         public int idwydarzenia { get; set; }
         public int idpracownika { get; set; }
+        
     }
 }

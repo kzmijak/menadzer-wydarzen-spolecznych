@@ -1,16 +1,16 @@
-﻿using MWS.dbo;
-using MWS.Lines;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MWS.dbo;
+using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class PanelSponsora: Panel
+    class PanelPracownika : Panel
     {
-        public PanelSponsora(Logowanie logowanie, StaticLine note = null): base(logowanie)
+        public PanelPracownika(Logowanie logowanie, StaticLine note = null): base(logowanie)
         {
-            Contents.Add(new StaticLine("PANEL SPONSORA"));
+            Contents.Add(new StaticLine("PANEL PRACOWNIKA"));
             Contents.Add(new ActiveLine("Moje wydarzenia"));
             Contents.Add(new ActiveLine("Skrzynka odbiorcza"));
             Contents.Add(new ActiveLine("Ustawienia konta"));

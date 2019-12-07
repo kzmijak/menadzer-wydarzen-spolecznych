@@ -9,7 +9,7 @@ namespace MWS.Pages
 {
     class Login : Page
     {
-        public Login(StaticLine note = null): base(note)
+        public Login(StaticLine note = null): base()
         {
             this.Contents.Add(new StaticLine("MENDAŻER WYDARZEŃ SPOŁECZNYCH"));
             this.Contents.Add(new StaticLine("Logowanie użytkownika"));

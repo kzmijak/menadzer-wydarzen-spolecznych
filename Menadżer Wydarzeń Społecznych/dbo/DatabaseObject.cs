@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace MWS.dbo
 {
-    interface DatabaseObject
+    abstract class DatabaseObject
     {
-        int id { get; set; }
+        public int id { get; set; }
     }
 }

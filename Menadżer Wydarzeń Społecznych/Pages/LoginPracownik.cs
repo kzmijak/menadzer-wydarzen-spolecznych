@@ -11,7 +11,7 @@ namespace MWS.Pages
         public ActiveLine login { get; set; }
         public ActiveLine password { get; set; }
 
-        public LoginPracownik(StaticLine note = null) : base(note)
+        public LoginPracownik(StaticLine note = null) : base()
         {
             Contents.Add(new StaticLine("LOGOWANIE PRACOWNIKA"));
             login = new ActiveLine("Login: ");
@@ -55,12 +55,14 @@ namespace MWS.Pages
                         haslo = password.Content.Substring(7)
                     };
                     log = DataAccess.Logowanie.CheckCredentials(log) as Logowanie;
-                    if (log is null)
+                    if (log is null || !(log.owner is Pracownik))
                         DisplayAdapter.Display(new LoginPracownik(new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
                     else
                     {
                         if (log.pracownik.stanowisko.ToLower() == "Organizator".ToLower())
                             DisplayAdapter.Display(new PanelOrganizatora(log));
+                        else
+                            DisplayAdapter.Display(new PanelPracownika(log));
 
                     }
                     break;

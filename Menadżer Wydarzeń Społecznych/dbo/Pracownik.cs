@@ -6,7 +6,6 @@ namespace MWS.dbo
 {
     class Pracownik: DatabaseObject
     {
-        public int id { get; set; }
         public string stanowisko { get; set; }
         public decimal wynagrodzenie { get; set; }
 
@@ -42,5 +41,7 @@ namespace MWS.dbo
                 return output;
             }
         }
+
+        public List<Wydarzenie> wydarzenia { get; set; } = new List<Wydarzenie>(255);
     }
 }
