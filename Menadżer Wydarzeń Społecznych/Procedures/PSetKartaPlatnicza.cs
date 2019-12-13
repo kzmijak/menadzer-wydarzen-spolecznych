@@ -22,7 +22,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.KartaPlatnicza_GetCollection").ToList();
+                return connection.Query<KartaPlatnicza>("dbo.KartaPlatnicza_GetCollection").Cast<DatabaseObject>().ToList();
             }
         }
 

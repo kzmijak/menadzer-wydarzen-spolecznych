@@ -12,15 +12,15 @@ namespace MWS.dbo
         public int idsponsora { get; set; } = 0;
         public int iduczestnika { get; set; } = 0;
 
-        public DatabaseObject owner
+        public CoreObject owner
         {
             get
             {
-                if (idpracownika > 0)
+                if (idpracownika != 0)
                     return pracownik;
-                if (idsponsora > 0)
+                if (idsponsora != 0)
                     return sponsor;
-                if (iduczestnika > 0)
+                if (iduczestnika != 0)
                     return uczestnik;
                 else return null;
             }

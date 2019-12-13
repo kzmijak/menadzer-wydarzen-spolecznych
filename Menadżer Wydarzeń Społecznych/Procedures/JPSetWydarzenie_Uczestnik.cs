@@ -14,7 +14,7 @@ namespace MWS.Procedures
             Wydarzenie_Uczestnik joiningObject = new Wydarzenie_Uczestnik()
             {
                 idwydarzenia = object1.id,
-                iduczestnika = object1.id
+                iduczestnika = object2.id
             };
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
@@ -27,7 +27,7 @@ namespace MWS.Procedures
             Wydarzenie_Uczestnik joiningObject = new Wydarzenie_Uczestnik()
             {
                 idwydarzenia = object1.id,
-                iduczestnika = object1.id
+                iduczestnika = object2.id
             };
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {

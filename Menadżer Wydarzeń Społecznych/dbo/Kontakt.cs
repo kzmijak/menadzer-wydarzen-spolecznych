@@ -17,5 +17,34 @@ namespace MWS.dbo
         public string ulica { get; set; }
         public int idpracownika { get; set; } = 0;
         public int iduczestnika { get; set; } = 0;
+
+        public CoreObject owner
+        {
+            get
+            {
+                if (iduczestnika != 0)
+                    return uczestnik;
+                if (idpracownika != 0)
+                    return pracownik;
+                else return null;
+
+            }
+        }
+
+        public Pracownik pracownik
+        {
+            get
+            {
+                return DataAccess.Pracownik.GetRecordById(idpracownika) as Pracownik;
+            }
+        }
+
+        public Uczestnik uczestnik
+        {
+            get
+            {
+                return DataAccess.Uczestnik.GetRecordById(iduczestnika) as Uczestnik;
+            }
+        }
     }
 }

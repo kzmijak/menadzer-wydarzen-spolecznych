@@ -28,7 +28,7 @@ namespace MWS.Pages
                     DisplayAdapter.Display(new SkrzynkaOdbiorcza(logowanie));
                     break;
                 case 3:
-                    DisplayAdapter.Display(new Ustawienia(logowanie));
+                    DisplayAdapter.Display(new PanelUstawienia(logowanie));
                     break;
                 case 4:
                     DisplayAdapter.Display(new Login(new StaticLine("Użytkownik został wylogowany", ConsoleColor.Green)));

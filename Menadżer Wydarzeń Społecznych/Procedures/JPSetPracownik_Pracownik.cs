@@ -14,7 +14,7 @@ namespace MWS.Procedures
             Pracownik_Pracownik joiningObject = new Pracownik_Pracownik()
             {
                 idorganizatora = object1.id,
-                idpracownika = object1.id
+                idpracownika = object2.id
             };
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
@@ -27,7 +27,7 @@ namespace MWS.Procedures
             Pracownik_Pracownik joiningObject = new Pracownik_Pracownik()
             {
                 idorganizatora = object1.id,
-                idpracownika = object1.id
+                idpracownika = object2.id
             };
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {

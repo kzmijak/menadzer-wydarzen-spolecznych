@@ -8,13 +8,13 @@ using System.Text;
 
 namespace MWS.Procedures
 {
-    class PSetWniosek: DatabaseObjectProcedures
+    class PSetWiadomosc: DatabaseObjectProcedures
     {
         public void Delete(DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wniosek_Delete @id", dbobject);
+                connection.Execute("dbo.Wiadomosc_Delete @id", dbobject);
             }
         }
 
@@ -22,7 +22,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.Wniosek_GetCollection").ToList();
+                return connection.Query<Wiadomosc>("dbo.Wiadomosc_GetCollection").Cast<DatabaseObject>().ToList();
             }
         }
 
@@ -30,7 +30,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecord @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecord @idpracownika, @idpracownika2, @idsponsora, @idsponsora2, @iduczestnika, @uczestnika2, @dzien, @godzina, @tresc", dbobject);
             }
         }
 
@@ -38,7 +38,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecordById @id", new { id });
+                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecordById @id", new { id });
             }
         }
 
@@ -46,7 +46,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_Insert @idpracownika, @idpracownika2, @idsponsora, @idsponsora2, @iduczestnika, @uczestnika2, @dzien, @godzina, @tresc", dbobject);
             }
         }
 
@@ -55,7 +55,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wniosek_Update @id, @idpracownika, @idwydarzenia, @kwota, @zatwierdzone", dbobject_new);
+                connection.Execute("dbo.Wiadomosc_Update @id, @idpracownika, @idpracownika2, @idsponsora, @idsponsora2, @iduczestnika, @uczestnika2, @dzien, @godzina, @tresc", dbobject_new);
             }
         }
     }

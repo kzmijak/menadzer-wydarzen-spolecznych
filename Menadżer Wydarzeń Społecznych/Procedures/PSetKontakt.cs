@@ -22,7 +22,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<DatabaseObject>("dbo.Kontakt_GetCollection").ToList();
+                return connection.Query<Kontakt>("dbo.Kontakt_GetCollection").Cast<DatabaseObject>().ToList();
             }
         }
 
@@ -55,7 +55,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.QuerySingle<Kontakt>("dbo.Kontakt_Update @id, @imie, @nazwisko, @telefon, @email, @miejscowosc, @nrdomu, @miast, @poczta, @ulica, @idpracownika, @iduczestnika", dbobject_new);
+                connection.Execute("dbo.Kontakt_Update @id, @imie, @nazwisko, @telefon, @email, @miejscowosc, @nrdomu, @miasto, @poczta, @ulica, @idpracownika, @iduczestnika", dbobject_new);
             }
         }
     }

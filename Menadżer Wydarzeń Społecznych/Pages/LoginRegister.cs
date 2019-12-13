@@ -74,7 +74,7 @@ namespace MWS.Pages
                 Contents.Add(new ActiveLine("Miejscowość: \t" + miejscowosc));  //10
                 Contents.Add(new ActiveLine("Numer domu: \t" + nrdomu));        //11
                 Contents.Add(new ActiveLine("Miasto: \t" + miasto));            //12
-                Contents.Add(new ActiveLine("Poczta: \t" + poczta));            //13
+                Contents.Add(new ActiveLine("Kod pocztowy: \t" + poczta));            //13
                 Contents.Add(new ActiveLine("Ulica: \t\t" + ulica));              //14
             }
             if(caller is LoginPracownik)

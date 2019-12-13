@@ -43,7 +43,7 @@ namespace MWS
                         break;
                     }
                     else
-                        lineChecked = 0;
+                        lineChecked = -1;
                 }
                 else if (CurrentPage.Contents[lineChecked + direction] is ActiveLine)
                 {
@@ -95,26 +95,18 @@ namespace MWS
                     (Line as ActiveLine).Toggle();
                     CurrentLine = Line;
                 }
-                Console.BackgroundColor = Line.Background;
-                Console.ForegroundColor = Line.Color;
-                Console.WriteLine(Line.Text());
+                if(Line != null)
+                {
+                    Console.BackgroundColor = Line.Background;
+                    Console.ForegroundColor = Line.Color;
+                    Console.WriteLine(Line.Text());
+
+                }
                 
 
                 Console.ResetColor();
             }
         }
-
-        /*public static void GetCurrentLine()
-        {
-            foreach (Line line in CurrentPage.Contents)
-            {
-                if (line is ActiveLine)
-                    if ((line as ActiveLine).Selected)
-                    {
-                        CurrentLine = line;
-                    }
-            }
-        }*/
 
         public static void Trigger()
         {

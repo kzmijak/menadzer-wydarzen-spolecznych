@@ -105,6 +105,7 @@ namespace MWS.Pages
                             budzet = this.budzet
                         };
                         wydarzenie = DataAccess.Wydarzenie.Insert(wydarzenie) as Wydarzenie;
+                        logowanie.pracownik.wydarzenia.Add(wydarzenie);
                         DataAccess.Wydarzenie_Pracownik.Insert(wydarzenie, pracownik);
 
                         DisplayAdapter.Display(new PanelWydarzenia(logowanie, new StaticLine("Dodawanie przebiegło pomyślnie.", ConsoleColor.Green)));
