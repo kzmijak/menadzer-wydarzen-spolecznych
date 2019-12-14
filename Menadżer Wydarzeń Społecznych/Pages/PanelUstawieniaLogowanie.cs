@@ -95,8 +95,8 @@ namespace MWS.Pages
                             if (DataAccess.Logowanie.CheckCredentials(Update) == null)
                             {
                                 if(execsponsor)
-                                    DataAccess.Sponsor.Update(logowanie.sponsor, Core);
-                                DataAccess.Logowanie.Update(logowanie.owner.logowanie, Update);
+                                    logowanie.sponsor = Core as Sponsor;
+                                logowanie.owner.logowanie = Update;
                                 DisplayAdapter.Display(new PanelUstawieniaLogowanie(logowanie, new StaticLine("Zmiany zostały zapisane. Hasło zostało zmienione.", ConsoleColor.Green)));
                             }
                         }
@@ -112,9 +112,9 @@ namespace MWS.Pages
                         Update.haslo = Haslo1;
                         if(DataAccess.Logowanie.CheckCredentials(Update)==null)
                         {
-                            if(execsponsor)
-                                DataAccess.Sponsor.Update(logowanie.sponsor, Core);
-                            DataAccess.Logowanie.Update(logowanie.owner.logowanie, Update);
+                            if (execsponsor)
+                                logowanie.sponsor = Core as Sponsor;
+                            logowanie.owner.logowanie = Update;
                             DisplayAdapter.Display(new PanelUstawieniaLogowanie(logowanie.owner.logowanie, new StaticLine("Zmiany zostały zapisane.", ConsoleColor.Green)));
                         }
 

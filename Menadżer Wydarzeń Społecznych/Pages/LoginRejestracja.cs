@@ -176,7 +176,7 @@ namespace MWS.Pages
                             idpracownika = pracownik.id
                         };
 
-                        DataAccess.Logowanie.Insert(login);
+                        pracownik.logowanie = login;
 
                         Kontakt kontakt = new Kontakt
                         {
@@ -191,10 +191,10 @@ namespace MWS.Pages
                             ulica = this.ulica,
                             idpracownika = pracownik.id
                         };
-
-                        DataAccess.Kontakt.Insert(kontakt);
+                        pracownik.kontakt = kontakt;
 
                         DisplayAdapter.Display(new LoginLogowanie(caller, new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
+                        
                     }
                     else if (DbHelper.IsAnyNullOrEmpty(this) == true)
                     {
@@ -277,7 +277,7 @@ namespace MWS.Pages
                             iduczestnika = uczestnik.id
                         };
 
-                        DataAccess.Logowanie.Insert(login);
+                        uczestnik.logowanie = login;
 
                         Kontakt kontakt = new Kontakt
                         {
@@ -293,7 +293,7 @@ namespace MWS.Pages
                             iduczestnika = uczestnik.id
                         };
 
-                        DataAccess.Kontakt.Insert(kontakt);
+                        uczestnik.kontakt = kontakt;
 
                         DisplayAdapter.Display(new LoginLogowanie(new Uczestnik(), new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }
@@ -363,8 +363,7 @@ namespace MWS.Pages
                             haslo = this.haslo,
                             idsponsora = sponsor.id
                         };
-
-                        DataAccess.Logowanie.Insert(login);
+                        sponsor.logowanie = login;
 
                         DisplayAdapter.Display(new LoginLogowanie(new Sponsor(), new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }

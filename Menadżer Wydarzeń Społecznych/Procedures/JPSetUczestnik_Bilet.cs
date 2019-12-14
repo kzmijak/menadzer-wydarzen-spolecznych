@@ -34,5 +34,12 @@ namespace MWS.Procedures
                 connection.Execute("dbo.Uczestnik_Bilet_Insert @iduczestnika, @idbiletu", joiningObject);
             }
         }
+        public IEnumerable<_JoiningTable> GetCollection()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
+            {
+                return connection.Query<Uczestnik_Bilet>("dbo.Uczestnik_Bilet_GetCollection");
+            }
+        }
     }
 }

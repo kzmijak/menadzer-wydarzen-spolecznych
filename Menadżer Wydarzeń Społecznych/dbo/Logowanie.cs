@@ -24,6 +24,28 @@ namespace MWS.dbo
                     return uczestnik;
                 else return null;
             }
+            set
+            {
+                if (owner is null)
+                {
+                    if (value is Pracownik)
+                        value = DataAccess.Pracownik.Insert(value) as Pracownik;
+                    if (value is Sponsor)
+                        value = DataAccess.Sponsor.Insert(value) as Sponsor;
+                    if (value is Uczestnik)
+                        value = DataAccess.Uczestnik.Insert(value) as Uczestnik;
+                    value.logowanie = this;
+                }
+                else
+                {
+                    if (value is Pracownik)
+                        DataAccess.Pracownik.Update(pracownik, value);
+                    if (value is Sponsor)
+                        DataAccess.Sponsor.Update(sponsor, value);
+                    if (value is Uczestnik)
+                        DataAccess.Uczestnik.Update(uczestnik, value);
+                }
+            }
         }
 
         public Pracownik pracownik
@@ -31,6 +53,16 @@ namespace MWS.dbo
             get
             {
                 return DataAccess.Pracownik.GetRecordById(idpracownika) as Pracownik;
+            }
+            set
+            {
+                if (pracownik is null)
+                {
+                    value = DataAccess.Pracownik.Insert(value) as Pracownik;
+                    value.logowanie = this;
+                }
+                else
+                    DataAccess.Pracownik.Update(pracownik, value);
             }
         }
 
@@ -40,6 +72,16 @@ namespace MWS.dbo
             {
                 return DataAccess.Sponsor.GetRecordById(idsponsora) as Sponsor;
             }
+            set
+            {
+                if (sponsor is null)
+                {
+                    value = DataAccess.Sponsor.Insert(value) as Sponsor;
+                    value.logowanie = this;
+                }
+                else
+                    DataAccess.Sponsor.Update(sponsor, value);
+            }
         }
 
         public Uczestnik uczestnik
@@ -47,6 +89,16 @@ namespace MWS.dbo
             get
             {
                 return DataAccess.Uczestnik.GetRecordById(iduczestnika) as Uczestnik;
+            }
+            set
+            {
+                if (uczestnik is null)
+                {
+                    value = DataAccess.Uczestnik.Insert(value) as Uczestnik;
+                    value.logowanie = this;
+                }
+                else
+                    DataAccess.Uczestnik.Update(uczestnik, value);
             }
         }
     }

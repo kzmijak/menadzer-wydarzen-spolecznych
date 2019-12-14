@@ -11,5 +11,35 @@ namespace MWS.dbo
         public decimal kwota { get; set; }
         public DateTime dzien { get; set; }
         public TimeSpan godzina { get; set; }
+
+        public KartaPlatnicza kartaPlatnicza
+        {
+            get
+            {
+                return DataAccess.KartaPlatnicza.GetRecordById(idkarty) as KartaPlatnicza;
+            }
+            set
+            {
+                if (kartaPlatnicza is null)
+                    DataAccess.KartaPlatnicza.Insert(value);
+                else
+                    DataAccess.KartaPlatnicza.Update(kartaPlatnicza, value);
+            }
+        }
+        public Kontakt odbiorca
+        {
+            get
+            {
+                return DataAccess.Kontakt.GetRecordById(idadresata) as Kontakt;
+            }
+            set
+            {
+                if (odbiorca is null)
+                    DataAccess.Kontakt.Insert(value);
+                else
+                    DataAccess.Kontakt.Update(odbiorca, value);
+            }
+        }
+
     }
 }

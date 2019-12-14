@@ -34,5 +34,12 @@ namespace MWS.Procedures
                 connection.Execute("dbo.Wydarzenie_Sponsor_Insert @idwydarzenia, @idsponsora", joiningObject);
             }
         }
+        public IEnumerable<_JoiningTable> GetCollection()
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
+            {
+                return connection.Query<Wydarzenie_Sponsor>("dbo.Wydarzenie_Sponsor_GetCollection");
+            }
+        }
     }
 }

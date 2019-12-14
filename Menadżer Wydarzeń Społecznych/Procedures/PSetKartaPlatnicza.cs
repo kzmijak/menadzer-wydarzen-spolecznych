@@ -22,7 +22,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<KartaPlatnicza>("dbo.KartaPlatnicza_GetCollection").Cast<_DatabaseObject>().ToList();
+                try
+                {
+                    return connection.Query<KartaPlatnicza>("dbo.KartaPlatnicza_GetCollection").Cast<_DatabaseObject>().ToList();
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -30,7 +37,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecord @wlasciciel, @numer, @wygasniecie, @kbezpiecz, @kontak", dbobject);
+                try
+                {
+                    return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecord @wlasciciel, @numer, @wygasniecie, @kbezpiecz, @kontak", dbobject);
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -38,7 +52,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecordById @id", new { id });
+                try
+                {
+                    return connection.QuerySingle<KartaPlatnicza>("dbo.KartaPlatnicza_GetRecordById @id", new { id });
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 

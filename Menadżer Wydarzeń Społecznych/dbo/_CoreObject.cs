@@ -10,9 +10,9 @@ namespace MWS.dbo
         {
             get
             {
-                Logowanie output = new Logowanie();
-                IEnumerable<_DatabaseObject> database = DataAccess.Logowanie.GetCollection();
-                foreach (_DatabaseObject @do in database)
+                Logowanie output = null;
+                var database = DataAccess.Logowanie.GetCollection();
+                foreach (var @do in database)
                 {
                     if ((@do as Logowanie).owner.id == id && (@do as Logowanie).owner.GetType() == this.GetType())
                     {
@@ -21,12 +21,26 @@ namespace MWS.dbo
                 }
                 return output;
             }
+            set
+            {
+                if(value != null)
+                {
+                    if(logowanie is null)
+                    {
+                        DataAccess.Logowanie.Insert(value);
+                    }
+                    else
+                    {
+                        DataAccess.Logowanie.Update(logowanie, value);
+                    }
+                }
+            }
         }
         public Kontakt kontakt
         {
             get
             {
-                Kontakt output = new Kontakt();
+                Kontakt output = null;
                 IEnumerable<_DatabaseObject> database = DataAccess.Kontakt.GetCollection();
                 foreach (_DatabaseObject @do in database)
                 {
@@ -37,8 +51,20 @@ namespace MWS.dbo
                 }
                 return output;
             }
+            set
+            {
+                if(value != null)
+                {
+                    if (kontakt is null)
+                    {
+                        DataAccess.Kontakt.Insert(value);
+                    }
+                    else
+                    {
+                        DataAccess.Kontakt.Update(kontakt, value);
+                    }
+                }
+            }
         }
-
-        public List<Wydarzenie> wydarzenia { get; set; } = new List<Wydarzenie>(255);
     }
 }

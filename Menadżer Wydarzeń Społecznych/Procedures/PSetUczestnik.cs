@@ -22,7 +22,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<Uczestnik>("dbo.Uczestnik_GetCollection").Cast<_DatabaseObject>().ToList();
+                try
+                {
+                    return connection.Query<Uczestnik>("dbo.Uczestnik_GetCollection").Cast<_DatabaseObject>().ToList();
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -30,7 +37,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Uczestnik>("dbo.Uczestnik_GetRecord @fid", dbobject);
+                try
+                {
+                    return connection.QuerySingle<Uczestnik>("dbo.Uczestnik_GetRecord @fid", dbobject);
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -38,7 +52,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Uczestnik>("dbo.Uczestnik_GetRecordById @id", new { id });
+                try
+                {
+                    return connection.QuerySingle<Uczestnik>("dbo.Uczestnik_GetRecordById @id", new { id });
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 

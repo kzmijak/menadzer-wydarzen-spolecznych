@@ -22,7 +22,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<Wiadomosc>("dbo.Wiadomosc_GetCollection").Cast<_DatabaseObject>().ToList();
+                try
+                {
+                    return connection.Query<Wiadomosc>("dbo.Wiadomosc_GetCollection").Cast<_DatabaseObject>().ToList();
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -30,7 +37,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecord @idpracownika, @idpracownika2, @idsponsora, @idsponsora2, @iduczestnika, @uczestnika2, @dzien, @godzina, @tresc", dbobject);
+                try
+                {
+                    return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecord @idadresata, @idodbiorcy, @dzien, @godzina, @tresc", dbobject);
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -38,7 +52,14 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecordById @id", new { id });
+                try
+                {
+                    return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecordById @id", new { id });
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -46,7 +67,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_Insert @idpracownika, @idpracownika2, @idsponsora, @idsponsora2, @iduczestnika, @uczestnika2, @dzien, @godzina, @tresc", dbobject);
+                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_Insert @idadresata, @idodbiorcy, @dzien, @godzina, @tresc", dbobject);
             }
         }
 

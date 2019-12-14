@@ -117,7 +117,7 @@ namespace MWS.Pages
                     {
                         if (DbHelper.IsAnyNullOrEmpty(Core as Pracownik) == false)
                         {
-                            DataAccess.Pracownik.Update(logowanie.owner, Core);
+                            logowanie.owner = Core;                         
                             allOk = true;
                         }
                     }
@@ -130,7 +130,7 @@ namespace MWS.Pages
 
                     if (DbHelper.IsAnyNullOrEmpty(Update) == false && allOk)
                     {
-                        DataAccess.Kontakt.Update(logowanie.owner.kontakt, Update);
+                        logowanie.owner.kontakt = Update;
                         DisplayAdapter.Display(new PanelUstawieniaKontakt(logowanie, new StaticLine("Zmiany zostały pomyślnie zapisane.", ConsoleColor.Green), Update, Core));
                     }
                     else
