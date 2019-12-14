@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Sponsor: CoreObject
+    class Sponsor: _CoreObject
     {
         public string nazwa { get; set; }
 

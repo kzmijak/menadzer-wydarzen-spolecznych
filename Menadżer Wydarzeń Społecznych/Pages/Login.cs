@@ -7,7 +7,7 @@ using MWS.Pages;
 
 namespace MWS.Pages
 {
-    class Login : Page
+    class Login : _Page
     {
         public Login(StaticLine note = null): base()
         {
@@ -22,18 +22,18 @@ namespace MWS.Pages
         }
 
         
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             switch(line.Index)
             {
                 case 2:
-                    DisplayAdapter.Display(new LoginPracownik());
+                    DisplayAdapter.Display(new LoginLogowanie(new Pracownik()));
                     break;
                 case 3:
-                    DisplayAdapter.Display(new LoginSponsor());
+                    DisplayAdapter.Display(new LoginLogowanie(new Sponsor()));
                     break;
                 case 4:
-                    DisplayAdapter.Display(new LoginUczestnik());
+                    DisplayAdapter.Display(new LoginLogowanie(new Uczestnik()));
                     break;
             }
         }

@@ -6,7 +6,7 @@ using Dapper;
 
 namespace MWS.dbo
 {
-    class Wydarzenie: DatabaseObject
+    class Wydarzenie: _DatabaseObject
     {
         public string nazwa { get; set; }
         public string opis { get; set; }

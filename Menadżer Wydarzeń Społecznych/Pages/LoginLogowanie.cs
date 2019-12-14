@@ -6,13 +6,16 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class LoginPracownik : Page
+    class LoginLogowanie : _Page
     {
+        public _CoreObject caller;
         public ActiveLine login { get; set; }
         public ActiveLine password { get; set; }
 
-        public LoginPracownik(StaticLine note = null) : base()
+        public LoginLogowanie(_CoreObject caller, StaticLine note = null) : base()
         {
+            this.caller = caller;
+
             Contents.Add(new StaticLine("LOGOWANIE PRACOWNIKA"));
             login = new ActiveLine("Login: ");
             password = new ActiveLine("Haslo: ");
@@ -26,7 +29,7 @@ namespace MWS.Pages
                 this.Contents.Add(note);
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             switch (line.Index)
             {
@@ -55,19 +58,35 @@ namespace MWS.Pages
                         haslo = password.Content.Substring(7)
                     };
                     log = DataAccess.Logowanie.CheckCredentials(log) as Logowanie;
-                    if (log is null || !(log.owner is Pracownik))
-                        DisplayAdapter.Display(new LoginPracownik(new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
-                    else
+                    if(caller is Pracownik)
                     {
-                        if (log.pracownik.stanowisko.ToLower() == "Organizator".ToLower())
-                            DisplayAdapter.Display(new PanelOrganizatora(log));
+                        if (log is null || !(log.owner is Pracownik))
+                            DisplayAdapter.Display(new LoginLogowanie(caller, new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
                         else
-                            DisplayAdapter.Display(new PanelPracownika(log));
-
+                        {
+                            if (log.pracownik.stanowisko.ToLower() == "Organizator".ToLower())
+                                DisplayAdapter.Display(new Panel(log));
+                            else
+                                DisplayAdapter.Display(new Panel(log));
+                        }
+                    }
+                    if(caller is Sponsor)
+                    {
+                        if (log is null || !(log.owner is Sponsor))
+                            DisplayAdapter.Display(new LoginLogowanie(new Sponsor(), new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
+                        else
+                            DisplayAdapter.Display(new Panel(log));
+                    }
+                    if(caller is Uczestnik)
+                    {
+                        if (log is null || !(log.owner is Uczestnik))
+                            DisplayAdapter.Display(new LoginLogowanie(new Uczestnik(), new StaticLine("Niepoprawne dane logowania. Spróbuj ponownie", ConsoleColor.Red)));
+                        else
+                            DisplayAdapter.Display(new Panel(log));
                     }
                     break;
                 case 4:
-                    DisplayAdapter.Display(new LoginRegister(new LoginPracownik()));
+                    DisplayAdapter.Display(new LoginRejestracja(caller));
                     break;
                 case 5:
                     DisplayAdapter.Display(new Login());

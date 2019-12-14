@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.Lines
 {
-    class ActiveLine: Line
+    class ActiveLine: _Line
     {
         public bool Selected { get; set; }
 
@@ -15,7 +15,7 @@ namespace MWS.Lines
             this.Selected = false;
             this.Color = color;
             this.Background = ConsoleColor.Black;
-            Line.LastIndex++;
+            _Line.LastIndex++;
         }
 
 

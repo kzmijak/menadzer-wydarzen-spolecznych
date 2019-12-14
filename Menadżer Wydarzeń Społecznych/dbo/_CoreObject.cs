@@ -4,15 +4,15 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    abstract class CoreObject: DatabaseObject
+    abstract class _CoreObject: _DatabaseObject
     {
         public Logowanie logowanie
         {
             get
             {
                 Logowanie output = new Logowanie();
-                IEnumerable<DatabaseObject> database = DataAccess.Logowanie.GetCollection();
-                foreach (DatabaseObject @do in database)
+                IEnumerable<_DatabaseObject> database = DataAccess.Logowanie.GetCollection();
+                foreach (_DatabaseObject @do in database)
                 {
                     if ((@do as Logowanie).owner.id == id && (@do as Logowanie).owner.GetType() == this.GetType())
                     {
@@ -27,8 +27,8 @@ namespace MWS.dbo
             get
             {
                 Kontakt output = new Kontakt();
-                IEnumerable<DatabaseObject> database = DataAccess.Kontakt.GetCollection();
-                foreach (DatabaseObject @do in database)
+                IEnumerable<_DatabaseObject> database = DataAccess.Kontakt.GetCollection();
+                foreach (_DatabaseObject @do in database)
                 {
                     if ((@do as Kontakt).owner.id == id && (@do as Kontakt).owner.GetType() == this.GetType())
                     {

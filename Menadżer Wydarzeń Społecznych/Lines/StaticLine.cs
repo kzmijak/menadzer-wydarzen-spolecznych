@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.Lines
 {
-    class StaticLine: Line
+    class StaticLine: _Line
     {
         public StaticLine(string Content, ConsoleColor color = ConsoleColor.Yellow)
         {
@@ -12,7 +12,7 @@ namespace MWS.Lines
             this.Index = LastIndex;
             this.Color = color;
             this.Background = ConsoleColor.Black;
-            Line.LastIndex++;
+            _Line.LastIndex++;
         }
     }
 }

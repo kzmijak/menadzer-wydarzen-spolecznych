@@ -7,7 +7,7 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class PanelDodajWydarzenie : Panel
+    class PanelWydarzeniaDodaj : _Panel
     {
         public string nazwa { get; set; }
         public string opis { get; set; }
@@ -16,7 +16,7 @@ namespace MWS.Pages
         public TimeSpan godzina { get; set; }
         public decimal budzet { get; set; }
 
-        public PanelDodajWydarzenie(Logowanie logowanie, StaticLine note = null, PanelDodajWydarzenie update = null): base(logowanie)
+        public PanelWydarzeniaDodaj(Logowanie logowanie, StaticLine note = null, PanelWydarzeniaDodaj update = null): base(logowanie)
         {
             if (update is null)
                 update = this;
@@ -53,7 +53,7 @@ namespace MWS.Pages
             }
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             switch (line.Index)
             {
@@ -70,7 +70,7 @@ namespace MWS.Pages
                     DateTime date;
                     if (!DateTime.TryParse(Console.ReadLine(), out date))
                     {
-                        DisplayAdapter.Display(new PanelDodajWydarzenie(logowanie, new StaticLine("Niepoprawny format daty. (DD.MM.RRRR)", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format daty. (DD.MM.RRRR)", ConsoleColor.Red), this));
                     }
                     dzien = date;
                     break;
@@ -79,7 +79,7 @@ namespace MWS.Pages
                     if (!DateTime.TryParseExact(Console.ReadLine(), "HH:mm", CultureInfo.InvariantCulture,
                                               DateTimeStyles.None, out dt))
                     {
-                        DisplayAdapter.Display(new PanelDodajWydarzenie(logowanie, new StaticLine("Niepoprawny format godziny. (GG:MM)", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format godziny. (GG:MM)", ConsoleColor.Red), this));
                     }
                     godzina = dt.TimeOfDay;
                     break;
@@ -87,7 +87,7 @@ namespace MWS.Pages
                     decimal dc;
                     if (!decimal.TryParse(Console.ReadLine(), out dc))
                     {
-                        DisplayAdapter.Display(new PanelDodajWydarzenie(logowanie, new StaticLine("Niepoprawny format liczbowy.", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format liczbowy.", ConsoleColor.Red), this));
                     }
                     budzet = dc;
                     break;
@@ -111,16 +111,16 @@ namespace MWS.Pages
                         DisplayAdapter.Display(new PanelWydarzenia(logowanie, new StaticLine("Dodawanie przebiegło pomyślnie.", ConsoleColor.Green)));
                     }
                     else
-                        DisplayAdapter.Display(new PanelDodajWydarzenie(logowanie, new StaticLine("Wypełnij wszystkie pola.", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Wypełnij wszystkie pola.", ConsoleColor.Red), this));
                     break;
                 case 9:
-                    DisplayAdapter.Display(new PanelDodajWydarzenie(logowanie));
+                    DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie));
                     break;
                 case 10:
                     DisplayAdapter.Display(new PanelWydarzenia(logowanie));
                     break;
             }
-            DisplayAdapter.Display(new PanelDodajWydarzenie(logowanie, null, this));
+            DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, null, this));
         }
     }
 }

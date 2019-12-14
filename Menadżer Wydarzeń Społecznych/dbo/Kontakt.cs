@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Kontakt : DatabaseObject
+    class Kontakt : _DatabaseObject
     {
         public string imie { get; set; }
         public string nazwisko { get; set; }
@@ -18,7 +18,7 @@ namespace MWS.dbo
         public int idpracownika { get; set; } = 0;
         public int iduczestnika { get; set; } = 0;
 
-        public CoreObject owner
+        public _CoreObject owner
         {
             get
             {

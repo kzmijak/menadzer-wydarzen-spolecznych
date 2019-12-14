@@ -8,9 +8,9 @@ using MWS.dbo;
 
 namespace MWS.Procedures
 {
-    class PSetPracownik : DatabaseObjectProcedures
+    class PSetPracownik : _DatabaseObjectProcedures
     {
-        public void Delete(DatabaseObject dbobject)
+        public void Delete(_DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
@@ -18,15 +18,15 @@ namespace MWS.Procedures
             }
         }
 
-        public List<DatabaseObject> GetCollection()
+        public List<_DatabaseObject> GetCollection()
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.Query<Pracownik>("dbo.Pracownik_GetCollection").Cast<DatabaseObject>().ToList();
+                return connection.Query<Pracownik>("dbo.Pracownik_GetCollection").Cast<_DatabaseObject>().ToList();
             }
         }
 
-        public DatabaseObject GetRecord(DatabaseObject dbobject)
+        public _DatabaseObject GetRecord(_DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
@@ -34,7 +34,7 @@ namespace MWS.Procedures
             }
         }
 
-        public DatabaseObject GetRecordById(int id)
+        public _DatabaseObject GetRecordById(int id)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
@@ -42,7 +42,7 @@ namespace MWS.Procedures
             }
         }
 
-        public DatabaseObject Insert(DatabaseObject dbobject)
+        public _DatabaseObject Insert(_DatabaseObject dbobject)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
@@ -50,7 +50,7 @@ namespace MWS.Procedures
             }
         }
 
-        public void Update(DatabaseObject dbobject_old, DatabaseObject dbobject_new)
+        public void Update(_DatabaseObject dbobject_old, _DatabaseObject dbobject_new)
         {
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))

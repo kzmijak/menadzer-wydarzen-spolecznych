@@ -6,12 +6,12 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class PanelUstawieniaKontakt : Panel
+    class PanelUstawieniaKontakt : _Panel
     {
-        CoreObject Core = null;
+        _CoreObject Core = null;
         Kontakt Update = new Kontakt();
 
-        public PanelUstawieniaKontakt(Logowanie logowanie, StaticLine note = null, Kontakt update = null, CoreObject core = null): base(logowanie)
+        public PanelUstawieniaKontakt(Logowanie logowanie, StaticLine note = null, Kontakt update = null, _CoreObject core = null): base(logowanie)
         {
             if (update == null)
                 Update = logowanie.owner.kontakt;
@@ -51,7 +51,7 @@ namespace MWS.Pages
                 Contents.Add(note);
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             switch(line.Index)
             {

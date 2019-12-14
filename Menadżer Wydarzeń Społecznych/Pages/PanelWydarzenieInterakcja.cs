@@ -6,14 +6,14 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class PanelWydarzenieInterakcja : Panel
+    class PanelWydarzenieInterakcja : _Panel
     {
         public PanelWydarzenieInterakcja(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null): base(logowanie)
         {
 
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
         }
     }

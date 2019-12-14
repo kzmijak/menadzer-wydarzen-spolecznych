@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Platnosc : DatabaseObject
+    class Platnosc : _DatabaseObject
     {
         public int idkarty { get; set; }
         public int idadresata { get; set; }

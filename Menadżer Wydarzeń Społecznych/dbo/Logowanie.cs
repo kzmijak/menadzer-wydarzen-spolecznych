@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Logowanie : DatabaseObject
+    class Logowanie : _DatabaseObject
     { 
         public string login { get; set; }
         public string haslo { get; set; }
@@ -12,7 +12,7 @@ namespace MWS.dbo
         public int idsponsora { get; set; } = 0;
         public int iduczestnika { get; set; } = 0;
 
-        public CoreObject owner
+        public _CoreObject owner
         {
             get
             {

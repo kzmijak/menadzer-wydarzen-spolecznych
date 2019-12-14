@@ -7,9 +7,9 @@ using MWS.dbo;
 
 namespace MWS.Procedures
 {
-    class JPSetWydarzenie_Pracownik : IJoiningTableProcedures
+    class JPSetWydarzenie_Pracownik : _JoiningTableProcedures
     {
-        public void Delete(DatabaseObject object1, DatabaseObject object2)
+        public void Delete(_DatabaseObject object1, _DatabaseObject object2)
         {
             Wydarzenie_Pracownik joiningObject = new Wydarzenie_Pracownik()
             {
@@ -22,7 +22,7 @@ namespace MWS.Procedures
             }
         }
 
-        public void Insert(DatabaseObject object1, DatabaseObject object2)
+        public void Insert(_DatabaseObject object1, _DatabaseObject object2)
         {
             Wydarzenie_Pracownik joiningObject = new Wydarzenie_Pracownik()
             {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Bilet : DatabaseObject
+    class Bilet : _DatabaseObject
     {
         public string nazwa { get; set; }
         public decimal cena { get; set; }

@@ -6,10 +6,10 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class LoginRegister : Page
+    class LoginRejestracja : _Page
     {
         public int id { get; set; }
-        public Page caller { get; set; }
+        public _CoreObject caller { get; set; }
         
         public string login { get; set; }
         public string haslo { get; set; }
@@ -30,12 +30,12 @@ namespace MWS.Pages
         public string nazwa { get; set; }
         public int fid { get; set; } 
 
-        LoginRegister() { }
+        LoginRejestracja() { }
 
-        public LoginRegister(Page caller, StaticLine note = null, LoginRegister update = null): base()
+        public LoginRejestracja(_CoreObject caller, StaticLine note = null, LoginRejestracja update = null): base()
         {
             if(update is null)
-                update = new LoginRegister();
+                update = new LoginRejestracja();
             
             this.caller = caller;
 
@@ -64,7 +64,7 @@ namespace MWS.Pages
             Contents.Add(new ActiveLine("Hasło: \t\t" + encode(haslo)));          //3
             Contents.Add(new ActiveLine("Powtórz hasło: \t" + encode(haslo2))); //4
 
-            if(!(caller is LoginSponsor))
+            if(!(caller is Sponsor))
             {
                 Contents.Add(new StaticLine("Dane kontaktowe"));                //5
                 Contents.Add(new ActiveLine("Imię: \t\t" + imie));                //6
@@ -77,11 +77,11 @@ namespace MWS.Pages
                 Contents.Add(new ActiveLine("Kod pocztowy: \t" + poczta));            //13
                 Contents.Add(new ActiveLine("Ulica: \t\t" + ulica));              //14
             }
-            if(caller is LoginPracownik)
+            if(caller is Pracownik)
             {
                 Contents.Add(new ActiveLine("Stanowisko: \t" + update.stanowisko));    //P:15
             }
-            if(caller is LoginSponsor)
+            if(caller is Sponsor)
             {
                 Contents.Add(new ActiveLine("Nazwa organizacji: \t" + update.nazwa));  //S:5
             }
@@ -94,13 +94,13 @@ namespace MWS.Pages
                 this.Contents.Add(note);
         }
         
-        public override void React(Line line)
+        public override void React(_Line line)
         {
-            if (caller is LoginPracownik)
+            if (caller is Pracownik)
                 pracownik(line.Index);
-            if (caller is LoginSponsor)
+            if (caller is Sponsor)
                 sponsor(line.Index);
-            if (caller is LoginUczestnik)
+            if (caller is Uczestnik)
                 uczestnik(line.Index);
         }
 
@@ -194,29 +194,29 @@ namespace MWS.Pages
 
                         DataAccess.Kontakt.Insert(kontakt);
 
-                        DisplayAdapter.Display(new LoginPracownik(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
+                        DisplayAdapter.Display(new LoginLogowanie(caller, new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }
                     else if (DbHelper.IsAnyNullOrEmpty(this) == true)
                     {
                         StaticLine warning = new StaticLine("Uzupełnij brakujące pola tekstowe.", ConsoleColor.Red);
-                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                        DisplayAdapter.Display(new LoginRejestracja(caller, warning, this));
                     }
                     else
                     {
                         StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
                         haslo = null;
                         haslo2 = null;
-                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                        DisplayAdapter.Display(new LoginRejestracja(caller, warning, this));
                     }
                     break;
                 case 18:
-                    DisplayAdapter.Display(new LoginRegister(caller, null, null));
+                    DisplayAdapter.Display(new LoginRejestracja(caller, null, null));
                     break;
                 case 19:
                     DisplayAdapter.Display(new Login());
                     break;
             }
-            DisplayAdapter.Display(new LoginRegister(caller, null, this), DisplayAdapter.CurrentLine);
+            DisplayAdapter.Display(new LoginRejestracja(caller, null, this), DisplayAdapter.CurrentLine);
         }
 
         private void uczestnik(int i)
@@ -295,29 +295,29 @@ namespace MWS.Pages
 
                         DataAccess.Kontakt.Insert(kontakt);
 
-                        DisplayAdapter.Display(new LoginUczestnik(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
+                        DisplayAdapter.Display(new LoginLogowanie(new Uczestnik(), new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }
                     else if (DbHelper.IsAnyNullOrEmpty(this) == true)
                     {
                         StaticLine warning = new StaticLine("Uzupełnij brakujące pola tekstowe.", ConsoleColor.Red);
-                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                        DisplayAdapter.Display(new LoginRejestracja(caller, warning, this));
                     }
                     else
                     {
                         StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
                         haslo = null;
                         haslo2 = null;
-                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                        DisplayAdapter.Display(new LoginRejestracja(caller, warning, this));
                     }
                     break;
                 case 17:
-                    DisplayAdapter.Display(new LoginRegister(caller, null, null));
+                    DisplayAdapter.Display(new LoginRejestracja(caller, null, null));
                     break;
                 case 18:
                     DisplayAdapter.Display(new Login());
                     break;
             }
-            DisplayAdapter.Display(new LoginRegister(caller, null, this), DisplayAdapter.CurrentLine);
+            DisplayAdapter.Display(new LoginRejestracja(caller, null, this), DisplayAdapter.CurrentLine);
         }
 
         private void sponsor(int i)
@@ -366,29 +366,29 @@ namespace MWS.Pages
 
                         DataAccess.Logowanie.Insert(login);
 
-                        DisplayAdapter.Display(new LoginSponsor(new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
+                        DisplayAdapter.Display(new LoginLogowanie(new Sponsor(), new StaticLine("Rejestracja przebiegła pomyślnie. Możesz się teraz zalogować.", ConsoleColor.Green)));
                     }
                     else if (DbHelper.IsAnyNullOrEmpty(this) == false)
                     {
                         StaticLine warning = new StaticLine("Uzupełnij brakujące pola tekstowe.", ConsoleColor.Red);
-                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                        DisplayAdapter.Display(new LoginRejestracja(caller, warning, this));
                     }
                     else
                     {
                         StaticLine warning = new StaticLine("Wprowadzone hasła się nie zgadzają. Wpisz je ponownie.", ConsoleColor.Red);
                         haslo = null;
                         haslo2 = null;
-                        DisplayAdapter.Display(new LoginRegister(caller, warning, this));
+                        DisplayAdapter.Display(new LoginRejestracja(caller, warning, this));
                     }
                     break;
                 case 8:
-                    DisplayAdapter.Display(new LoginRegister(caller, null, null));
+                    DisplayAdapter.Display(new LoginRejestracja(caller, null, null));
                     break;
                 case 9:
                     DisplayAdapter.Display(new Login());
                     break;
             }
-            DisplayAdapter.Display(new LoginRegister(caller, null, this), DisplayAdapter.CurrentLine);
+            DisplayAdapter.Display(new LoginRejestracja(caller, null, this), DisplayAdapter.CurrentLine);
         }
     }
 }

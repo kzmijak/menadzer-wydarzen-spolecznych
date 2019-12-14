@@ -6,7 +6,7 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class PanelUstawienia : Panel
+    class PanelUstawienia : _Panel
     {
         public PanelUstawienia(Logowanie logowanie, StaticLine note = null): base(logowanie)
         {
@@ -18,7 +18,7 @@ namespace MWS.Pages
             Contents.Add(new ActiveLine("Powrót"));
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             int sponsordependent = 0;
             if (logowanie.owner is Sponsor)
@@ -44,7 +44,7 @@ namespace MWS.Pages
             }
             if(line.Index == 4 - sponsordependent)
             {
-                DisplayAdapter.Display(new PanelPracownika(logowanie));
+                DisplayAdapter.Display(new Panel(logowanie));
             }
         }
     }

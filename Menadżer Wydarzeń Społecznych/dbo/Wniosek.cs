@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Wniosek : DatabaseObject
+    class Wniosek : _DatabaseObject
     {
         public int idpracownika { get; set; }
         public int indwydarzenia { get; set; }

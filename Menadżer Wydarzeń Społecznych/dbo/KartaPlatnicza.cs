@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class KartaPlatnicza : DatabaseObject
+    class KartaPlatnicza : _DatabaseObject
     {
         public int wlasciciel { get; set; }
         public string numer { get; set; }

@@ -6,13 +6,13 @@ using MWS.Lines;
 
 namespace MWS.Pages
 {
-    class SkrzynkaOdbiorcza : Panel
+    class PanelSkrzynka : _Panel
     {
-        public SkrzynkaOdbiorcza(Logowanie logowanie, StaticLine note = null): base(logowanie)
+        public PanelSkrzynka(Logowanie logowanie, StaticLine note = null): base(logowanie)
         {
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             throw new NotImplementedException();
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    class Uczestnik : CoreObject
+    class Uczestnik : _CoreObject
     {
         public int fid { get; set; }
         

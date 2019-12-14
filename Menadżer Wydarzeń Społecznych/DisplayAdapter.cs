@@ -8,15 +8,15 @@ namespace MWS
 {
     class DisplayAdapter
     {
-        public static Page CurrentPage = null;
-        public static Line CurrentLine = null;
+        public static _Page CurrentPage = null;
+        public static _Line CurrentLine = null;
 
         static void Main(string[] args)
         {
             Display(new Login());   
         }
 
-        public static void FindNextValidLine(Line currentline, int direction)
+        public static void FindNextValidLine(_Line currentline, int direction)
         {
             int lineChecked = currentline.Index;
             do
@@ -57,7 +57,7 @@ namespace MWS
             while (true);
         }
 
-        public static void Display(Page Page, Line cl = null)
+        public static void Display(_Page Page, _Line cl = null)
         {
             CurrentPage = Page;
             CurrentLine = cl;
@@ -84,11 +84,11 @@ namespace MWS
             }
         }
 
-        public static void Refresh(Page Page)
+        public static void Refresh(_Page Page)
         {
             Console.Clear();
             CurrentPage = Page;
-            foreach(Line Line in Page.Contents)
+            foreach(_Line Line in Page.Contents)
             {
                 if (Line is ActiveLine && CurrentLine is null)
                 {

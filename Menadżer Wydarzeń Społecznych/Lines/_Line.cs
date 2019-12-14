@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MWS.Lines
 {
-    abstract class Line
+    abstract class _Line
     {
         public int Index { get; set; }
         public string Content { get; set; }

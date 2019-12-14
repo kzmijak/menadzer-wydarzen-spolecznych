@@ -7,16 +7,16 @@ using System.Text;
 
 namespace MWS.Pages
 {
-    class PanelUstawieniaLogowanie : Panel
+    class PanelUstawieniaLogowanie : _Panel
     {
         private Logowanie Update;
-        private CoreObject Core;
+        private _CoreObject Core;
         private string Haslo1;
         private string Haslo2;
         private string Haslo3;
 
 
-        public PanelUstawieniaLogowanie(Logowanie logowanie, StaticLine note=null, Logowanie update=null, CoreObject core=null, string haslo1 = "", string haslo2 = "", string haslo3 = ""): base(logowanie)
+        public PanelUstawieniaLogowanie(Logowanie logowanie, StaticLine note=null, Logowanie update=null, _CoreObject core=null, string haslo1 = "", string haslo2 = "", string haslo3 = ""): base(logowanie)
         {
             if (update != null)
                 Update = update;
@@ -52,7 +52,7 @@ namespace MWS.Pages
             }
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             switch(line.Index)
             {

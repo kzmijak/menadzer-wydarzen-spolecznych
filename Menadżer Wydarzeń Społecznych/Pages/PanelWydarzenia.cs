@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MWS.Pages
 {
-    class PanelWydarzenia : Panel
+    class PanelWydarzenia : _Panel
     {
         private bool organizatorCheck = false;
         private int notedependent = 1;
@@ -20,7 +20,7 @@ namespace MWS.Pages
                     this.organizatorCheck = true;
                 }
             Contents.Add(new StaticLine("Aktywne wydarzenia:"));
-            foreach (DatabaseObject wydarzenie in DataAccess.Wydarzenie.GetCollection())
+            foreach (_DatabaseObject wydarzenie in DataAccess.Wydarzenie.GetCollection())
             {
                 Contents.Add(new ActiveLine((wydarzenie as Wydarzenie).nazwa));
             }
@@ -33,20 +33,15 @@ namespace MWS.Pages
             }
         }
 
-        public override void React(Line line)
+        public override void React(_Line line)
         {
             if (organizatorCheck == true && line.Index == 1)
             {
-                DisplayAdapter.Display(new PanelDodajWydarzenie(logowanie));
+                DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie));
             }
             else if(line.Index == Contents.Count - notedependent )
             {
-                if (logowanie.owner is Pracownik)
-                    DisplayAdapter.Display(new PanelPracownika(logowanie));
-                if (logowanie.owner is Sponsor)
-                    DisplayAdapter.Display(new PanelSponsora(logowanie));
-                if (logowanie.owner is Uczestnik)
-                    DisplayAdapter.Display(new PanelUczestnika(logowanie));
+                DisplayAdapter.Display(new Panel(logowanie));
             }
             else
             {
