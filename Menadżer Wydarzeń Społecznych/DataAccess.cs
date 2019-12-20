@@ -28,5 +28,7 @@ namespace MWS
         public static JPSetWydarzenie_Pracownik Wydarzenie_Pracownik { get; set; } = new JPSetWydarzenie_Pracownik();
         public static JPSetWydarzenie_Sponsor Wydarzenie_Sponsor { get; set; } = new JPSetWydarzenie_Sponsor();
         public static JPSetWydarzenie_Uczestnik Wydarzenie_Uczestnik { get; set; } = new JPSetWydarzenie_Uczestnik();
+        public static JPSetLogowanie_Logowanie Logowanie_Logowanie { get; set; } = new JPSetLogowanie_Logowanie();
+
     }
 }

@@ -25,7 +25,11 @@ namespace MWS.dbo
                 jt = DataAccess.Wydarzenie_Pracownik.GetCollection().Cast<Wydarzenie_Pracownik>();
                 foreach(Wydarzenie_Pracownik ob in jt)            
                     if(ob.idwydarzenia == id)
-                        output.Add(DataAccess.Pracownik.GetRecordById(ob.idpracownika) as Pracownik);                 
+                    {
+                        Pracownik pracownik = DataAccess.Pracownik.GetRecordById(ob.idpracownika) as Pracownik;
+                        if(pracownik.stanowisko.ToLower() != "organizator")
+                            output.Add(pracownik);                 
+                    }
                 return output;
             }
         }       
@@ -34,10 +38,15 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Pracownik>(9999);
-                foreach (_CoreObject ob in pracownicy)
-                    if (ob is Pracownik)
-                        if((ob as Pracownik).stanowisko.ToLower() == "organizator")
-                            output.Add(ob as Pracownik);
+                IEnumerable<Wydarzenie_Pracownik> jt;
+                jt = DataAccess.Wydarzenie_Pracownik.GetCollection().Cast<Wydarzenie_Pracownik>();
+                foreach (Wydarzenie_Pracownik ob in jt)
+                    if (ob.idwydarzenia == id)
+                    {
+                        Pracownik pracownik = DataAccess.Pracownik.GetRecordById(ob.idpracownika) as Pracownik;
+                        if (pracownik.stanowisko.ToLower() == "organizator")
+                            output.Add(pracownik);
+                    }
                 return output;
             }
         }
@@ -67,6 +76,38 @@ namespace MWS.dbo
                 return output;
             }
         }
+        public List<_DatabaseObject> czlonkowie
+        {
+            get
+            {
+                var output = new List<_DatabaseObject>(9999);
+                IEnumerable<Wydarzenie_Pracownik> wp;
+                wp = DataAccess.Wydarzenie_Pracownik.GetCollection().Cast<Wydarzenie_Pracownik>();
+                foreach (Wydarzenie_Pracownik ob in wp)
+                    if (ob.idwydarzenia == id)
+                    {
+                        Pracownik pracownik = DataAccess.Pracownik.GetRecordById(ob.idpracownika) as Pracownik;
+                        output.Add(pracownik);
+                    }
+                IEnumerable<Wydarzenie_Sponsor> ws;
+                ws = DataAccess.Wydarzenie_Sponsor.GetCollection().Cast<Wydarzenie_Sponsor>();
+                foreach (var ob in ws)
+                    if (ob.idwydarzenia == id)
+                    {
+                        Sponsor s = DataAccess.Sponsor.GetRecordById(ob.idsponsora) as Sponsor;
+                        output.Add(s);
+                    }
+                IEnumerable<Wydarzenie_Uczestnik> wu;
+                wu = DataAccess.Wydarzenie_Uczestnik.GetCollection().Cast<Wydarzenie_Uczestnik>();
+                foreach (var ob in wu)
+                    if (ob.idwydarzenia == id)
+                    {
+                        Uczestnik u = DataAccess.Sponsor.GetRecordById(ob.iduczestnika) as Uczestnik;
+                        output.Add(u);
+                    }
+                return output;
+            }
+        }
         public List<Dotacja> dotacje
         {
             get
@@ -74,6 +115,18 @@ namespace MWS.dbo
                 var output = new List<Dotacja>(9999);
                 var ddb = DataAccess.Dotacja.GetCollection().Cast<Dotacja>();
                 foreach (Dotacja d in ddb)
+                    if (d.idwydarzenia == id)
+                        output.Add(d);
+                return output;
+            }
+        }
+        public List<Bilet> bilety
+        {
+            get
+            {
+                var output = new List<Bilet>(9999);
+                var ddb = DataAccess.Bilet.GetCollection().Cast<Bilet>();
+                foreach (Bilet d in ddb)
                     if (d.idwydarzenia == id)
                         output.Add(d);
                 return output;

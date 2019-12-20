@@ -25,7 +25,7 @@ namespace MWS.dbo
         {
             get
             {
-                if(stanowisko.ToLower() == "organizator")
+                if (stanowisko.ToLower() == "organizator")
                 {
                     var output = new List<Pracownik>(9999);
                     var jt = DataAccess.Pracownik_Pracownik.GetCollection();

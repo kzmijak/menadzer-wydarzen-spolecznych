@@ -76,7 +76,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wiadomosc_Update @id, @idpracownika, @idpracownika2, @idsponsora, @idsponsora2, @iduczestnika, @uczestnika2, @dzien, @godzina, @tresc", dbobject_new);
+                connection.Execute("dbo.Wiadomosc_Update @id, @idadresata, @idodbiorcy, @dzien, @godzina, @tresc", dbobject_new);
             }
         }
     }

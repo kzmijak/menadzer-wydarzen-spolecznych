@@ -20,7 +20,12 @@ namespace MWS.Pages
 
         public override void React(_Line line)
         {
-            throw new NotImplementedException();
+            switch (line.Index)
+            {
+                case 4:
+                    DisplayAdapter.Display(new Panel(logowanie));
+                    break;
+            }
         }
     }
 }

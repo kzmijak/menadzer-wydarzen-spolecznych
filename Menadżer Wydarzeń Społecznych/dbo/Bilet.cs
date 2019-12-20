@@ -6,6 +6,7 @@ namespace MWS.dbo
 {
     class Bilet : _DatabaseObject
     {
+        public int idwydarzenia { get; set; }
         public string nazwa { get; set; }
         public decimal cena { get; set; }
         public string opis { get; set; }
@@ -20,6 +21,21 @@ namespace MWS.dbo
                     if (ob.idbiletu == id)
                         output.Add(DataAccess.Uczestnik.GetRecordById(ob.iduczestnika) as Uczestnik);
                 return output;
+            }
+        }
+
+        public Wydarzenie wydarzenie
+        {
+            get
+            {
+                return DataAccess.Wydarzenie.GetRecordById(idwydarzenia) as Wydarzenie;
+            }
+            set
+            {
+                if (wydarzenie is null)
+                    DataAccess.Wydarzenie.Insert(value);
+                else
+                    DataAccess.Wydarzenie.Update(wydarzenie, value);
             }
         }
     }

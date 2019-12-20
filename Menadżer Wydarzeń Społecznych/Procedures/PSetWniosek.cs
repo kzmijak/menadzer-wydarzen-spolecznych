@@ -39,7 +39,7 @@ namespace MWS.Procedures
             {
                 try
                 {
-                    return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecord @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                    return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecord @idadresata, @idodbiorcy, @kwota, @zatwierdzone", dbobject);
                 }
                 catch (InvalidOperationException)
                 {
@@ -67,7 +67,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idadresata, @idodbiorcy, @kwota, @zatwierdzone", dbobject);
             }
         }
 
@@ -76,7 +76,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wniosek_Update @id, @idpracownika, @idwydarzenia, @kwota, @zatwierdzone", dbobject_new);
+                connection.Execute("dbo.Wniosek_Update @id, @idadresata, @idodbiorcy, @kwota, @zatwierdzone", dbobject_new);
             }
         }
     }

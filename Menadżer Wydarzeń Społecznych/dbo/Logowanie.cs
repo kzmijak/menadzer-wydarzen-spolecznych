@@ -47,7 +47,6 @@ namespace MWS.dbo
                 }
             }
         }
-
         public Pracownik pracownik
         {
             get
@@ -65,7 +64,6 @@ namespace MWS.dbo
                     DataAccess.Pracownik.Update(pracownik, value);
             }
         }
-
         public Sponsor sponsor
         {
             get 
@@ -83,7 +81,6 @@ namespace MWS.dbo
                     DataAccess.Sponsor.Update(sponsor, value);
             }
         }
-
         public Uczestnik uczestnik
         {
             get

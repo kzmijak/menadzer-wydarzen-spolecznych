@@ -9,7 +9,7 @@ namespace MWS.dbo
         public int idpracownika { get; set; }
         public int idwydarzenia { get; set; }
         public decimal kwota { get; set; }
-        public bool zatwierdzone { get; set; }
+        public bool zatwierdzone { get; set; } = false;
 
         public Pracownik pracownik
         {

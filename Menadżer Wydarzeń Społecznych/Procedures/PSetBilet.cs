@@ -39,7 +39,7 @@ namespace MWS.Procedures
             {
                 try
                 {
-                    return connection.QuerySingle<Bilet>("dbo.Bilet_GetRecord @nazwa, @cena, @opis", dbobject);
+                    return connection.QuerySingle<Bilet>("dbo.Bilet_GetRecord @idwydarzenia, @nazwa, @cena, @opis", dbobject);
                 }
                 catch (InvalidOperationException)
                 {
@@ -67,7 +67,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Bilet>("dbo.Bilet_Insert @nazwa, @cena, @opis", dbobject);
+                return connection.QuerySingle<Bilet>("dbo.Bilet_Insert @idwydarzenia, @nazwa, @cena, @opis", dbobject);
             }
         }
 
@@ -76,7 +76,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Bilet_Update @id, @nazwa, @cena, @opis", dbobject_new);
+                connection.Execute("dbo.Bilet_Update @id, @idwydarzenia, @nazwa, @cena, @opis", dbobject_new);
             }
         }
     }

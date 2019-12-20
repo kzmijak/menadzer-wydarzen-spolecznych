@@ -44,7 +44,7 @@ namespace MWS.dbo
                 IEnumerable<_DatabaseObject> database = DataAccess.Kontakt.GetCollection();
                 foreach (_DatabaseObject @do in database)
                 {
-                    if ((@do as Kontakt).owner.id == id && (@do as Kontakt).owner.GetType() == this.GetType())
+                    if ((@do as Kontakt).owner.id == id && (@do as Kontakt).owner.GetType() == GetType())
                     {
                         output = @do as Kontakt;
                     }

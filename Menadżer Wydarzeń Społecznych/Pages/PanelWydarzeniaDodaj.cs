@@ -28,12 +28,7 @@ namespace MWS.Pages
             godzina = update.godzina;
             budzet = update.budzet;
 
-            string sgodzina = godzina.ToString("hh\\:mm"); 
-            //opis
-            //miejsce
-            //dzien
-            //godzina
-            //budzet
+            string sgodzina = godzina.ToString("hh\\:mm");
 
             Contents.Add(new StaticLine("KREATOR WYDARZEŃ"));
             Contents.Add(new ActiveLine("Nazwa:\t\t" + update.nazwa));
