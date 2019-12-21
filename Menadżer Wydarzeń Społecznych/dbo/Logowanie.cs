@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MWS.dbo
@@ -96,6 +97,18 @@ namespace MWS.dbo
                 }
                 else
                     DataAccess.Uczestnik.Update(uczestnik, value);
+            }
+        }
+        public List<Logowanie> kontakty
+        {
+            get
+            {
+                var output = new List<Logowanie>(9999);
+                var jt = DataAccess.Logowanie_Logowanie.GetCollection();
+                foreach (Logowanie_Logowanie ob in jt)
+                    if (ob.idlogowania1 == id)
+                        output.Add(DataAccess.Logowanie.GetRecordById(ob.idlogowania2) as Logowanie);
+                return output;
             }
         }
     }

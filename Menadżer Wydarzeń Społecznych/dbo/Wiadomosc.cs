@@ -12,32 +12,32 @@ namespace MWS.dbo
         public TimeSpan godzina { get; set; }
         public string tresc { get; set; }
 
-        public Kontakt adresat
+        public Logowanie adresat
         {
             get
             {
-                return DataAccess.Kontakt.GetRecordById(idadresata) as Kontakt;
+                return DataAccess.Logowanie.GetRecordById(idadresata) as Logowanie;
             }
             set
             {
                 if (adresat is null)
-                    DataAccess.Kontakt.Insert(value);
+                    DataAccess.Logowanie.Insert(value);
                 else
-                    DataAccess.Kontakt.Update(adresat, value);
+                    DataAccess.Logowanie.Update(adresat, value);
             }
         }
-        public Kontakt odbiorca
+        public Logowanie odbiorca
         {
             get
             {
-                return DataAccess.Kontakt.GetRecordById(idodbiorcy) as Kontakt;
+                return DataAccess.Logowanie.GetRecordById(idodbiorcy) as Logowanie;
             }
             set
             {
                 if (odbiorca is null)
-                    DataAccess.Kontakt.Insert(value);
+                    DataAccess.Logowanie.Insert(value);
                 else
-                    DataAccess.Kontakt.Update(odbiorca, value);
+                    DataAccess.Logowanie.Update(odbiorca, value);
             }
         }
     }

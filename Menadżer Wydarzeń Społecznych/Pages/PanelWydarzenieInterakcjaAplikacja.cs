@@ -53,8 +53,8 @@ namespace MWS.Pages
                 case 7:
                     Wniosek wniosek = new Wniosek
                     {
-                        idpracownika = logowanie.owner.id,
-                        idwydarzenia = wydarzenie.id,
+                        idadresata = logowanie.owner.id,
+                        idodbiorcy = wydarzenie.id,
                         kwota = donation
                     };
                     DataAccess.Wniosek.Insert(wniosek);

@@ -9,37 +9,47 @@ namespace MWS.Pages
 {
     class PanelWydarzeniaDodaj : _Panel
     {
-        public string nazwa { get; set; }
-        public string opis { get; set; }
-        public string miejsce { get; set; }
-        public DateTime dzien { get; set; }
-        public TimeSpan godzina { get; set; }
-        public decimal budzet { get; set; }
 
-        public PanelWydarzeniaDodaj(Logowanie logowanie, StaticLine note = null, PanelWydarzeniaDodaj update = null): base(logowanie)
+        private Wydarzenie wydarzenie;
+        int updatecaller;
+
+        public PanelWydarzeniaDodaj(Logowanie logowanie, StaticLine note = null, Wydarzenie update = null, int updatecaller = 0): base(logowanie)
         {
-            if (update is null)
-                update = this;
+            if (updatecaller != 0)
+            {
+                this.updatecaller = updatecaller;
+            }
+            else
+                this.updatecaller = 0;
+            if(update != null)
+            {
+                wydarzenie = update;
+            }
+            else
+            {
+                wydarzenie = new Wydarzenie
+                {
+                    nazwa = "",
+                    opis = "",
+                    miejsce = "",
+                    dzien = DateTime.Now,
+                    godzina = DateTime.Now.TimeOfDay,
+                    budzet = 0
+                };
+            }
 
-            nazwa = update.nazwa;
-            opis = update.opis;
-            miejsce = update.miejsce;
-            dzien = update.dzien;
-            godzina = update.godzina;
-            budzet = update.budzet;
-
-            string sgodzina = godzina.ToString("hh\\:mm");
+            string sgodzina = wydarzenie.godzina.ToString("hh\\:mm");
 
             Contents.Add(new StaticLine("KREATOR WYDARZEŃ"));
-            Contents.Add(new ActiveLine("Nazwa:\t\t" + update.nazwa));
-            Contents.Add(new ActiveLine("Opis:\t\t" + update.opis));
-            Contents.Add(new ActiveLine("Miejsce:\t" + update.miejsce));
-            Contents.Add(new ActiveLine("Dzien:\t\t" + update.dzien.ToShortDateString()));
+            Contents.Add(new ActiveLine("Nazwa:\t\t" + wydarzenie.nazwa));
+            Contents.Add(new ActiveLine("Opis:\t\t" + wydarzenie.opis));
+            Contents.Add(new ActiveLine("Miejsce:\t" + wydarzenie.miejsce));
+            Contents.Add(new ActiveLine("Dzien:\t\t" + wydarzenie.dzien.ToShortDateString()));
             Contents.Add(new ActiveLine("Godzina:\t" + sgodzina));
-            Contents.Add(new ActiveLine("Budżet (PLN):\t" + update.budzet));
+            Contents.Add(new ActiveLine("Budżet (PLN):\t" + wydarzenie.budzet));
             Contents.Add(new StaticLine(""));
             Contents.Add(new ActiveLine("Opublikuj"));
-            Contents.Add(new ActiveLine("Cofnij zmiany"));
+            Contents.Add(new ActiveLine("Wyczyść pola"));
             Contents.Add(new ActiveLine("Wróć"));
 
             if(note != null)
@@ -53,67 +63,81 @@ namespace MWS.Pages
             switch (line.Index)
             {
                 case 1:
-                    nazwa = Console.ReadLine();
+                    wydarzenie.nazwa = Console.ReadLine();
                     break;
                 case 2:
-                    opis = Console.ReadLine();
+                    wydarzenie.opis = Console.ReadLine();
                     break;
                 case 3:
-                    miejsce = Console.ReadLine();
+                    wydarzenie.miejsce = Console.ReadLine();
                     break;
                 case 4:
                     DateTime date;
                     if (!DateTime.TryParse(Console.ReadLine(), out date))
                     {
-                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format daty. (DD.MM.RRRR)", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format daty. (DD.MM.RRRR)", ConsoleColor.Red), wydarzenie, updatecaller));
                     }
-                    dzien = date;
+                    wydarzenie.dzien = date;
                     break;
                 case 5:
                     DateTime dt;
                     if (!DateTime.TryParseExact(Console.ReadLine(), "HH:mm", CultureInfo.InvariantCulture,
                                               DateTimeStyles.None, out dt))
                     {
-                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format godziny. (GG:MM)", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format godziny. (GG:MM)", ConsoleColor.Red), wydarzenie, updatecaller));
                     }
-                    godzina = dt.TimeOfDay;
+                    wydarzenie.godzina = dt.TimeOfDay;
                     break;
                 case 6:
                     decimal dc;
                     if (!decimal.TryParse(Console.ReadLine(), out dc))
                     {
-                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format liczbowy.", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Niepoprawny format liczbowy.", ConsoleColor.Red), wydarzenie, updatecaller));
                     }
-                    budzet = dc;
+                    wydarzenie.budzet = dc;
                     break;
                 case 8:
-                    if(!DbHelper.IsAnyNullOrEmpty(this))
-                    {
-                        Pracownik pracownik = logowanie.pracownik;
-                        Wydarzenie wydarzenie = new Wydarzenie
+                    if(!DbHelper.IsAnyNullOrEmpty(wydarzenie))
+                    {   
+                        if(this.updatecaller == 0)
                         {
-                            nazwa = this.nazwa,
-                            opis = this.opis,
-                            miejsce = this.miejsce,
-                            dzien = this.dzien,
-                            godzina = this.godzina,
-                            budzet = this.budzet
-                        };
-                        Wydarzenie_Pracownik.Add(wydarzenie, pracownik);
+                            Wydarzenie_Pracownik.Add(wydarzenie, logowanie.pracownik);
 
-                        DisplayAdapter.Display(new PanelWydarzenia(logowanie, new StaticLine("Dodawanie przebiegło pomyślnie.", ConsoleColor.Green)));
+                            DisplayAdapter.Display(new PanelWydarzenia(logowanie, new StaticLine("Dodawanie przebiegło pomyślnie.", ConsoleColor.Green)));
+                        }
+                        else 
+                        {
+                            var old = DataAccess.Wydarzenie.GetRecordById(updatecaller);
+                            DataAccess.Wydarzenie.Update(old, wydarzenie);
+
+                            foreach(var jt in DataAccess.Wydarzenie_Pracownik.GetCollection())
+                            {
+                                if((jt as Wydarzenie_Pracownik).idwydarzenia == old.id && ((DataAccess.Pracownik.GetRecordById((jt as Wydarzenie_Pracownik).idpracownika)) as Pracownik).stanowisko.ToLower() == "organizator")
+                                {
+                                    DataAccess.Wiadomosc.Send(logowanie, (DataAccess.Pracownik.GetRecordById((jt as Wydarzenie_Pracownik).idpracownika) as Pracownik).logowanie, $"Zostały dokonane zmiany w wydarzeniu \"{(old as Wydarzenie).nazwa}\"."
+                                                                                                                                                            + $"Korekty dokonał: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}."
+                                                                                                                                                            + $"Nazwa:   {(old as Wydarzenie).nazwa}   -> {wydarzenie.nazwa}"
+                                                                                                                                                            + $"Miejsce: {(old as Wydarzenie).miejsce} -> {wydarzenie.miejsce}"
+                                                                                                                                                            + $"Dzień:   {(old as Wydarzenie).dzien}   -> {wydarzenie.dzien}"
+                                                                                                                                                            + $"Godzina: {(old as Wydarzenie).godzina} -> {wydarzenie.godzina}"
+                                                                                                                                                            + $"Budżet:  {(old as Wydarzenie).budzet}  -> {wydarzenie.budzet}");
+
+                                }
+                            }
+                            DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie, null));
+                        }
                     }
                     else
-                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Wypełnij wszystkie pola.", ConsoleColor.Red), this));
+                        DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, new StaticLine("Wypełnij wszystkie pola.", ConsoleColor.Red), wydarzenie, updatecaller));
                     break;
                 case 9:
-                    DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie));
+                    DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, null, null, updatecaller));
                     break;
                 case 10:
                     DisplayAdapter.Display(new PanelWydarzenia(logowanie));
                     break;
             }
-            DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, null, this));
+            DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie, null, wydarzenie, updatecaller));
         }
     }
 }

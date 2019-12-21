@@ -219,7 +219,7 @@ namespace MWS.Pages
                         }
                         else
                         {
-                            // REDIRECT TO MANAGE PANEL PaneWydarzenieInterakcjaCzlonek
+                            DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie));
                         }
                     }
                     else
@@ -250,23 +250,24 @@ namespace MWS.Pages
                         }
                         else
                         {
-                            // REDIRECT TO PanelWydarzenieInterakcjaCzlonek
+                            DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie));
                         }
                     }
                 }
                 if(logowanie.owner is Sponsor)
                 {
                     // REDIRECT TO SEND DONATION TAB PanelWydarzenieInterakcjaDotacja
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaDotacja(logowanie, wydarzenie)); 
                 }
                 if (logowanie.owner is Uczestnik)
                 {
-                    if(!isIn)
+                    if(wydarzenie.bilety.Count == 0)
                     {
-                        // REDIRECT TO THE TICKETS TAB PanelWydarzenieInterakcjaBilety
+                        DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, new StaticLine("Organizator nie wydał jeszcze biletów na to wydarzenie.", ConsoleColor.Red)));
                     }
                     else
                     {
-                        // REDIRECT TO PanelWydarzenieInterakcjaCzlonek
+                        DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie));
                     }
                 }
 

@@ -79,5 +79,18 @@ namespace MWS.Procedures
                 connection.Execute("dbo.Wniosek_Update @id, @idadresata, @idodbiorcy, @kwota, @zatwierdzone", dbobject_new);
             }
         }
+
+        public void Send(Logowanie sender, Logowanie receiver, decimal amount, string message)
+        {
+            Wniosek wniosek = new Wniosek
+            {
+                idadresata = sender.id,
+                idodbiorcy = receiver.id,
+                kwota = amount,
+                zatwierdzone = false
+            };
+            if (sender.id != receiver.id)
+                DataAccess.Wniosek.Insert(wniosek);
+        }
     }
 }

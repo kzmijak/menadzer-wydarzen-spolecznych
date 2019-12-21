@@ -79,5 +79,19 @@ namespace MWS.Procedures
                 connection.Execute("dbo.Wiadomosc_Update @id, @idadresata, @idodbiorcy, @dzien, @godzina, @tresc", dbobject_new);
             }
         }
+
+        public void Send(Logowanie sender, Logowanie receiver, string message)
+        {
+            Wiadomosc wiadomosc = new Wiadomosc
+            {
+                idadresata = sender.id,
+                idodbiorcy = receiver.id,
+                dzien = DateTime.Now,
+                godzina = DateTime.Now.TimeOfDay,
+                tresc = message
+            };
+            if(sender.id != receiver.id)
+                DataAccess.Wiadomosc.Insert(wiadomosc);
+        }
     }
 }
