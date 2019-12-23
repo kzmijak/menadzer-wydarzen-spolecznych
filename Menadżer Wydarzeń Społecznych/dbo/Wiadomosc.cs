@@ -10,6 +10,7 @@ namespace MWS.dbo
         public int idodbiorcy { get; set; } = 0;
         public DateTime dzien { get; set; }
         public TimeSpan godzina { get; set; }
+        public string tytul { get; set; }
         public string tresc { get; set; }
 
         public Logowanie adresat
@@ -38,6 +39,28 @@ namespace MWS.dbo
                     DataAccess.Logowanie.Insert(value);
                 else
                     DataAccess.Logowanie.Update(odbiorca, value);
+            }
+        }
+
+        public Wniosek wniosek
+        {
+            get
+            {
+                foreach(Wniosek w in DataAccess.Wniosek.GetCollection())
+                {
+                    if (w.idwiadomosci == id)
+                        return w;
+                }
+                return null;
+            }
+            set
+            {
+                if (wniosek is null)
+                {
+                    DataAccess.Wniosek.Insert(value);
+                }
+                else
+                    DataAccess.Wniosek.Update(wniosek, value);
             }
         }
     }

@@ -138,7 +138,7 @@ namespace MWS.Pages
 
                 if (line.Index > 8 && line.Index < 9 + cnt)
                 {
-                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, null, wydarzenie, objects[line.Index - 9]));
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, wydarzenie, objects[line.Index - 9]));
                 }
             }
 
@@ -158,7 +158,7 @@ namespace MWS.Pages
 
                 if (line.Index > 9 && line.Index < 10 + cnt)
                 {
-                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, null, wydarzenie, objects[line.Index - 10]));
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, wydarzenie, objects[line.Index - 10]));
                 }
             }
 
@@ -177,7 +177,7 @@ namespace MWS.Pages
 
                 if (line.Index > 10 && line.Index < 11 + cnt)
                 {
-                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, null, wydarzenie, objects[line.Index - 11]));
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, wydarzenie, objects[line.Index - 11]));
                 }
             }
 
@@ -196,7 +196,7 @@ namespace MWS.Pages
                 
                 if(line.Index > 11 && line.Index < 13 + cnt)
                 {
-                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, null, wydarzenie, objects[line.Index - 12]));
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, wydarzenie, objects[line.Index - 12]));
                 }
             }
             if (line.Index == 13 + cnt)

@@ -51,29 +51,23 @@ namespace MWS.Pages
                     DisplayAdapter.Display(new PanelWydarzenieInterakcjaAplikacja(logowanie, wydarzenie, null, message, dc));
                     break;
                 case 7:
-                    Wniosek wniosek = new Wniosek
-                    {
-                        idadresata = logowanie.owner.id,
-                        idodbiorcy = wydarzenie.id,
-                        kwota = donation
-                    };
-                    DataAccess.Wniosek.Insert(wniosek);
 
                     string str = "";
                     for(int i = 0; i < 6; i++)
                     {
-                        str += $"{Contents[i]}\n";
+                        str += $"{Contents[i].Content}\n";
                     }
-
-                    Wiadomosc wiadomosc = new Wiadomosc
+                    
+                    var sender = logowanie.pracownik.logowanie;
+                    var receiver = wydarzenie.organizatorzy[0].logowanie;
+                    
+                    Wniosek wniosek = new Wniosek
                     {
-                        idadresata = logowanie.pracownik.id,
-                        idodbiorcy = wydarzenie.organizatorzy[0].id,
-                        dzien = DateTime.Now,
-                        godzina = DateTime.Now.TimeOfDay,
-                        tresc = str
+                        kwota = donation,
+                        akcja = "PracownikApply"
                     };
-                    DataAccess.Wiadomosc.Insert(wiadomosc);
+                    DataAccess.Wiadomosc.Send($"APLIKACJA DO WYDARZENIA \"{wydarzenie.nazwa.ToUpper()}\"", str, sender, receiver, wniosek);
+                    
                     DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, new StaticLine("Aplikacja na zgłoszenie została wysłana.", ConsoleColor.Green)));
                     break;
                 case 8:

@@ -6,37 +6,23 @@ namespace MWS.dbo
 {
     class Wniosek : _DatabaseObject
     {
-        public int idadresata { get; set; }
-        public int idodbiorcy { get; set; }
+        public int idwiadomosci { get; set; }
         public decimal kwota { get; set; }
+        public string akcja { get; set; }
         public bool zatwierdzone { get; set; } = false;
 
-        public Logowanie adresat
+        public Wiadomosc wiadomosc
         {
             get
             {
-                return DataAccess.Logowanie.GetRecordById(idadresata) as Logowanie;
+                return DataAccess.Wiadomosc.GetRecordById(idwiadomosci) as Wiadomosc;
             }
             set
             {
-                if (adresat is null)
-                    DataAccess.Logowanie.Insert(value);
+                if (wiadomosc is null)
+                    DataAccess.Wiadomosc.Insert(value);
                 else
-                    DataAccess.Logowanie.Update(adresat, value);
-            }
-        }
-        public Wydarzenie wydarzenie
-        {
-            get
-            {
-                return DataAccess.Wydarzenie.GetRecordById(idodbiorcy) as Wydarzenie;
-            }
-            set
-            {
-                if (wydarzenie is null)
-                    DataAccess.Wydarzenie.Insert(value);
-                else
-                    DataAccess.Wydarzenie.Update(wydarzenie, value);
+                    DataAccess.Wiadomosc.Update(wiadomosc, value);
             }
         }
     }

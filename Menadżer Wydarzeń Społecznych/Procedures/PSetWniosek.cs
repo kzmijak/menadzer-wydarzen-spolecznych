@@ -39,7 +39,7 @@ namespace MWS.Procedures
             {
                 try
                 {
-                    return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecord @idadresata, @idodbiorcy, @kwota, @zatwierdzone", dbobject);
+                    return connection.QuerySingle<Wniosek>("dbo.Wniosek_GetRecord @idwiadomosci, @kwota, @akcja, @zatwierdzone", dbobject);
                 }
                 catch (InvalidOperationException)
                 {
@@ -67,7 +67,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idadresata, @idodbiorcy, @kwota, @zatwierdzone", dbobject);
+                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idwniadomosci, @kwota, @akcja, @zatwierdzone", dbobject);
             }
         }
 
@@ -76,21 +76,20 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wniosek_Update @id, @idadresata, @idodbiorcy, @kwota, @zatwierdzone", dbobject_new);
+                connection.Execute("dbo.Wniosek_Update @id, @idwiadomosci, @kwota, @akcja, @zatwierdzone", dbobject_new);
             }
         }
 
-        public void Send(Logowanie sender, Logowanie receiver, decimal amount, string message)
+        public void Send(Wiadomosc source, decimal amount, string action)
         {
             Wniosek wniosek = new Wniosek
             {
-                idadresata = sender.id,
-                idodbiorcy = receiver.id,
+                idwiadomosci = source.id,
                 kwota = amount,
+                akcja = action,
                 zatwierdzone = false
             };
-            if (sender.id != receiver.id)
-                DataAccess.Wniosek.Insert(wniosek);
+            DataAccess.Wniosek.Insert(wniosek);
         }
     }
 }

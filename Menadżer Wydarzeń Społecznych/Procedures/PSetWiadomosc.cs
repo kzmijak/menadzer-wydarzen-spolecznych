@@ -39,7 +39,7 @@ namespace MWS.Procedures
             {
                 try
                 {
-                    return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecord @idadresata, @idodbiorcy, @dzien, @godzina, @tresc", dbobject);
+                    return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_GetRecord @idadresata, @idodbiorcy, @dzien, @godzina, @tytul, @tresc", dbobject);
                 }
                 catch (InvalidOperationException)
                 {
@@ -67,7 +67,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_Insert @idadresata, @idodbiorcy, @dzien, @godzina, @tresc", dbobject);
+                return connection.QuerySingle<Wiadomosc>("dbo.Wiadomosc_Insert @idadresata, @idodbiorcy, @dzien, @godzina, @tytul, @tresc", dbobject);
             }
         }
 
@@ -76,11 +76,11 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Wiadomosc_Update @id, @idadresata, @idodbiorcy, @dzien, @godzina, @tresc", dbobject_new);
+                connection.Execute("dbo.Wiadomosc_Update @id, @idadresata, @idodbiorcy, @dzien, @godzina, @tytul, @tresc", dbobject_new);
             }
         }
 
-        public void Send(Logowanie sender, Logowanie receiver, string message)
+        public void Send(string title, string message, Logowanie sender, Logowanie receiver, Wniosek addition = null)
         {
             Wiadomosc wiadomosc = new Wiadomosc
             {
@@ -88,10 +88,19 @@ namespace MWS.Procedures
                 idodbiorcy = receiver.id,
                 dzien = DateTime.Now,
                 godzina = DateTime.Now.TimeOfDay,
+                tytul = title,
                 tresc = message
             };
             if(sender.id != receiver.id)
-                DataAccess.Wiadomosc.Insert(wiadomosc);
+            {
+                wiadomosc = DataAccess.Wiadomosc.Insert(wiadomosc) as Wiadomosc;
+                if(addition != null)
+                {
+                    addition.idwiadomosci = wiadomosc.id;
+                    addition.zatwierdzone = false;
+                    DataAccess.Wniosek.Insert(addition);
+                }
+            }
         }
     }
 }

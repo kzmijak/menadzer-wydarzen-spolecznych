@@ -114,13 +114,22 @@ namespace MWS.Pages
                             {
                                 if((jt as Wydarzenie_Pracownik).idwydarzenia == old.id && ((DataAccess.Pracownik.GetRecordById((jt as Wydarzenie_Pracownik).idpracownika)) as Pracownik).stanowisko.ToLower() == "organizator")
                                 {
-                                    DataAccess.Wiadomosc.Send(logowanie, (DataAccess.Pracownik.GetRecordById((jt as Wydarzenie_Pracownik).idpracownika) as Pracownik).logowanie, $"Zostały dokonane zmiany w wydarzeniu \"{(old as Wydarzenie).nazwa}\"."
-                                                                                                                                                            + $"Korekty dokonał: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}."
-                                                                                                                                                            + $"Nazwa:   {(old as Wydarzenie).nazwa}   -> {wydarzenie.nazwa}"
-                                                                                                                                                            + $"Miejsce: {(old as Wydarzenie).miejsce} -> {wydarzenie.miejsce}"
-                                                                                                                                                            + $"Dzień:   {(old as Wydarzenie).dzien}   -> {wydarzenie.dzien}"
-                                                                                                                                                            + $"Godzina: {(old as Wydarzenie).godzina} -> {wydarzenie.godzina}"
-                                                                                                                                                            + $"Budżet:  {(old as Wydarzenie).budzet}  -> {wydarzenie.budzet}");
+                                    Wniosek GoToWydarzenia = new Wniosek
+                                    {
+                                        kwota = 0,
+                                        akcja = "GoToWydarzenia"
+                                    };
+
+                                    DataAccess.Wiadomosc.Send(
+                                        $"WYDARZENIE \"{wydarzenie.nazwa.ToUpper()}\" ULEGŁO ZMIANIE", 
+                                        $"Zostały dokonane zmiany w wydarzeniu \"{(old as Wydarzenie).nazwa}\"."
+                                      + $"\nKorekty dokonał: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}."
+                                      + $"\nNazwa:   {(old as Wydarzenie).nazwa}   -> {wydarzenie.nazwa}"
+                                      + $"\nMiejsce: {(old as Wydarzenie).miejsce} -> {wydarzenie.miejsce}"
+                                      + $"\nDzień:   {(old as Wydarzenie).dzien}   -> {wydarzenie.dzien}"
+                                      + $"\nGodzina: {(old as Wydarzenie).godzina} -> {wydarzenie.godzina}"
+                                      + $"\nBudżet:  {(old as Wydarzenie).budzet}  -> {wydarzenie.budzet}", 
+                                        logowanie, (DataAccess.Pracownik.GetRecordById((jt as Wydarzenie_Pracownik).idpracownika) as Pracownik).logowanie, GoToWydarzenia);
 
                                 }
                             }
