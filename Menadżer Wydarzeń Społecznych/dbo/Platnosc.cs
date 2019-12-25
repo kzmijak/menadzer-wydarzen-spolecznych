@@ -16,28 +16,28 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.KartaPlatnicza.GetRecordById(idkarty) as KartaPlatnicza;
+                return DataAccess.GetRecordById<KartaPlatnicza>(idkarty) as KartaPlatnicza;
             }
             set
             {
                 if (kartaPlatnicza is null)
-                    DataAccess.KartaPlatnicza.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.KartaPlatnicza.Update(kartaPlatnicza, value);
+                    DataAccess.Update(kartaPlatnicza, value);
             }
         }
         public Kontakt odbiorca
         {
             get
             {
-                return DataAccess.Kontakt.GetRecordById(idadresata) as Kontakt;
+                return DataAccess.GetRecordById<Kontakt>(idadresata) as Kontakt;
             }
             set
             {
                 if (odbiorca is null)
-                    DataAccess.Kontakt.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.Kontakt.Update(odbiorca, value);
+                    DataAccess.Update(odbiorca, value);
             }
         }
 

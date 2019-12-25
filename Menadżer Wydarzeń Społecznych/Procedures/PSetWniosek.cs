@@ -89,7 +89,7 @@ namespace MWS.Procedures
                 akcja = action,
                 zatwierdzone = false
             };
-            DataAccess.Wniosek.Insert(wniosek);
+            DataAccess.Insert(wniosek);
         }
     }
 }

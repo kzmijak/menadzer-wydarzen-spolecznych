@@ -57,7 +57,7 @@ namespace MWS.Pages
                         login = login.Content.Substring(7),
                         haslo = password.Content.Substring(7)
                     };
-                    log = DataAccess.Logowanie.CheckCredentials(log) as Logowanie;
+                    log = Logowanie.CheckCredentials(log) as Logowanie;
                     if(caller is Pracownik)
                     {
                         if (log is null || !(log.owner is Pracownik))

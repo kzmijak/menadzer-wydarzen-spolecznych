@@ -92,7 +92,7 @@ namespace MWS.Pages
                                 else break;
                             }
                             Update.haslo = Haslo3;
-                            if (DataAccess.Logowanie.CheckCredentials(Update) == null)
+                            if (Logowanie.CheckCredentials(Update) == null)
                             {
                                 if(execsponsor)
                                     logowanie.sponsor = Core as Sponsor;
@@ -110,7 +110,7 @@ namespace MWS.Pages
                             else break;
                         }
                         Update.haslo = Haslo1;
-                        if(DataAccess.Logowanie.CheckCredentials(Update)==null)
+                        if(Logowanie.CheckCredentials(Update)==null)
                         {
                             if (execsponsor)
                                 logowanie.sponsor = Core as Sponsor;

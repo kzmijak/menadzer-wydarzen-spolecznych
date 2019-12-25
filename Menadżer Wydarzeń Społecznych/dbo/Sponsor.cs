@@ -15,10 +15,10 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Wydarzenie>(9999);
-                var jt = DataAccess.Wydarzenie_Sponsor.GetCollection();
+                var jt = DataAccess.GetConnections<Wydarzenie_Sponsor>();
                 foreach (Wydarzenie_Sponsor ob in jt)
                     if (ob.idsponsora == id)
-                        output.Add(DataAccess.Wydarzenie.GetRecordById(ob.idwydarzenia) as Wydarzenie);
+                        output.Add(DataAccess.GetRecordById<Wydarzenie>(ob.idwydarzenia) as Wydarzenie);
                 return output;
             }
         }
@@ -27,7 +27,7 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Dotacja>(9999);
-                var ddb = DataAccess.Dotacja.GetCollection().Cast<Dotacja>();
+                var ddb = DataAccess.GetCollection<Dotacja>().Cast<Dotacja>();
                 foreach(var d in ddb)
                     if (d.idsponsora == id)
                         output.Add(d);

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -30,21 +32,21 @@ namespace MWS.dbo
                 if (owner is null)
                 {
                     if (value is Pracownik)
-                        value = DataAccess.Pracownik.Insert(value) as Pracownik;
+                        value = DataAccess.Insert(value) as Pracownik;
                     if (value is Sponsor)
-                        value = DataAccess.Sponsor.Insert(value) as Sponsor;
+                        value = DataAccess.Insert(value) as Sponsor;
                     if (value is Uczestnik)
-                        value = DataAccess.Uczestnik.Insert(value) as Uczestnik;
+                        value = DataAccess.Insert(value) as Uczestnik;
                     value.logowanie = this;
                 }
                 else
                 {
                     if (value is Pracownik)
-                        DataAccess.Pracownik.Update(pracownik, value);
+                        DataAccess.Update(pracownik, value);
                     if (value is Sponsor)
-                        DataAccess.Sponsor.Update(sponsor, value);
+                        DataAccess.Update(sponsor, value);
                     if (value is Uczestnik)
-                        DataAccess.Uczestnik.Update(uczestnik, value);
+                        DataAccess.Update(uczestnik, value);
                 }
             }
         }
@@ -52,51 +54,51 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.Pracownik.GetRecordById(idpracownika) as Pracownik;
+                return DataAccess.GetRecordById<Pracownik>(idpracownika);
             }
             set
             {
                 if (pracownik is null)
                 {
-                    value = DataAccess.Pracownik.Insert(value) as Pracownik;
+                    value = DataAccess.Insert(value) as Pracownik;
                     value.logowanie = this;
                 }
                 else
-                    DataAccess.Pracownik.Update(pracownik, value);
+                    DataAccess.Update(pracownik, value);
             }
         }
         public Sponsor sponsor
         {
             get 
             {
-                return DataAccess.Sponsor.GetRecordById(idsponsora) as Sponsor;
+                return DataAccess.GetRecordById<Sponsor>(idsponsora) as Sponsor;
             }
             set
             {
                 if (sponsor is null)
                 {
-                    value = DataAccess.Sponsor.Insert(value) as Sponsor;
+                    value = DataAccess.Insert(value) as Sponsor;
                     value.logowanie = this;
                 }
                 else
-                    DataAccess.Sponsor.Update(sponsor, value);
+                    DataAccess.Update(sponsor, value);
             }
         }
         public Uczestnik uczestnik
         {
             get
             {
-                return DataAccess.Uczestnik.GetRecordById(iduczestnika) as Uczestnik;
+                return DataAccess.GetRecordById<Uczestnik>(iduczestnika);
             }
             set
             {
                 if (uczestnik is null)
                 {
-                    value = DataAccess.Uczestnik.Insert(value) as Uczestnik;
+                    value = DataAccess.Insert(value) as Uczestnik;
                     value.logowanie = this;
                 }
                 else
-                    DataAccess.Uczestnik.Update(uczestnik, value);
+                    DataAccess.Update(uczestnik, value);
             }
         }
         public List<Logowanie> kontakty
@@ -104,11 +106,26 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Logowanie>(9999);
-                var jt = DataAccess.Logowanie_Logowanie.GetCollection();
+                var jt = DataAccess.GetConnections<Logowanie_Logowanie>();
                 foreach (Logowanie_Logowanie ob in jt)
                     if (ob.idlogowania1 == id)
-                        output.Add(DataAccess.Logowanie.GetRecordById(ob.idlogowania2) as Logowanie);
+                        output.Add(DataAccess.GetRecordById<Logowanie>(ob.idlogowania2));
                 return output;
+            }
+        }
+
+        public static Logowanie CheckCredentials(_DatabaseObject databaseObject)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
+            {
+                try
+                {
+                    return connection.QuerySingle<Logowanie>("dbo.Logowanie_CheckCredentials @login, @haslo", databaseObject);
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
             }
         }
     }

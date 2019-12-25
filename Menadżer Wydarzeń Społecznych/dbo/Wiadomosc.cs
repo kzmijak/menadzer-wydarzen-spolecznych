@@ -17,28 +17,28 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.Logowanie.GetRecordById(idadresata) as Logowanie;
+                return DataAccess.GetRecordById<Logowanie>(idadresata) as Logowanie;
             }
             set
             {
                 if (adresat is null)
-                    DataAccess.Logowanie.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.Logowanie.Update(adresat, value);
+                    DataAccess.Update(adresat, value);
             }
         }
         public Logowanie odbiorca
         {
             get
             {
-                return DataAccess.Logowanie.GetRecordById(idodbiorcy) as Logowanie;
+                return DataAccess.GetRecordById<Logowanie>(idodbiorcy) as Logowanie;
             }
             set
             {
                 if (odbiorca is null)
-                    DataAccess.Logowanie.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.Logowanie.Update(odbiorca, value);
+                    DataAccess.Update(odbiorca, value);
             }
         }
 
@@ -46,7 +46,7 @@ namespace MWS.dbo
         {
             get
             {
-                foreach(Wniosek w in DataAccess.Wniosek.GetCollection())
+                foreach(Wniosek w in DataAccess.GetCollection<Wniosek>())
                 {
                     if (w.idwiadomosci == id)
                         return w;
@@ -57,10 +57,34 @@ namespace MWS.dbo
             {
                 if (wniosek is null)
                 {
-                    DataAccess.Wniosek.Insert(value);
+                    DataAccess.Insert(value);
                 }
                 else
-                    DataAccess.Wniosek.Update(wniosek, value);
+                    DataAccess.Update(wniosek, value);
+            }
+        }
+
+        public static void Send(string title, string message, Logowanie sender, Logowanie receiver, Wniosek addition = null)
+        {
+            Wiadomosc wiadomosc = new Wiadomosc
+            {
+                idadresata = sender.id,
+                idodbiorcy = receiver.id,
+                dzien = DateTime.Now,
+                godzina = DateTime.Now.TimeOfDay,
+                tytul = title,
+                tresc = message
+            };
+
+            if (sender.id != receiver.id)
+            {
+                wiadomosc = DataAccess.Insert(wiadomosc) as Wiadomosc;
+                if (addition != null)
+                {
+                    addition.idwiadomosci = wiadomosc.id;
+                    addition.zatwierdzone = false;
+                    DataAccess.Insert(addition);
+                }
             }
         }
     }

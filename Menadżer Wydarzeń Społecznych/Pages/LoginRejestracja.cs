@@ -166,7 +166,7 @@ namespace MWS.Pages
                             stanowisko = this.stanowisko
                         };
 
-                        pracownik = DataAccess.Pracownik.Insert(pracownik) as Pracownik;
+                        pracownik = DataAccess.Insert(pracownik) as Pracownik;
                         Console.WriteLine(pracownik.id);
 
                         Logowanie login = new Logowanie
@@ -268,7 +268,7 @@ namespace MWS.Pages
                         var rnd = new Random();
                         Uczestnik uczestnik = new Uczestnik { fid = rnd.Next(10000,99999) };
 
-                        uczestnik = DataAccess.Uczestnik.Insert(uczestnik) as Uczestnik;
+                        uczestnik = DataAccess.Insert(uczestnik) as Uczestnik;
 
                         Logowanie login = new Logowanie
                         {
@@ -355,7 +355,7 @@ namespace MWS.Pages
                             nazwa = this.nazwa
                         };
 
-                        sponsor = DataAccess.Sponsor.Insert(sponsor) as Sponsor;
+                        sponsor = DataAccess.Insert(sponsor) as Sponsor;
 
                         Logowanie login = new Logowanie
                         {

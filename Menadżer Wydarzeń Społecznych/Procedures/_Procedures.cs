@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MWS.dbo
+namespace MWS.Procedures
 {
-    abstract class _JoiningTable
+    interface _Procedures
     {
     }
 }

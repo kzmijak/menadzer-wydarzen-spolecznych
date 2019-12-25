@@ -22,11 +22,11 @@ namespace MWS.dbo
             {
                 var output = new List<Pracownik>(9999);
                 IEnumerable<Wydarzenie_Pracownik> jt;
-                jt = DataAccess.Wydarzenie_Pracownik.GetCollection().Cast<Wydarzenie_Pracownik>();
+                jt = DataAccess.GetConnections<Wydarzenie_Pracownik>().Cast<Wydarzenie_Pracownik>();
                 foreach(Wydarzenie_Pracownik ob in jt)            
                     if(ob.idwydarzenia == id)
                     {
-                        Pracownik pracownik = DataAccess.Pracownik.GetRecordById(ob.idpracownika) as Pracownik;
+                        Pracownik pracownik = DataAccess.GetRecordById<Pracownik>(ob.idpracownika);
                         if(pracownik.stanowisko.ToLower() != "organizator")
                             output.Add(pracownik);                 
                     }
@@ -39,11 +39,11 @@ namespace MWS.dbo
             {
                 var output = new List<Pracownik>(9999);
                 IEnumerable<Wydarzenie_Pracownik> jt;
-                jt = DataAccess.Wydarzenie_Pracownik.GetCollection().Cast<Wydarzenie_Pracownik>();
+                jt = DataAccess.GetConnections<Wydarzenie_Pracownik>().Cast<Wydarzenie_Pracownik>();
                 foreach (Wydarzenie_Pracownik ob in jt)
                     if (ob.idwydarzenia == id)
                     {
-                        Pracownik pracownik = DataAccess.Pracownik.GetRecordById(ob.idpracownika) as Pracownik;
+                        Pracownik pracownik = DataAccess.GetRecordById<Pracownik>(ob.idpracownika);
                         if (pracownik.stanowisko.ToLower() == "organizator")
                             output.Add(pracownik);
                     }
@@ -56,10 +56,10 @@ namespace MWS.dbo
             {
                 var output = new List<Sponsor>(9999);
                 IEnumerable<Wydarzenie_Sponsor> jt;
-                jt = DataAccess.Wydarzenie_Sponsor.GetCollection().Cast<Wydarzenie_Sponsor>();
+                jt = DataAccess.GetConnections<Wydarzenie_Sponsor>().Cast<Wydarzenie_Sponsor>();
                 foreach (Wydarzenie_Sponsor ob in jt)
                     if (ob.idwydarzenia == id)
-                        output.Add(DataAccess.Pracownik.GetRecordById(ob.idsponsora) as Sponsor);
+                        output.Add(DataAccess.GetRecordById<Sponsor>(ob.idsponsora));
                 return output;
             }
         }
@@ -69,10 +69,10 @@ namespace MWS.dbo
             {
                 var output = new List<Uczestnik>(9999);
                 IEnumerable<Wydarzenie_Uczestnik> jt;
-                jt = DataAccess.Wydarzenie_Uczestnik.GetCollection().Cast<Wydarzenie_Uczestnik>();
+                jt = DataAccess.GetConnections<Wydarzenie_Uczestnik>().Cast<Wydarzenie_Uczestnik>();
                 foreach (Wydarzenie_Uczestnik ob in jt)
                     if (ob.idwydarzenia == id)
-                        output.Add(DataAccess.Pracownik.GetRecordById(ob.iduczestnika) as Uczestnik);
+                        output.Add(DataAccess.GetRecordById<Uczestnik>(ob.iduczestnika));
                 return output;
             }
         }
@@ -82,27 +82,27 @@ namespace MWS.dbo
             {
                 var output = new List<_DatabaseObject>(9999);
                 IEnumerable<Wydarzenie_Pracownik> wp;
-                wp = DataAccess.Wydarzenie_Pracownik.GetCollection().Cast<Wydarzenie_Pracownik>();
+                wp = DataAccess.GetConnections<Wydarzenie_Pracownik>().Cast<Wydarzenie_Pracownik>();
                 foreach (Wydarzenie_Pracownik ob in wp)
                     if (ob.idwydarzenia == id)
                     {
-                        Pracownik pracownik = DataAccess.Pracownik.GetRecordById(ob.idpracownika) as Pracownik;
+                        Pracownik pracownik = DataAccess.GetRecordById<Pracownik>(ob.idpracownika);
                         output.Add(pracownik);
                     }
                 IEnumerable<Wydarzenie_Sponsor> ws;
-                ws = DataAccess.Wydarzenie_Sponsor.GetCollection().Cast<Wydarzenie_Sponsor>();
+                ws = DataAccess.GetConnections<Wydarzenie_Sponsor>().Cast<Wydarzenie_Sponsor>();
                 foreach (var ob in ws)
                     if (ob.idwydarzenia == id)
                     {
-                        Sponsor s = DataAccess.Sponsor.GetRecordById(ob.idsponsora) as Sponsor;
+                        Sponsor s = DataAccess.GetRecordById<Sponsor>(ob.idsponsora);
                         output.Add(s);
                     }
                 IEnumerable<Wydarzenie_Uczestnik> wu;
-                wu = DataAccess.Wydarzenie_Uczestnik.GetCollection().Cast<Wydarzenie_Uczestnik>();
+                wu = DataAccess.GetConnections<Wydarzenie_Uczestnik>().Cast<Wydarzenie_Uczestnik>();
                 foreach (var ob in wu)
                     if (ob.idwydarzenia == id)
                     {
-                        Uczestnik u = DataAccess.Sponsor.GetRecordById(ob.iduczestnika) as Uczestnik;
+                        Uczestnik u = DataAccess.GetRecordById<Uczestnik>(ob.iduczestnika);
                         output.Add(u);
                     }
                 return output;
@@ -113,7 +113,7 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Dotacja>(9999);
-                var ddb = DataAccess.Dotacja.GetCollection().Cast<Dotacja>();
+                var ddb = DataAccess.GetCollection<Dotacja>().Cast<Dotacja>();
                 foreach (Dotacja d in ddb)
                     if (d.idwydarzenia == id)
                         output.Add(d);
@@ -125,7 +125,7 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Bilet>(9999);
-                var ddb = DataAccess.Bilet.GetCollection().Cast<Bilet>();
+                var ddb = DataAccess.GetCollection<Bilet>().Cast<Bilet>();
                 foreach (Bilet d in ddb)
                     if (d.idwydarzenia == id)
                         output.Add(d);

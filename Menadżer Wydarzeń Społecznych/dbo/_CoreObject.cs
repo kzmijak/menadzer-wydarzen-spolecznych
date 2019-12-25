@@ -11,7 +11,7 @@ namespace MWS.dbo
             get
             {
                 Logowanie output = null;
-                var database = DataAccess.Logowanie.GetCollection();
+                var database = DataAccess.GetCollection<Logowanie>();
                 foreach (var @do in database)
                 {
                     if ((@do as Logowanie).owner.id == id && (@do as Logowanie).owner.GetType() == this.GetType())
@@ -27,11 +27,11 @@ namespace MWS.dbo
                 {
                     if(logowanie is null)
                     {
-                        DataAccess.Logowanie.Insert(value);
+                        DataAccess.Insert(value);
                     }
                     else
                     {
-                        DataAccess.Logowanie.Update(logowanie, value);
+                        DataAccess.Update(logowanie, value);
                     }
                 }
             }
@@ -41,7 +41,7 @@ namespace MWS.dbo
             get
             {
                 Kontakt output = null;
-                IEnumerable<_DatabaseObject> database = DataAccess.Kontakt.GetCollection();
+                IEnumerable<_DatabaseObject> database = DataAccess.GetCollection<Kontakt>();
                 foreach (_DatabaseObject @do in database)
                 {
                     if ((@do as Kontakt).owner.id == id && (@do as Kontakt).owner.GetType() == GetType())
@@ -57,11 +57,11 @@ namespace MWS.dbo
                 {
                     if (kontakt is null)
                     {
-                        DataAccess.Kontakt.Insert(value);
+                        DataAccess.Insert(value);
                     }
                     else
                     {
-                        DataAccess.Kontakt.Update(kontakt, value);
+                        DataAccess.Update(kontakt, value);
                     }
                 }
             }

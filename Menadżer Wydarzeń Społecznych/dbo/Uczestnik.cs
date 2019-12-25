@@ -13,10 +13,10 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Wydarzenie>(9999);
-                var jt = DataAccess.Wydarzenie_Uczestnik.GetCollection();
+                var jt = DataAccess.GetConnections<Wydarzenie_Uczestnik>();
                 foreach (Wydarzenie_Uczestnik ob in jt)
                     if (ob.iduczestnika == id)
-                        output.Add(DataAccess.Wydarzenie.GetRecordById(ob.idwydarzenia) as Wydarzenie);
+                        output.Add(DataAccess.GetRecordById<Wydarzenie>(ob.idwydarzenia) as Wydarzenie);
                 return output;
             }
         }
@@ -26,10 +26,10 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Bilet>(9999);
-                var jt = DataAccess.Uczestnik_Bilet.GetCollection();
+                var jt = DataAccess.GetConnections<Uczestnik_Bilet>();
                 foreach (Uczestnik_Bilet ob in jt)
                     if (ob.iduczestnika == id)
-                        output.Add(DataAccess.Bilet.GetRecordById(ob.idbiletu) as Bilet);
+                        output.Add(DataAccess.GetRecordById<Bilet>(ob.idbiletu) as Bilet);
                 return output;
             }
         }

@@ -112,39 +112,39 @@ namespace MWS.Pages
             {
                 if(wydarzenie.organizatorzy.Count>1 && wydarzenie.organizatorzy[0].id == logowanie.owner.id)
                 {
-                    DataAccess.Wiadomosc.Send($"{wydarzenie.nazwa.ToUpper()} - ZMIANA ORGANIZACJI", $"Zostałeś głównym organizatorem wydarzenia \"{wydarzenie.nazwa}\"", logowanie, wydarzenie.organizatorzy[1].logowanie);
+                    Wiadomosc.Send($"{wydarzenie.nazwa.ToUpper()} - ZMIANA ORGANIZACJI", $"Zostałeś głównym organizatorem wydarzenia \"{wydarzenie.nazwa}\"", logowanie, wydarzenie.organizatorzy[1].logowanie);
                 }
-                DataAccess.Wydarzenie_Pracownik.Delete(wydarzenie, logowanie.pracownik);
+                DataAccess.Delete(wydarzenie, logowanie.pracownik);
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, new StaticLine("Nie jesteś już organizatorem tego wydarzenia.", ConsoleColor.Green)));
             }
             if(index == 5 + cnt)
             {
                 if (wydarzenie.organizatorzy.Count > 1 && wydarzenie.organizatorzy[0].id == logowanie.owner.id) 
-                foreach(Wydarzenie_Pracownik jt in DataAccess.Wydarzenie_Pracownik.GetCollection())
+                foreach(Wydarzenie_Pracownik jt in DataAccess.GetConnections<Wydarzenie_Pracownik>())
                 {
                     if(jt.idwydarzenia == wydarzenie.id)
                     {
                         var sender = logowanie;
-                        var receiver = (DataAccess.Pracownik.GetRecordById(jt.idpracownika) as Pracownik).logowanie;
-                        DataAccess.Wiadomosc.Send($"WYDARZENIE ODWOŁANE", $"Wydarzenie w którym brałeś udział (\"{wydarzenie.nazwa}\") zostało odwołane. \nW przypadku niedogodności skontaktuj się z organizatorem - {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}", sender, receiver);
+                        var receiver = (DataAccess.GetRecordById<Pracownik>(jt.idpracownika)).logowanie;
+                        Wiadomosc.Send($"WYDARZENIE ODWOŁANE", $"Wydarzenie w którym brałeś udział (\"{wydarzenie.nazwa}\") zostało odwołane. \nW przypadku niedogodności skontaktuj się z organizatorem - {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}", sender, receiver);
                     }
                 }
-                foreach (Wydarzenie_Sponsor jt in DataAccess.Wydarzenie_Sponsor.GetCollection())
+                foreach (Wydarzenie_Sponsor jt in DataAccess.GetConnections<Wydarzenie_Sponsor>())
                 {
                     if (jt.idwydarzenia == wydarzenie.id)
                     {
                         var sender = logowanie;
-                        var receiver = (DataAccess.Sponsor.GetRecordById(jt.idsponsora) as Sponsor).logowanie;
-                        DataAccess.Wiadomosc.Send($"WYDARZENIE ODWOŁANE", $"Wydarzenie w którym brałeś udział (\"{wydarzenie.nazwa}\") zostało anulowane. \nW przypadku niedogodności skontaktuj się z organizatorem - {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}", sender, receiver);
+                        var receiver = DataAccess.GetRecordById<Sponsor>(jt.idsponsora).logowanie;
+                        Wiadomosc.Send($"WYDARZENIE ODWOŁANE", $"Wydarzenie w którym brałeś udział (\"{wydarzenie.nazwa}\") zostało anulowane. \nW przypadku niedogodności skontaktuj się z organizatorem - {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}", sender, receiver);
                     }
                 }
-                foreach (Wydarzenie_Uczestnik jt in DataAccess.Wydarzenie_Uczestnik.GetCollection())
+                foreach (Wydarzenie_Uczestnik jt in DataAccess.GetConnections<Wydarzenie_Uczestnik>())
                 {
                     if (jt.idwydarzenia == wydarzenie.id)
                     {
                         var sender = logowanie;
-                        var receiver = (DataAccess.Uczestnik.GetRecordById(jt.iduczestnika) as Uczestnik).logowanie;
-                        DataAccess.Wiadomosc.Send("WYDARZENIE ODWOŁANE", $"Wydarzenie w którym brałeś udział (\"{wydarzenie.nazwa}\") zostało anulowane. \nW przypadku niedogodności skontaktuj się z organizatorem - {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}", sender, receiver);
+                        var receiver = DataAccess.GetRecordById<Uczestnik>(jt.iduczestnika).logowanie;
+                        Wiadomosc.Send("WYDARZENIE ODWOŁANE", $"Wydarzenie w którym brałeś udział (\"{wydarzenie.nazwa}\") zostało anulowane. \nW przypadku niedogodności skontaktuj się z organizatorem - {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}", sender, receiver);
                     }
                 }
             }
@@ -159,8 +159,8 @@ namespace MWS.Pages
             switch(index)
             {
                 case 1:
-                    DataAccess.Wydarzenie_Pracownik.Delete(wydarzenie, logowanie.pracownik);                    
-                    DataAccess.Wiadomosc.Send("Pracownik zrezygnował z wydarzenia", $"Nadawca wiadomości zrezygnował się z wydarzenia: \"{wydarzenie.nazwa}\"", logowanie, logowanie.pracownik.kadra[0].logowanie);
+                    DataAccess.Delete(wydarzenie, logowanie.pracownik);                    
+                    Wiadomosc.Send("Pracownik zrezygnował z wydarzenia", $"Nadawca wiadomości zrezygnował się z wydarzenia: \"{wydarzenie.nazwa}\"", logowanie, logowanie.pracownik.kadra[0].logowanie);
                     DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, new StaticLine("Nie bierzesz już udziału w tym wydarzeniu.\nTwój przełożony został poinformowany", ConsoleColor.Red)));
                     break;
             }

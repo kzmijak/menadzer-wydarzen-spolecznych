@@ -15,14 +15,14 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.Wiadomosc.GetRecordById(idwiadomosci) as Wiadomosc;
+                return DataAccess.GetRecordById<Wiadomosc>(idwiadomosci) as Wiadomosc;
             }
             set
             {
                 if (wiadomosc is null)
-                    DataAccess.Wiadomosc.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.Wiadomosc.Update(wiadomosc, value);
+                    DataAccess.Update(wiadomosc, value);
             }
         }
     }

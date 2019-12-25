@@ -11,13 +11,13 @@ namespace MWS.dbo
 
     public static void Add(_DatabaseObject obj1, _DatabaseObject obj2)
     {
-        if (DataAccess.Logowanie.GetRecord(obj1) is null)
-            obj1 = DataAccess.Logowanie.Insert(obj1) as Logowanie;
+        if (DataAccess.GetRecord(obj1) is null)
+            obj1 = DataAccess.Insert(obj1) as Logowanie;
 
-        if (DataAccess.Logowanie.GetRecord(obj2) is null)
-            obj2 = DataAccess.Logowanie.Insert(obj2) as Logowanie;
+        if (DataAccess.GetRecord(obj2) is null)
+            obj2 = DataAccess.Insert(obj2) as Logowanie;
 
-        DataAccess.Logowanie_Logowanie.Insert(obj1, obj2);
+        DataAccess.Insert(obj1, obj2);
     }
 }
 }

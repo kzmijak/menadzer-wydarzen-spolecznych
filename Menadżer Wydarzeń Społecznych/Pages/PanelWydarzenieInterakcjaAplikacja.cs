@@ -66,7 +66,7 @@ namespace MWS.Pages
                         kwota = donation,
                         akcja = "PracownikApply"
                     };
-                    DataAccess.Wiadomosc.Send($"APLIKACJA DO WYDARZENIA \"{wydarzenie.nazwa.ToUpper()}\"", str, sender, receiver, wniosek);
+                    Wiadomosc.Send($"APLIKACJA DO WYDARZENIA \"{wydarzenie.nazwa.ToUpper()}\"", str, sender, receiver, wniosek);
                     
                     DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, new StaticLine("Aplikacja na zgłoszenie została wysłana.", ConsoleColor.Green)));
                     break;

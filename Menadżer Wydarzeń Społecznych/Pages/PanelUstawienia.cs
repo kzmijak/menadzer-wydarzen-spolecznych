@@ -38,7 +38,7 @@ namespace MWS.Pages
                 conf = Console.ReadLine();
                 if (conf == (logowanie.pracownik.kontakt.imie + ' ' + logowanie.owner.kontakt.nazwisko))
                 {
-                    DataAccess.Pracownik.Delete(logowanie.pracownik);
+                    DataAccess.Delete(logowanie.pracownik);
                     DisplayAdapter.Display(new Login());//, new StaticLine("Użytkownik został usunięty", ConsoleColor.Red));
                 }
             }

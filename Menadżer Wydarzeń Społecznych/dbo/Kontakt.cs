@@ -33,9 +33,9 @@ namespace MWS.dbo
                 if(value != null && owner != null)
                 {            
                     if (value is Pracownik)
-                        DataAccess.Pracownik.Update(pracownik, value);
+                        DataAccess.Update(pracownik, value);
                     if (value is Uczestnik)
-                        DataAccess.Uczestnik.Update(uczestnik, value);            
+                        DataAccess.Update(uczestnik, value);            
                 }
             }
         }
@@ -43,24 +43,24 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.Pracownik.GetRecordById(idpracownika) as Pracownik;
+                return DataAccess.GetRecordById<Pracownik>(idpracownika) as Pracownik;
             }
             set
             {
                 if(pracownik!=null)
-                    DataAccess.Pracownik.Update(pracownik, value);
+                    DataAccess.Update(pracownik, value);
             }
         }
         public Uczestnik uczestnik
         {
             get
             {
-                return DataAccess.Uczestnik.GetRecordById(iduczestnika) as Uczestnik;
+                return DataAccess.GetRecordById<Uczestnik>(iduczestnika) as Uczestnik;
             }
             set
             {
                 if(uczestnik != null)
-                    DataAccess.Uczestnik.Update(uczestnik, value);
+                    DataAccess.Update(uczestnik, value);
             }
         }
 
@@ -69,7 +69,7 @@ namespace MWS.dbo
             get
             {
                 var output = new KartaPlatnicza();
-                var karty = DataAccess.KartaPlatnicza.GetCollection();
+                var karty = DataAccess.GetCollection<KartaPlatnicza>();
                 foreach (KartaPlatnicza karta in karty)
                     if (karta.kontakt == id)
                         output = karta;
@@ -78,9 +78,9 @@ namespace MWS.dbo
             set
             {
                 if(kartaPlatnicza == null)
-                    DataAccess.KartaPlatnicza.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.KartaPlatnicza.Update(kartaPlatnicza, value);
+                    DataAccess.Update(kartaPlatnicza, value);
             }
         }
     }

@@ -107,12 +107,12 @@ namespace MWS.Pages
                         }
                         else 
                         {
-                            var old = DataAccess.Wydarzenie.GetRecordById(updatecaller);
-                            DataAccess.Wydarzenie.Update(old, wydarzenie);
+                            var old = DataAccess.GetRecordById<Wydarzenie>(updatecaller);
+                            DataAccess.Update(old, wydarzenie);
 
-                            foreach(var jt in DataAccess.Wydarzenie_Pracownik.GetCollection())
+                            foreach(var jt in DataAccess.GetConnections<Wydarzenie_Pracownik>())
                             {
-                                if((jt as Wydarzenie_Pracownik).idwydarzenia == old.id && ((DataAccess.Pracownik.GetRecordById((jt as Wydarzenie_Pracownik).idpracownika)) as Pracownik).stanowisko.ToLower() == "organizator")
+                                if((jt as Wydarzenie_Pracownik).idwydarzenia == old.id && (DataAccess.GetRecordById<Pracownik>((jt as Wydarzenie_Pracownik).idpracownika)).stanowisko.ToLower() == "organizator")
                                 {
                                     Wniosek GoToWydarzenia = new Wniosek
                                     {
@@ -120,7 +120,7 @@ namespace MWS.Pages
                                         akcja = "GoToWydarzenia"
                                     };
 
-                                    DataAccess.Wiadomosc.Send(
+                                    Wiadomosc.Send(
                                         $"WYDARZENIE \"{wydarzenie.nazwa.ToUpper()}\" ULEGŁO ZMIANIE", 
                                         $"Zostały dokonane zmiany w wydarzeniu \"{(old as Wydarzenie).nazwa}\"."
                                       + $"\nKorekty dokonał: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}."
@@ -129,7 +129,7 @@ namespace MWS.Pages
                                       + $"\nDzień:   {(old as Wydarzenie).dzien}   -> {wydarzenie.dzien}"
                                       + $"\nGodzina: {(old as Wydarzenie).godzina} -> {wydarzenie.godzina}"
                                       + $"\nBudżet:  {(old as Wydarzenie).budzet}  -> {wydarzenie.budzet}", 
-                                        logowanie, (DataAccess.Pracownik.GetRecordById((jt as Wydarzenie_Pracownik).idpracownika) as Pracownik).logowanie, GoToWydarzenia);
+                                        logowanie, (DataAccess.GetRecordById<Pracownik>((jt as Wydarzenie_Pracownik).idpracownika)).logowanie, GoToWydarzenia);
 
                                 }
                             }

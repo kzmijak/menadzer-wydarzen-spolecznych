@@ -14,14 +14,14 @@ namespace MWS.Pages
         private int isOrganizer;
         private int isSponsor;
         private bool listingWydarzenie;
-        private int listingWydarzenieCount;
+        private List<Wydarzenie> Wydarzenia;
 
 
-        public PanelWydarzenieInterakcjaOsoba(Logowanie logowanie, Wydarzenie selectedEvent, _CoreObject selectedUser, StaticLine note = null) : base(logowanie)
+        public PanelWydarzenieInterakcjaOsoba(Logowanie logowanie, Wydarzenie selectedEvent, _CoreObject selectedUser, bool listingWydarzenie = false, StaticLine note = null) : base(logowanie)
         {
             this.selectedEvent = selectedEvent;
             this.selectedUser = selectedUser;
-
+            this.listingWydarzenie = listingWydarzenie;
             isOrganizer = 0;
             if (logowanie.owner is Pracownik)
             {
@@ -53,7 +53,6 @@ namespace MWS.Pages
             {
                 ConstructorUczestnik();
             }
-            Contents.Add(new ActiveLine("Inne wydarzenia"));
             if(isSponsor == 0)
                 Contents.Add(new ActiveLine("Zaproś do kontaktów"));
             if(isOrganizer == 1)
@@ -65,11 +64,7 @@ namespace MWS.Pages
 
         public override void React(_Line line)
         {
-
-            if (line.Index == Contents.Count - 5 - isOrganizer + isSponsor)
-            {
-            }
-            else if (isSponsor == 0 && line.Index == Contents.Count - 4 - isOrganizer)
+            if (isSponsor == 0 && line.Index == Contents.Count - 4 - isOrganizer)
             {
                 Wniosek addition = new Wniosek
                 {
@@ -77,26 +72,15 @@ namespace MWS.Pages
                     akcja = "FriendslistInvitation"
                 };
 
-                DataAccess.Wiadomosc.Send("ZAPROSZENIE DO GRONA ZNAJOMYCH",
+                Wiadomosc.Send("ZAPROSZENIE DO GRONA ZNAJOMYCH",
                     $"Użytkownik {logowanie.owner.kontakt.imie} {logowanie.owner.kontakt.nazwisko} zaprasza cię do grona znajomych.",
                     logowanie, selectedUser.logowanie, addition
                     );
             }
             else if (isOrganizer == 1 && line.Index == Contents.Count - 4)
             {
-                if(selectedUser is Pracownik)
-                {
-                    DataAccess.Wydarzenie_Pracownik.Delete(selectedEvent, selectedUser);
-                }
-                else if (selectedUser is Sponsor)
-                {
-                    DataAccess.Wydarzenie_Sponsor.Delete(selectedEvent, selectedUser);
-                }
-                else if (selectedUser is Uczestnik)
-                {
-                    DataAccess.Wydarzenie_Uczestnik.Delete(selectedEvent, selectedUser);
-                }
-                DataAccess.Wiadomosc.Send("NIE BIERZESZ JUŻ UDZIAŁU W WYDARZENIU",
+                DataAccess.Delete(selectedEvent, selectedUser);                
+                Wiadomosc.Send("NIE BIERZESZ JUŻ UDZIAŁU W WYDARZENIU",
                     $"Nie bierzesz już udziału w wydarzeniu \"{selectedEvent.nazwa}\"."
                   + $"\nDecyzja podjęta przez: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}.",
                     logowanie, selectedUser.logowanie);
@@ -106,6 +90,10 @@ namespace MWS.Pages
             else if (line.Index == Contents.Count - 2)
             {
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, selectedEvent));
+            }
+            else if (selectedUser is Uczestnik)
+            {
+                ReactUczestnik(line.Index);
             }
             else if (selectedUser is Sponsor)
             {
@@ -154,7 +142,6 @@ namespace MWS.Pages
         {
             Contents.Add(new StaticLine((selectedUser as Sponsor).nazwa.ToUpper()));
             Contents.Add(new ActiveLine("Dotacje sponsorskie"));
-
             listing = 0;
             foreach(var model in selectedEvent.dotacje)
             {
@@ -168,6 +155,8 @@ namespace MWS.Pages
                     Contents.Add(new StaticLine("Wybrany sponsor nie ma zatwierdzonych dotacji"));
                 }
             }
+            Contents.Add(new ActiveLine("Inne wydarzenia"));
+            //foreach (Wydarzenie wydarzenie in (selectedUser as Sponsor).wydarzenia);
         }
 
         private void ReactSponsor(int index)
@@ -180,6 +169,12 @@ namespace MWS.Pages
             Contents.Add(new StaticLine((selectedUser as Uczestnik).kontakt.imie.ToUpper() + " " + (selectedUser as Uczestnik).kontakt.nazwisko.ToUpper()));
             Contents.Add(new StaticLine("Telefon: " + (selectedUser as Uczestnik).kontakt.telefon));
             ContactForm();
+            Contents.Add(new ActiveLine("Inne wydarzenia"));
+        }
+
+        private void ReactUczestnik(int index)
+        {
+
         }
 
         private void ContactForm()

@@ -17,7 +17,7 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.Kontakt.GetRecordById(kontakt) as Kontakt;
+                return DataAccess.GetRecordById<Kontakt>(kontakt);
             }
         }
         public List<Platnosc> platnosci
@@ -25,10 +25,10 @@ namespace MWS.dbo
             get
             {
                 var output = new List<Platnosc>(9999);
-                var platnosci = DataAccess.Platnosc.GetCollection();
+                var platnosci = DataAccess.GetCollection<Platnosc>();
                 foreach (Platnosc ob in platnosci)
                     if (ob.idkarty == id)
-                        output.Add(DataAccess.Platnosc.GetRecordById(ob.idadresata) as Platnosc);
+                        output.Add(DataAccess.GetRecordById<Platnosc>(ob.idadresata) as Platnosc);
                 return output;
             }
         }

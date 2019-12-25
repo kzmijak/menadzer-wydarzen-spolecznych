@@ -65,14 +65,14 @@ namespace MWS.Pages
 
                     if (!DbHelper.IsAnyNullOrEmpty(dbo))
                     {
-                        //dbo = DataAccess.Dotacja.Insert(dbo) as Dotacja;
+                        //dbo = DataAccess.Insert(dbo) as Dotacja;
                         Wydarzenie_Sponsor.Add(wydarzenie, logowanie.sponsor);
                         Wniosek wniosek = new Wniosek
                         {
                             kwota = dotacja.kwota,
                             akcja = "DecideDotacja"
                         };
-                        DataAccess.Wiadomosc.Send(
+                        Wiadomosc.Send(
                             "NOWA DOTACJA OD SPONSORA", 
                             $"Wydarzenie:  {wydarzenie.nazwa}"
                           + $"\nSponsor:     {logowanie.sponsor.nazwa}"

@@ -16,28 +16,28 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.Wydarzenie.GetRecordById(idwydarzenia) as Wydarzenie;
+                return DataAccess.GetRecordById<Wydarzenie>(idwydarzenia) as Wydarzenie;
             }
             set
             {
                 if (wydarzenie is null)
-                    DataAccess.Wydarzenie.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.Wydarzenie.Update(wydarzenie, value);
+                    DataAccess.Update(wydarzenie, value);
             }
         }
         public Sponsor sponsor
         {
             get
             {
-                return DataAccess.Sponsor.GetRecordById(idsponsora) as Sponsor;
+                return DataAccess.GetRecordById<Sponsor>(idsponsora) as Sponsor;
             }
             set
             {
                 if (sponsor is null)
-                    DataAccess.Sponsor.Insert(value);
+                    DataAccess.Insert(value);
                 else
-                    DataAccess.Sponsor.Update(sponsor, value);
+                    DataAccess.Update(sponsor, value);
             }
         }
     }

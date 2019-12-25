@@ -79,20 +79,5 @@ namespace MWS.Procedures
                 connection.Execute("dbo.Logowanie_Update @id, @login, @haslo, @idpracownika, @idsponsora, @iduczestnika", dbobject_new);
             }
         }
-
-        public _DatabaseObject CheckCredentials(_DatabaseObject databaseObject)
-        {
-            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
-            {
-                try
-                {
-                    return connection.QuerySingle<Logowanie>("dbo.Logowanie_CheckCredentials @login, @haslo", databaseObject);
-                }
-                catch(InvalidOperationException)
-                {
-                    return null;
-                }
-            }
-        }
     }
 }

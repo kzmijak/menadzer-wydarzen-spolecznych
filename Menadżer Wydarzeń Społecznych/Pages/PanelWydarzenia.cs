@@ -20,7 +20,7 @@ namespace MWS.Pages
                     this.organizatorCheck = true;
                 }
             Contents.Add(new StaticLine("Aktywne wydarzenia:"));
-            foreach (_DatabaseObject wydarzenie in DataAccess.Wydarzenie.GetCollection())
+            foreach (_DatabaseObject wydarzenie in DataAccess.GetCollection<Wydarzenie>())
             {
                 Contents.Add(new ActiveLine((wydarzenie as Wydarzenie).nazwa));
             }
@@ -48,7 +48,7 @@ namespace MWS.Pages
                 int organizatordependent = 2;
                 if (organizatorCheck == true)
                     organizatordependent = 3;
-                Wydarzenie wydarzenie = DataAccess.Wydarzenie.GetCollection()[DisplayAdapter.CurrentLine.Index - organizatordependent] as Wydarzenie;
+                Wydarzenie wydarzenie = DataAccess.GetCollection<Wydarzenie>()[DisplayAdapter.CurrentLine.Index - organizatordependent] as Wydarzenie;
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie));
             }
         }
