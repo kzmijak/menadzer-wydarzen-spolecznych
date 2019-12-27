@@ -76,13 +76,13 @@ namespace MWS.dbo
                 return output;
             }
         }
-        public List<_DatabaseObject> czlonkowie
+        public List<_CoreObject> czlonkowie
         {
             get
             {
-                var output = new List<_DatabaseObject>(9999);
+                var output = new List<_CoreObject>(9999);
                 IEnumerable<Wydarzenie_Pracownik> wp;
-                wp = DataAccess.GetConnections<Wydarzenie_Pracownik>().Cast<Wydarzenie_Pracownik>();
+                wp = DataAccess.GetConnections<Wydarzenie_Pracownik>();
                 foreach (Wydarzenie_Pracownik ob in wp)
                     if (ob.idwydarzenia == id)
                     {
@@ -90,7 +90,7 @@ namespace MWS.dbo
                         output.Add(pracownik);
                     }
                 IEnumerable<Wydarzenie_Sponsor> ws;
-                ws = DataAccess.GetConnections<Wydarzenie_Sponsor>().Cast<Wydarzenie_Sponsor>();
+                ws = DataAccess.GetConnections<Wydarzenie_Sponsor>();
                 foreach (var ob in ws)
                     if (ob.idwydarzenia == id)
                     {
@@ -98,7 +98,7 @@ namespace MWS.dbo
                         output.Add(s);
                     }
                 IEnumerable<Wydarzenie_Uczestnik> wu;
-                wu = DataAccess.GetConnections<Wydarzenie_Uczestnik>().Cast<Wydarzenie_Uczestnik>();
+                wu = DataAccess.GetConnections<Wydarzenie_Uczestnik>();
                 foreach (var ob in wu)
                     if (ob.idwydarzenia == id)
                     {

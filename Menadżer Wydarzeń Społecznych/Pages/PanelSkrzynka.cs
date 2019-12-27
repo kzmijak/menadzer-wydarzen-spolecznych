@@ -22,7 +22,19 @@ namespace MWS.Pages
         {
             switch (line.Index)
             {
+                case 1:
+                    DisplayAdapter.Display(new PanelSkrzynkaWiadomosci(logowanie, "ODEBRANE"));
+                    break;
+                case 2:
+                    DisplayAdapter.Display(new PanelSkrzynkaWiadomosci(logowanie, "WYSŁANE"));
+                    break;
+                case 3:
+                    DisplayAdapter.Display(new PanelSkrzynkaWyslij(logowanie));
+                    break;
                 case 4:
+                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie));
+                    break;
+                case 5:
                     DisplayAdapter.Display(new Panel(logowanie));
                     break;
             }

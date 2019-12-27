@@ -71,7 +71,7 @@ namespace MWS.dbo
         {
             get 
             {
-                return DataAccess.GetRecordById<Sponsor>(idsponsora) as Sponsor;
+                return DataAccess.GetRecordById<Sponsor>(idsponsora);
             }
             set
             {

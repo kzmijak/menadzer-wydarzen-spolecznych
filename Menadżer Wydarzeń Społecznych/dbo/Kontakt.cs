@@ -43,7 +43,7 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.GetRecordById<Pracownik>(idpracownika) as Pracownik;
+                return DataAccess.GetRecordById<Pracownik>(idpracownika);
             }
             set
             {
@@ -55,7 +55,7 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.GetRecordById<Uczestnik>(iduczestnika) as Uczestnik;
+                return DataAccess.GetRecordById<Uczestnik>(iduczestnika);
             }
             set
             {

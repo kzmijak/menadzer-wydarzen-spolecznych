@@ -89,9 +89,7 @@ namespace MWS.Pages
             Contents.Add(new ActiveLine("Zarejestruj"));                        //6:16:15
             Contents.Add(new ActiveLine("Cofnij zmiany"));                      //7:17:16
             Contents.Add(new ActiveLine("Anuluj"));                             //8:18:17
-
-            if (!(note is null))
-                this.Contents.Add(note);
+            this.Contents.Add(note);
         }
         
         public override void React(_Line line)

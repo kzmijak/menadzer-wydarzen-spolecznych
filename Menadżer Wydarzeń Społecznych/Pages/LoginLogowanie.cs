@@ -24,9 +24,7 @@ namespace MWS.Pages
             Contents.Add(new ActiveLine("Zaloguj"));
             Contents.Add(new ActiveLine("Zarejestruj"));
             Contents.Add(new ActiveLine("Powrot"));
-
-            if (!(note is null))
-                this.Contents.Add(note);
+            this.Contents.Add(note);
         }
 
         public override void React(_Line line)

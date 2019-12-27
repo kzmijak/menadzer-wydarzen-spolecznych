@@ -67,10 +67,10 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idwniadomosci, @kwota, @akcja, @zatwierdzone", dbobject);
+                return connection.QuerySingle<Wniosek>("dbo.Wniosek_Insert @idwiadomosci, @kwota, @akcja, @zatwierdzone", dbobject);
             }
         }
-
+        
         public void Update(_DatabaseObject dbobject_old, _DatabaseObject dbobject_new)
         {
             dbobject_new.id = dbobject_old.id;

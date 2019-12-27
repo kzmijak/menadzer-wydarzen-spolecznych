@@ -12,9 +12,8 @@ namespace MWS.Pages
         private Wydarzenie selectedEvent { get; set; }
         private int listing;
         private int isOrganizer;
-        private int isSponsor;
         private bool listingWydarzenie;
-        private List<Wydarzenie> Wydarzenia;
+        private List<Wydarzenie> Wydarzenia = new List<Wydarzenie>(9999);
 
 
         public PanelWydarzenieInterakcjaOsoba(Logowanie logowanie, Wydarzenie selectedEvent, _CoreObject selectedUser, bool listingWydarzenie = false, StaticLine note = null) : base(logowanie)
@@ -33,49 +32,76 @@ namespace MWS.Pages
                     }
                 }
             }
-            isSponsor = 0;
-            if (logowanie.owner is Sponsor)
-                isSponsor++;
+            Constructor(selectedUser);
 
-            if (selectedUser is Sponsor)
+            
+            Contents.Add(new ActiveLine("Inne wydarzenia"));
+            if (listingWydarzenie)
             {
-                ConstructorSponsor();
+                if(Wydarzenia.Count > 0)
+                {
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, false));
+                }
+
+                foreach(Wydarzenie wydarzenie in selectedUser.wydarzenia)
+                {
+                    if(wydarzenie.id != selectedEvent.id)
+                    {
+                        Contents.Add(new ActiveLine(" " + wydarzenie.nazwa));
+                        Wydarzenia.Add(wydarzenie);
+                    }
+                }
+                if(Wydarzenia.Count == 0)
+                {
+                    Contents.Add(new StaticLine(" Użytkownik nie bierze udziału w żadnym innym wydarzeniu"));
+                }
             }
-            else if (selectedUser is Pracownik && (selectedUser as Pracownik).stanowisko.ToLower() == "organizator")
-            {
-                ConstructorOrganizator();
-            }
-            else if (selectedUser is Pracownik && (selectedUser as Pracownik).stanowisko.ToLower() != "organizator")
-            {
-                ConstructorPracownik();   
-            }
-            else if (selectedUser is Uczestnik)
-            {
-                ConstructorUczestnik();
-            }
-            if(isSponsor == 0)
-                Contents.Add(new ActiveLine("Zaproś do kontaktów"));
+            Contents.Add(new ActiveLine("Zaproś do kontaktów"));
             if(isOrganizer == 1)
                 Contents.Add(new ActiveLine("Usuń z wydarzenia"));
-            Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
-        }
+            Contents.Add(new StaticLine(""));                       
+            Contents.Add(new ActiveLine("Powrót"));                 
+            Contents.Add(note);                                     
+        }                                                           
 
         public override void React(_Line line)
         {
-            if (isSponsor == 0 && line.Index == Contents.Count - 4 - isOrganizer)
+            int wcount = 0;
+            if(listingWydarzenie)
             {
-                Wniosek addition = new Wniosek
-                {
-                    kwota = 0,
-                    akcja = "FriendslistInvitation"
-                };
+                wcount = Wydarzenia.Count;
+                if (wcount == 0)
+                    wcount++;
+            }
 
-                Wiadomosc.Send("ZAPROSZENIE DO GRONA ZNAJOMYCH",
-                    $"Użytkownik {logowanie.owner.kontakt.imie} {logowanie.owner.kontakt.nazwisko} zaprasza cię do grona znajomych.",
-                    logowanie, selectedUser.logowanie, addition
-                    );
+            if (line.Index == Contents.Count - 4 - isOrganizer - wcount)
+            {
+                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, true));
+            }
+            if(listingWydarzenie && line.Index > (Contents.Count - 5 - isOrganizer - wcount) && line.Index < (Contents.Count - 4 - isOrganizer))
+            {
+                DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, Wydarzenia[0]));
+            }
+            if (line.Index == Contents.Count - 4 - isOrganizer)
+            {
+                if(selectedUser.id == logowanie.owner.id && selectedUser.GetType() == logowanie.owner.GetType())
+                {
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, false, new StaticLine("Nie możesz wysłać zaproszenia samemu sobie.", ConsoleColor.Red)));
+                }
+                else
+                {
+                    Wniosek addition = new Wniosek
+                    {
+                        kwota = 0,
+                        akcja = "FriendslistInvitation"
+                    };
+
+                    Wiadomosc.Send("ZAPROSZENIE DO GRONA ZNAJOMYCH",
+                        $"Użytkownik {logowanie.owner.kontakt.imie} {logowanie.owner.kontakt.nazwisko} zaprasza cię do grona znajomych.",
+                        logowanie, selectedUser.logowanie, addition
+                        );
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, false, new StaticLine("Zaproszenie zostało wysłane.", ConsoleColor.Green)));
+                }
             }
             else if (isOrganizer == 1 && line.Index == Contents.Count - 4)
             {
@@ -90,10 +116,6 @@ namespace MWS.Pages
             else if (line.Index == Contents.Count - 2)
             {
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, selectedEvent));
-            }
-            else if (selectedUser is Uczestnik)
-            {
-                ReactUczestnik(line.Index);
             }
             else if (selectedUser is Sponsor)
             {
@@ -155,8 +177,6 @@ namespace MWS.Pages
                     Contents.Add(new StaticLine("Wybrany sponsor nie ma zatwierdzonych dotacji"));
                 }
             }
-            Contents.Add(new ActiveLine("Inne wydarzenia"));
-            //foreach (Wydarzenie wydarzenie in (selectedUser as Sponsor).wydarzenia);
         }
 
         private void ReactSponsor(int index)
@@ -169,12 +189,6 @@ namespace MWS.Pages
             Contents.Add(new StaticLine((selectedUser as Uczestnik).kontakt.imie.ToUpper() + " " + (selectedUser as Uczestnik).kontakt.nazwisko.ToUpper()));
             Contents.Add(new StaticLine("Telefon: " + (selectedUser as Uczestnik).kontakt.telefon));
             ContactForm();
-            Contents.Add(new ActiveLine("Inne wydarzenia"));
-        }
-
-        private void ReactUczestnik(int index)
-        {
-
         }
 
         private void ContactForm()
@@ -187,6 +201,26 @@ namespace MWS.Pages
                 Contents.Add(new StaticLine("Miasto: \t" + (selectedUser as Uczestnik).kontakt.miasto));
                 Contents.Add(new StaticLine("Kod pocztowy: \t" + (selectedUser as Uczestnik).kontakt.poczta));
                 Contents.Add(new StaticLine("Ulica: \t\t" + (selectedUser as Uczestnik).kontakt.ulica));
+            }
+        }
+
+        private void Constructor(_CoreObject selectedUser) 
+        {
+            if (selectedUser is Sponsor)
+            {
+                ConstructorSponsor();
+            }
+            else if (selectedUser is Pracownik && (selectedUser as Pracownik).stanowisko.ToLower() == "organizator")
+            {
+                ConstructorOrganizator();
+            }
+            else if (selectedUser is Pracownik && (selectedUser as Pracownik).stanowisko.ToLower() != "organizator")
+            {
+                ConstructorPracownik();
+            }
+            else if (selectedUser is Uczestnik)
+            {
+                ConstructorUczestnik();
             }
         }
     }

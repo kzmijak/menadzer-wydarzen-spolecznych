@@ -263,7 +263,7 @@ namespace MWS
                 wiadomosc.Delete(obj);
             }
         }
-        public static T GetRecord<T>(T obj) where T: _DatabaseObject
+        public static T GetRecord<T>(_DatabaseObject obj) where T: _DatabaseObject
         {
             if (obj is Bilet)
             {
@@ -313,7 +313,10 @@ namespace MWS
             {
                 return wiadomosc.GetRecord(obj) as T;
             }
-            return null;
+            else
+            {
+                throw new InvalidCastException("Data type not precised.");
+            }
         }
         public static T GetRecordById<T>(int id) where T: _DatabaseObject
         {

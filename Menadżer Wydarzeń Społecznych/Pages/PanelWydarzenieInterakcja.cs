@@ -22,7 +22,7 @@ namespace MWS.Pages
             Contents.Add(new StaticLine($"Opis: \t\t\t{wydarzenie.opis}"));
             Contents.Add(new StaticLine($"Miejsce: \t\t{wydarzenie.miejsce}"));
             Contents.Add(new StaticLine($"Data: \t\t\t{wydarzenie.dzien.ToShortDateString()} {wydarzenie.godzina.ToString().Substring(0, 5)}"));
-            if(wydarzenie.organizatorzy != null)
+            if(wydarzenie.organizatorzy.Count != 0)
                 Contents.Add(new StaticLine($"Główny organizator: \t{wydarzenie.organizatorzy[0].kontakt.imie} {wydarzenie.organizatorzy[0].kontakt.nazwisko}"));
             else
                 Contents.Add(new StaticLine($"Główny organizator: \tbrak"));

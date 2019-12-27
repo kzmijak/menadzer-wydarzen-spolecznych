@@ -23,7 +23,7 @@ namespace MWS.dbo
             }
             set
             {
-                if(value != null)
+                if(value != null && value is Logowanie)
                 {
                     if(logowanie is null)
                     {
@@ -41,19 +41,19 @@ namespace MWS.dbo
             get
             {
                 Kontakt output = null;
-                IEnumerable<_DatabaseObject> database = DataAccess.GetCollection<Kontakt>();
-                foreach (_DatabaseObject @do in database)
+                var database = DataAccess.GetCollection<Kontakt>();
+                foreach (Kontakt found in database)
                 {
-                    if ((@do as Kontakt).owner.id == id && (@do as Kontakt).owner.GetType() == GetType())
+                    if (found.owner.id == id && found.owner.GetType() == this.GetType())
                     {
-                        output = @do as Kontakt;
+                        output = found;
                     }
                 }
                 return output;
             }
             set
             {
-                if(value != null)
+                if(value != null && value is Kontakt)
                 {
                     if (kontakt is null)
                     {
@@ -64,6 +64,40 @@ namespace MWS.dbo
                         DataAccess.Update(kontakt, value);
                     }
                 }
+            }
+        }
+        public List<Wydarzenie> wydarzenia
+        {
+            get
+            {
+                if (this is Pracownik)
+                {
+                    var output = new List<Wydarzenie>(9999);
+                    var jt = DataAccess.GetConnections<Wydarzenie_Pracownik>();
+                    foreach (Wydarzenie_Pracownik ob in jt)
+                        if (ob.idpracownika == id)
+                            output.Add(DataAccess.GetRecordById<Wydarzenie>(ob.idwydarzenia));
+                    return output;
+                }
+                else if (this is Sponsor)
+                {
+                    var output = new List<Wydarzenie>(9999);
+                    var jt = DataAccess.GetConnections<Wydarzenie_Sponsor>();
+                    foreach (Wydarzenie_Sponsor ob in jt)
+                        if (ob.idsponsora == id)
+                            output.Add(DataAccess.GetRecordById<Wydarzenie>(ob.idwydarzenia));
+                    return output;
+                }
+                else if (this is Uczestnik)
+                {
+                    var output = new List<Wydarzenie>(9999);
+                    var jt = DataAccess.GetConnections<Wydarzenie_Uczestnik>();
+                    foreach (Wydarzenie_Uczestnik ob in jt)
+                        if (ob.iduczestnika == id)
+                            output.Add(DataAccess.GetRecordById<Wydarzenie>(ob.idwydarzenia));
+                    return output;
+                }
+                else return null;
             }
         }
     }

@@ -9,19 +9,7 @@ namespace MWS.dbo
     {
         public string nazwa { get; set; }
         public new Kontakt kontakt = null;
-
-        public List<Wydarzenie> wydarzenia
-        {
-            get
-            {
-                var output = new List<Wydarzenie>(9999);
-                var jt = DataAccess.GetConnections<Wydarzenie_Sponsor>();
-                foreach (Wydarzenie_Sponsor ob in jt)
-                    if (ob.idsponsora == id)
-                        output.Add(DataAccess.GetRecordById<Wydarzenie>(ob.idwydarzenia) as Wydarzenie);
-                return output;
-            }
-        }
+        
         public List<Dotacja> dotacje
         {
             get

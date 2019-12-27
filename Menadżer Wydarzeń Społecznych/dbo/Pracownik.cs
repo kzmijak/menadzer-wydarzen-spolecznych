@@ -8,19 +8,7 @@ namespace MWS.dbo
     {
         public string stanowisko { get; set; }
         public decimal wynagrodzenie { get; set; }
-
-        public List<Wydarzenie> wydarzenia
-        {
-            get
-            {
-                var output = new List<Wydarzenie>(9999);
-                var jt = DataAccess.GetConnections<Wydarzenie_Pracownik>();
-                foreach(Wydarzenie_Pracownik ob in jt)
-                    if (ob.idpracownika == id)
-                        output.Add(DataAccess.GetRecordById<Wydarzenie>(ob.idwydarzenia) as Wydarzenie);
-                return output;
-            }
-        }
+        
         public List<Pracownik> kadra
         {
             get

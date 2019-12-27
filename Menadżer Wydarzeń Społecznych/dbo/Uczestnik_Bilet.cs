@@ -11,10 +11,10 @@ namespace MWS.dbo
 
         public static void Add(_DatabaseObject obj1, _DatabaseObject obj2)
         {
-            if (DataAccess.GetRecord(obj1) is null)
+            if (DataAccess.GetRecordById<Uczestnik>(obj1.id) is null)
                 obj1 = DataAccess.Insert(obj1) as Uczestnik;
 
-            if (DataAccess.GetRecord(obj2) is null)
+            if (DataAccess.GetRecordById<Bilet>(obj2.id) is null)
                 obj2 = DataAccess.Insert(obj2) as Bilet;
 
             DataAccess.Insert(obj1, obj2);

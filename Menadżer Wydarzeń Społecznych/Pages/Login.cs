@@ -17,8 +17,7 @@ namespace MWS.Pages
             this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako sponsor"));
             this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako uczestnik"));
             
-            if (!(note is null))
-                this.Contents.Add(note);
+            this.Contents.Add(note);
         }
 
         
