@@ -29,7 +29,7 @@ namespace MWS.Pages
             Contents.Add(new StaticLine($"Budżet: \t\t{wydarzenie.budzet}PLN"));
             Contents.Add(new StaticLine(""));
             Contents.Add(new StaticLine("CZŁONKOWIE"));
-            Contents.Add(new ActiveLine("Organizatorzy")); //8
+            Contents.Add(new ActiveLine("Organizatorzy")); 
 
             if (listing == "organizator")
             {
@@ -123,7 +123,7 @@ namespace MWS.Pages
         {
             int cnt = 0;
 
-            if (line.Index == 8)     // Organizatorzy
+            if (line.Index == 8)   
             {
                 if(listing != "organizator")
                     DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, null, "organizator"));
@@ -142,8 +142,8 @@ namespace MWS.Pages
                 }
             }
 
-
-            if (line.Index == 9 + cnt) // Pracownicy
+        
+            if (line.Index == 9 + cnt) 
             {
                 if(listing != "pracownik")
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, null, "pracownik"));
@@ -162,7 +162,7 @@ namespace MWS.Pages
                 }
             }
 
-            if (line.Index == 10 + cnt) // Sponsorzy
+            if (line.Index == 10 + cnt) 
             {
                 if(listing != "sponsor")
                     DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, null, "sponsor"));
@@ -181,7 +181,7 @@ namespace MWS.Pages
                 }
             }
 
-            if (line.Index == 11 + cnt) // Członkowie
+            if (line.Index == 11 + cnt)
             {
                 if(listing != "uczestnik")
                     DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, null, "uczestnik"));
@@ -256,7 +256,6 @@ namespace MWS.Pages
                 }
                 if(logowanie.owner is Sponsor)
                 {
-                    // REDIRECT TO SEND DONATION TAB PanelWydarzenieInterakcjaDotacja
                     DisplayAdapter.Display(new PanelWydarzenieInterakcjaDotacja(logowanie, wydarzenie)); 
                 }
                 if (logowanie.owner is Uczestnik)

@@ -8,6 +8,7 @@ namespace MWS.Pages
 {
     class PanelSkrzynkaWiadomosci : _Panel
     {
+        private List<Wiadomosc> messages = new List<Wiadomosc>(9999);
         private string mode;
         public PanelSkrzynkaWiadomosci(Logowanie logowanie, string mode, StaticLine note = null) : base(logowanie)
         {
@@ -18,6 +19,7 @@ namespace MWS.Pages
                 if((mode == "ODEBRANE" && wiadomosc.idodbiorcy == logowanie.id) || (mode == "WYSŁANE" && wiadomosc.idadresata == logowanie.id))
                 {
                     Contents.Add(new ActiveLine($"({wiadomosc.dzien.ToShortDateString()} {wiadomosc.godzina.ToString("hh\\:mm")}) {wiadomosc.tytul}"));
+                    messages.Add(wiadomosc);
                 }
             }
             Contents.Add(new StaticLine(""));
@@ -28,9 +30,9 @@ namespace MWS.Pages
 
         public override void React(_Line line)
         {
-            if(line.Index > 1 && line.Index < Contents.Count - 4)
+            if(line.Index > 0 && line.Index < Contents.Count - 4)
             {
-                // GO TO PanelSkrzynkaWiadomosc
+                DisplayAdapter.Display(new PanelSkrzynkaWiadomosc(logowanie, messages[line.Index - 1]));
             }
             if(line.Index == Contents.Count - 3)
             {

@@ -62,22 +62,21 @@ namespace MWS.Pages
                         kwota = dotacja.kwota,
                         zatwierdzone = false
                     };
+                    dbo = DataAccess.Insert(dbo) as Dotacja;
 
                     if (!DbHelper.IsAnyNullOrEmpty(dbo))
                     {
-                        //dbo = DataAccess.Insert(dbo) as Dotacja;
-                        Wydarzenie_Sponsor.Add(wydarzenie, logowanie.sponsor);
                         Wniosek wniosek = new Wniosek
                         {
                             kwota = dotacja.kwota,
-                            akcja = "DecideDotacja"
+                            akcja = $"donation:{dbo.id}"
                         };
                         Wiadomosc.Send(
                             "NOWA DOTACJA OD SPONSORA", 
                             $"Wydarzenie:  {wydarzenie.nazwa}"
-                          + $"\nSponsor:     {logowanie.sponsor.nazwa}"
-                          + $"\nKwota:       {dotacja.kwota}"
-                          + $"\nOczekiwania: {dotacja.oczekiwania},", 
+                        + $"\nSponsor:     {logowanie.sponsor.nazwa}"
+                        + $"\nKwota:       {dotacja.kwota}"
+                        + $"\nOczekiwania: {dotacja.oczekiwania},", 
                             logowanie, wydarzenie.organizatorzy[0].logowanie, wniosek);
 
                         DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, new StaticLine("Dotacja została wysłana pomyślnie i oczekuje na potwierdzenie.", ConsoleColor.Green)));

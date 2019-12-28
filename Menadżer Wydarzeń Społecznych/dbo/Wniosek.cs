@@ -9,7 +9,7 @@ namespace MWS.dbo
         public int idwiadomosci { get; set; }
         public decimal kwota { get; set; }
         public string akcja { get; set; }
-        public bool zatwierdzone { get; set; } = false;
+        public bool zatwierdzone { get; set; }
 
         public Wiadomosc wiadomosc
         {

@@ -58,37 +58,37 @@ namespace MWS.Pages
             nazwa = update.nazwa;
             fid = update.fid;
 
-            Contents.Add(new StaticLine("REJESTRACJA UŻYTKOWNIKA"));                   //0
-            Contents.Add(new StaticLine("Dane logowania"));                            //1
-            Contents.Add(new ActiveLine("Login: \t\t" + login));                  //2
-            Contents.Add(new ActiveLine("Hasło: \t\t" + encode(haslo)));          //3
-            Contents.Add(new ActiveLine("Powtórz hasło: \t" + encode(haslo2))); //4
+            Contents.Add(new StaticLine("REJESTRACJA UŻYTKOWNIKA"));             
+            Contents.Add(new StaticLine("Dane logowania"));                      
+            Contents.Add(new ActiveLine("Login: \t\t" + login));                
+            Contents.Add(new ActiveLine("Hasło: \t\t" + encode(haslo)));        
+            Contents.Add(new ActiveLine("Powtórz hasło: \t" + encode(haslo2))); 
 
             if(!(caller is Sponsor))
             {
-                Contents.Add(new StaticLine("Dane kontaktowe"));                //5
-                Contents.Add(new ActiveLine("Imię: \t\t" + imie));                //6
-                Contents.Add(new ActiveLine("Nazwisko: \t" + nazwisko));        //7
-                Contents.Add(new ActiveLine("Telefon: \t" + telefon));          //8
-                Contents.Add(new ActiveLine("Email: \t\t" + email));              //9
-                Contents.Add(new ActiveLine("Miejscowość: \t" + miejscowosc));  //10
-                Contents.Add(new ActiveLine("Numer domu: \t" + nrdomu));        //11
-                Contents.Add(new ActiveLine("Miasto: \t" + miasto));            //12
-                Contents.Add(new ActiveLine("Kod pocztowy: \t" + poczta));            //13
-                Contents.Add(new ActiveLine("Ulica: \t\t" + ulica));              //14
+                Contents.Add(new StaticLine("Dane kontaktowe"));                
+                Contents.Add(new ActiveLine("Imię: \t\t" + imie));              
+                Contents.Add(new ActiveLine("Nazwisko: \t" + nazwisko));        
+                Contents.Add(new ActiveLine("Telefon: \t" + telefon));          
+                Contents.Add(new ActiveLine("Email: \t\t" + email));            
+                Contents.Add(new ActiveLine("Miejscowość: \t" + miejscowosc));  
+                Contents.Add(new ActiveLine("Numer domu: \t" + nrdomu));        
+                Contents.Add(new ActiveLine("Miasto: \t" + miasto));            
+                Contents.Add(new ActiveLine("Kod pocztowy: \t" + poczta));      
+                Contents.Add(new ActiveLine("Ulica: \t\t" + ulica));            
             }
             if(caller is Pracownik)
             {
-                Contents.Add(new ActiveLine("Stanowisko: \t" + update.stanowisko));    //P:15
+                Contents.Add(new ActiveLine("Stanowisko: \t" + update.stanowisko));    
             }
             if(caller is Sponsor)
             {
-                Contents.Add(new ActiveLine("Nazwa organizacji: \t" + update.nazwa));  //S:5
+                Contents.Add(new ActiveLine("Nazwa organizacji: \t" + update.nazwa));  
             }
-            Contents.Add(new StaticLine(""));                                   //S:P :U
-            Contents.Add(new ActiveLine("Zarejestruj"));                        //6:16:15
-            Contents.Add(new ActiveLine("Cofnij zmiany"));                      //7:17:16
-            Contents.Add(new ActiveLine("Anuluj"));                             //8:18:17
+            Contents.Add(new StaticLine(""));                                 
+            Contents.Add(new ActiveLine("Zarejestruj"));                      
+            Contents.Add(new ActiveLine("Cofnij zmiany"));                    
+            Contents.Add(new ActiveLine("Anuluj"));                           
             this.Contents.Add(note);
         }
         

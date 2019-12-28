@@ -39,7 +39,7 @@ namespace MWS.Procedures
             {
                 try
                 {
-                    return connection.QuerySingle<Pracownik>("dbo.Pracownik_GetRecord @stanowisko, @wynagrodzenie", dbobject);//new { stanowisko = (dbobject as Pracownik).stanowisko, wynagrodzenie = (dbobject as Pracownik).wynagrodzenie });
+                    return connection.QuerySingle<Pracownik>("dbo.Pracownik_GetRecord @stanowisko, @wynagrodzenie", dbobject);
                 }
                 catch (InvalidOperationException)
                 {

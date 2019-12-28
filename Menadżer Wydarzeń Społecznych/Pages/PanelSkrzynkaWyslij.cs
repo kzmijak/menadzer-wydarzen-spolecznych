@@ -9,11 +9,19 @@ namespace MWS.Pages
     class PanelSkrzynkaWyslij : _Panel
     {
         private List<string> lines;
-        public PanelSkrzynkaWyslij(Logowanie logowanie, List<string> lines = null, StaticLine note = null) : base(logowanie)
+        private int idodbiorcy;
+        private Wiadomosc wiadomosc;
+        public PanelSkrzynkaWyslij(Logowanie logowanie, List<string> lines = null, Wiadomosc replied = null, StaticLine note = null) : base(logowanie)
         {
+            wiadomosc = replied;
             if(lines == null)
             {
                 lines = new List<string>{ "", "", "", "", "", "", "", "", ""};
+            }
+            if(replied != null)
+            {
+                lines[0] = $"RE: {replied.tytul}";
+                this.idodbiorcy = replied.idodbiorcy;
             }
             this.lines = lines;
 
@@ -67,9 +75,20 @@ namespace MWS.Pages
                 {
                     idadresata = logowanie.id,
                     tytul = title,
-                    tresc = content
+                    tresc = content,
+                    dzien = DateTime.Now,
+                    godzina = DateTime.Now.TimeOfDay
                 };
-                DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, "0000", wiadomosc, new StaticLine("Wybierz osobę do której wiadomość ma zostać wysłana.", ConsoleColor.Blue)));
+                if(this.idodbiorcy > 0)
+                {
+                    wiadomosc.idodbiorcy = this.idodbiorcy;
+                    DataAccess.Insert(wiadomosc);
+                    DisplayAdapter.Display(new PanelSkrzynka(logowanie, new StaticLine("Odpowiedź została wysłana.", ConsoleColor.Green)));
+                }
+                else if (idodbiorcy == 0)
+                {
+                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, "0000", wiadomosc, new StaticLine("Wybierz osobę do której wiadomość ma zostać wysłana.", ConsoleColor.Blue)));
+                }
             }
             if(line.Index == Contents.Count - 3)
             {
@@ -79,7 +98,7 @@ namespace MWS.Pages
             {
                 DisplayAdapter.Display(new PanelSkrzynka(logowanie));
             }
-            DisplayAdapter.Display(new PanelSkrzynkaWyslij(logowanie, lines));
+            DisplayAdapter.Display(new PanelSkrzynkaWyslij(logowanie, lines, wiadomosc));
         }
     }
 }

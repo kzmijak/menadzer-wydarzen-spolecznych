@@ -39,7 +39,7 @@ namespace MWS.Pages
                 if (conf == (logowanie.pracownik.kontakt.imie + ' ' + logowanie.owner.kontakt.nazwisko))
                 {
                     DataAccess.Delete(logowanie.pracownik);
-                    DisplayAdapter.Display(new Login());//, new StaticLine("Użytkownik został usunięty", ConsoleColor.Red));
+                    DisplayAdapter.Display(new Login(new StaticLine("Użytkownik został usunięty", ConsoleColor.Red)));
                 }
             }
             if(line.Index == 4 - sponsordependent)
