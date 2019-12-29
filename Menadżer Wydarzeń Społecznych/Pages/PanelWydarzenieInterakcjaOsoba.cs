@@ -10,17 +10,56 @@ namespace MWS.Pages
     {
         private _CoreObject selectedUser { get; set; }
         private Wydarzenie selectedEvent { get; set; }
-        private int listing;
         private int isOrganizer;
-        private bool listingWydarzenie;
-        private List<Wydarzenie> Wydarzenia = new List<Wydarzenie>(9999);
+        private int constructorLinesCount;
+        private string listingcode;
+        private List<Wydarzenie> wydarzenia
+        {
+            get
+            {
+                List<Wydarzenie> output = new List<Wydarzenie>(9999);
+                foreach (Wydarzenie wydarzenie in selectedUser.wydarzenia)
+                {
+                    if (wydarzenie.id != selectedEvent.id)
+                    {
+                        output.Add(wydarzenie);
+                    }
+                }
+                return output;
+            }
+        }
+        private List<Dotacja> dotacje
+        {
+            get
+            {
+                return selectedEvent.dotacje;
+            }
+        }
+        private List<Pracownik> pracownicy
+        {
+            get
+            {
+                List<Pracownik> output = new List<Pracownik>(9999);
+                foreach(Pracownik pracownik in (selectedUser as Pracownik).kadra)
+                {
+                    foreach(Pracownik pracownikwydarzenie in selectedEvent.pracownicy)
+                    {
+                        if(pracownik.id == pracownikwydarzenie.id)
+                        {
+                            output.Add(pracownik);
+                        }
+                    }
+                }
+                return output;
+            }
+        }
+        
 
-
-        public PanelWydarzenieInterakcjaOsoba(Logowanie logowanie, Wydarzenie selectedEvent, _CoreObject selectedUser, bool listingWydarzenie = false, StaticLine note = null) : base(logowanie)
+        public PanelWydarzenieInterakcjaOsoba(Logowanie logowanie, Wydarzenie selectedEvent, _CoreObject selectedUser, string listingcode = "00", StaticLine note = null) : base(logowanie)
         {
             this.selectedEvent = selectedEvent;
             this.selectedUser = selectedUser;
-            this.listingWydarzenie = listingWydarzenie;
+            this.listingcode = listingcode;
             isOrganizer = 0;
             if (logowanie.owner is Pracownik)
             {
@@ -32,30 +71,11 @@ namespace MWS.Pages
                     }
                 }
             }
-            Constructor(selectedUser);
 
+            constructorLinesCount = Constructor(selectedUser);
             
             Contents.Add(new ActiveLine("Inne wydarzenia"));
-            if (listingWydarzenie)
-            {
-                if(Wydarzenia.Count > 0)
-                {
-                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, false));
-                }
-
-                foreach(Wydarzenie wydarzenie in selectedUser.wydarzenia)
-                {
-                    if(wydarzenie.id != selectedEvent.id)
-                    {
-                        Contents.Add(new ActiveLine(" " + wydarzenie.nazwa));
-                        Wydarzenia.Add(wydarzenie);
-                    }
-                }
-                if(Wydarzenia.Count == 0)
-                {
-                    Contents.Add(new StaticLine(" Użytkownik nie bierze udziału w żadnym innym wydarzeniu"));
-                }
-            }
+            Expand(wydarzenia, listingcode[1]);
             Contents.Add(new ActiveLine("Zaproś do kontaktów"));
             if(isOrganizer == 1)
                 Contents.Add(new ActiveLine("Usuń z wydarzenia"));
@@ -66,43 +86,46 @@ namespace MWS.Pages
 
         public override void React(_Line line)
         {
-            int wcount = 0;
-            if(listingWydarzenie)
+            int cnt = Expand(wydarzenia,listingcode[1], false);
+            if (line.Index == constructorLinesCount) // inne wydarzenia
             {
-                wcount = Wydarzenia.Count;
-                if (wcount == 0)
-                    wcount++;
+                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, Reverse(1)));
             }
-
-            if (line.Index == Contents.Count - 4 - isOrganizer - wcount)
+            else if(line.Index > constructorLinesCount && line.Index < constructorLinesCount + Expand(wydarzenia, listingcode[1], false) + 1) // wydarzenie
             {
-                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, true));
-            }
-            if(listingWydarzenie && line.Index > (Contents.Count - 5 - isOrganizer - wcount) && line.Index < (Contents.Count - 4 - isOrganizer))
-            {
-                DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, Wydarzenia[0]));
-            }
-            if (line.Index == Contents.Count - 4 - isOrganizer)
+                DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenia[line.Index - constructorLinesCount - 1]));
+            } // zaproś do kontaktów
+            else if (line.Index == constructorLinesCount + Expand(wydarzenia, listingcode[1], false) + 1)
             {
                 if(selectedUser.id == logowanie.owner.id && selectedUser.GetType() == logowanie.owner.GetType())
                 {
-                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, false, new StaticLine("Nie możesz wysłać zaproszenia samemu sobie.", ConsoleColor.Red)));
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, listingcode, new StaticLine("Nie możesz wysłać zaproszenia samemu sobie.", ConsoleColor.Red)));
                 }
                 else
                 {
                     Wniosek addition = new Wniosek
                     {
                         kwota = 0,
-                        akcja = "FriendslistInvitation"
+                        akcja = "contactsAdd"
                     };
 
+                    string msg = "";
+                    if(logowanie.owner is Sponsor)
+                    {
+                        msg = $"Sponsor \"{logowanie.sponsor.nazwa}\" zaprasza cię do grona znajomych.";
+                    }
+                    else
+                    {
+                        msg = $"Użytkownik {logowanie.owner.kontakt.imie} {logowanie.owner.kontakt.nazwisko} zaprasza cię do grona znajomych.";
+
+                    }
                     Wiadomosc.Send("ZAPROSZENIE DO GRONA ZNAJOMYCH",
-                        $"Użytkownik {logowanie.owner.kontakt.imie} {logowanie.owner.kontakt.nazwisko} zaprasza cię do grona znajomych.",
+                        msg,
                         logowanie, selectedUser.logowanie, addition
                         );
-                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, false, new StaticLine("Zaproszenie zostało wysłane.", ConsoleColor.Green)));
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, listingcode, new StaticLine("Zaproszenie zostało wysłane.", ConsoleColor.Green)));
                 }
-            }
+            } // usuń z wydarzenia jeśli (isOrganizer == 1)
             else if (isOrganizer == 1 && line.Index == Contents.Count - 4)
             {
                 DataAccess.Delete(selectedEvent, selectedUser);                
@@ -113,7 +136,7 @@ namespace MWS.Pages
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, selectedEvent, new StaticLine("Użytkownik został usunięty z wydarzenia.", ConsoleColor.Green)));
 
             }
-            else if (line.Index == Contents.Count - 2)
+            else if (line.Index == Contents.Count - 2) //powrót
             {
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, selectedEvent));
             }
@@ -131,97 +154,146 @@ namespace MWS.Pages
             }
         }
 
-        private void ConstructorOrganizator()
+        private int ConstructorOrganizator()
         {
             Contents.Add(new StaticLine((selectedUser as Pracownik).kontakt.imie.ToUpper() + " " + (selectedUser as Pracownik).kontakt.nazwisko.ToUpper()));
             Contents.Add(new StaticLine("Telefon: " + (selectedUser as Pracownik).kontakt.telefon));
             Contents.Add(new ActiveLine("Pracownicy"));
-            foreach(var model in (selectedUser as Pracownik).kadra)
+            return 3 + Expand(pracownicy, listingcode[0]);
+        }
+        private void ReactOrganizator(int index)
+        {
+            if(index == 2)
             {
-                Contents.Add(new ActiveLine(model.stanowisko + " " + model.kontakt.imie + " " + model.kontakt.nazwisko));
+                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, Reverse(0)));
+            }
+            else
+            {
+                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, pracownicy[index - 3]));
             }
         }
 
-        private void ReactOrganizator(int index)
-        {
-
-        }
-
-        private void ConstructorPracownik()
+        private int ConstructorPracownik()
         {
             Contents.Add(new StaticLine((selectedUser as Pracownik).stanowisko.ToUpper() + " " + (selectedUser as Pracownik).kontakt.imie.ToUpper() + " " + (selectedUser as Pracownik).kontakt.nazwisko.ToUpper()));
             Contents.Add(new StaticLine("Telefon: " + (selectedUser as Pracownik).kontakt.telefon));
             Contents.Add(new ActiveLine("Koordynator: " + (selectedUser as Pracownik).kadra[0].kontakt.imie + " " + (selectedUser as Pracownik).kadra[0].kontakt.nazwisko));
-            ContactForm();
+            return ContactForm() + 3;
         }
-
         private void ReactPracownik(int index)
         {
-
+            if(index == 2)
+            {
+                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, (selectedUser as Pracownik).kadra[0]));
+            }
         }
 
-        private void ConstructorSponsor()
+        private int ConstructorSponsor()
         {
             Contents.Add(new StaticLine((selectedUser as Sponsor).nazwa.ToUpper()));
             Contents.Add(new ActiveLine("Dotacje sponsorskie"));
-            listing = 0;
-            foreach(var model in selectedEvent.dotacje)
+            return Expand(dotacje, listingcode[0]) + 2;
+        }
+        private void ReactSponsor(int index)
+        {
+            if(index == 1)
             {
-                if(model.sponsor.id == selectedUser.id && model.zatwierdzone == true)
-                {
-                    Contents.Add(new ActiveLine(model.kwota + ": " + model.oczekiwania));
-                    listing++;
-                }
-                if(listing == 0)
-                {
-                    Contents.Add(new StaticLine("Wybrany sponsor nie ma zatwierdzonych dotacji"));
-                }
+                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, Reverse(0)));
             }
         }
 
-        private void ReactSponsor(int index)
-        {
-            
-        }
-
-        private void ConstructorUczestnik()
+        private int ConstructorUczestnik()
         {
             Contents.Add(new StaticLine((selectedUser as Uczestnik).kontakt.imie.ToUpper() + " " + (selectedUser as Uczestnik).kontakt.nazwisko.ToUpper()));
             Contents.Add(new StaticLine("Telefon: " + (selectedUser as Uczestnik).kontakt.telefon));
-            ContactForm();
+            return ContactForm() + 2;
         }
 
-        private void ContactForm()
+        private int ContactForm()
         {
             if(isOrganizer == 1)
             {
-                Contents.Add(new StaticLine("Email: \t\t" + (selectedUser as Uczestnik).kontakt.email));
-                Contents.Add(new StaticLine("Miejscowość: \t" + (selectedUser as Uczestnik).kontakt.miejscowosc));
-                Contents.Add(new StaticLine("Numer domu: \t" + (selectedUser as Uczestnik).kontakt.nrdomu));
-                Contents.Add(new StaticLine("Miasto: \t" + (selectedUser as Uczestnik).kontakt.miasto));
-                Contents.Add(new StaticLine("Kod pocztowy: \t" + (selectedUser as Uczestnik).kontakt.poczta));
-                Contents.Add(new StaticLine("Ulica: \t\t" + (selectedUser as Uczestnik).kontakt.ulica));
+                Contents.Add(new StaticLine("Email: \t\t" + selectedUser.kontakt.email));
+                Contents.Add(new StaticLine("Miejscowość: \t" + selectedUser.kontakt.miejscowosc));
+                Contents.Add(new StaticLine("Numer domu: \t" + selectedUser.kontakt.nrdomu));
+                Contents.Add(new StaticLine("Miasto: \t" + selectedUser.kontakt.miasto));
+                Contents.Add(new StaticLine("Kod pocztowy: \t" + selectedUser.kontakt.poczta));
+                Contents.Add(new StaticLine("Ulica: \t\t" + selectedUser.kontakt.ulica));
+                return 6;
             }
+            return 0;
         }
-
-        private void Constructor(_CoreObject selectedUser) 
+        private int Constructor(_CoreObject selectedUser) 
         {
             if (selectedUser is Sponsor)
             {
-                ConstructorSponsor();
+                return ConstructorSponsor();
             }
             else if (selectedUser is Pracownik && (selectedUser as Pracownik).stanowisko.ToLower() == "organizator")
             {
-                ConstructorOrganizator();
+                return ConstructorOrganizator();
             }
             else if (selectedUser is Pracownik && (selectedUser as Pracownik).stanowisko.ToLower() != "organizator")
             {
-                ConstructorPracownik();
+                return ConstructorPracownik();
             }
             else if (selectedUser is Uczestnik)
             {
-                ConstructorUczestnik();
+                return ConstructorUczestnik();
             }
+            return 0;
+        }
+        private int Expand<T>(List<T> source, char check = '2', bool display = true) where T: _DatabaseObject
+        {
+            
+            int cnt = 0;
+            if(check == '1' || check == '2')
+            {
+                if (source.Count == 0)
+                {
+                    if(check == '1' && display)
+                        Contents.Add(new StaticLine(" Brak danych do wyświetlenia"));
+                    cnt++;
+                }
+                else
+                { 
+                    foreach (var obj in source)
+                    {
+                        if(obj is Wydarzenie)
+                        {
+                            if(check == '1' && display)
+                                Contents.Add(new ActiveLine(" " + (obj as Wydarzenie).nazwa));
+                            cnt++;
+                        }
+                        if(obj is Dotacja)
+                        {
+                            if (check == '1' && display)
+                                Contents.Add(new StaticLine(" " + (obj as Dotacja).kwota + ": " + (obj as Dotacja).oczekiwania));
+                            cnt++;
+                        }
+                        if(obj is Pracownik)
+                        {
+                            if (check == '1' && display)
+                                Contents.Add(new ActiveLine(" " + (obj as Dotacja).kwota + ": " + (obj as Dotacja).oczekiwania));
+                            cnt++;
+                        }
+                    }
+                }
+            }
+            return cnt;
+        }
+        private string Reverse(int position)
+        {
+            var expandcode = this.listingcode.ToCharArray();
+            if (expandcode[position] == '0')
+            {
+                expandcode[position] = '1';
+            }
+            else
+            {
+                expandcode[position] = '0';
+            }
+            return new string(expandcode);
         }
     }
 }

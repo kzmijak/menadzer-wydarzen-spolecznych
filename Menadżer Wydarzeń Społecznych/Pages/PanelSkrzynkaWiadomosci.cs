@@ -10,7 +10,7 @@ namespace MWS.Pages
     {
         private List<Wiadomosc> messages = new List<Wiadomosc>(9999);
         private string mode;
-        public PanelSkrzynkaWiadomosci(Logowanie logowanie, string mode, StaticLine note = null) : base(logowanie)
+        public PanelSkrzynkaWiadomosci(Logowanie logowanie, string mode, Logowanie selectedUser = null, StaticLine note = null) : base(logowanie)
         {
             this.mode = mode;
             Contents.Add(new StaticLine(mode + " WIADOMOŚCI"));
@@ -18,6 +18,8 @@ namespace MWS.Pages
             {
                 if((mode == "ODEBRANE" && wiadomosc.idodbiorcy == logowanie.id) || (mode == "WYSŁANE" && wiadomosc.idadresata == logowanie.id))
                 {
+                    if (selectedUser != null && (wiadomosc.idadresata == selectedUser.id || wiadomosc.idodbiorcy == selectedUser.id))
+                        continue;
                     Contents.Add(new ActiveLine($"({wiadomosc.dzien.ToShortDateString()} {wiadomosc.godzina.ToString("hh\\:mm")}) {wiadomosc.tytul}"));
                     messages.Add(wiadomosc);
                 }
@@ -44,7 +46,7 @@ namespace MWS.Pages
                         DataAccess.Delete(wiadomosc);
                     }
                 }
-                DisplayAdapter.Display(new PanelSkrzynkaWiadomosci(logowanie, mode, new StaticLine("Wszystkie wiadomości zostały usunięte po obu stronach.", ConsoleColor.Green)));
+                DisplayAdapter.Display(new PanelSkrzynkaWiadomosci(logowanie, mode, null, new StaticLine("Wszystkie wiadomości zostały usunięte po obu stronach.", ConsoleColor.Green)));
             }
             if(line.Index == Contents.Count - 2)
             {

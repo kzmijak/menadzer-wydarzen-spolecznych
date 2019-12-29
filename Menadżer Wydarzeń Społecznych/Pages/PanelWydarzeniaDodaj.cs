@@ -117,7 +117,7 @@ namespace MWS.Pages
                                     Wniosek GoToWydarzenia = new Wniosek
                                     {
                                         kwota = 0,
-                                        akcja = "GoToWydarzenia"
+                                        akcja = $"gotoevent:{wydarzenie.id}"
                                     };
 
                                     Wiadomosc.Send(

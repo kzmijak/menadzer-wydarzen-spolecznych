@@ -36,11 +36,12 @@ namespace MWS.Pages
 
             Contents.Add(new StaticLine(""));
             Contents.Add(new ActiveLine("Powrót"));
+            Contents.Add(note);
         }
 
         public override void React(_Line line)
         {
-            if (line.Index == Contents.Count - 1)
+            if (line.Index == Contents.Count - 2)
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie));
             else
             {
@@ -66,7 +67,6 @@ namespace MWS.Pages
         {
             Contents.Add(new ActiveLine("Ustawienia wydarzenia"));
             Contents.Add(new ActiveLine("Bilety"));
-            Contents.Add(new ActiveLine("Histora płatności"));
             Contents.Add(new ActiveLine("Moja kadra"));
             if(listing is false)
             {
@@ -102,7 +102,14 @@ namespace MWS.Pages
             }
             if(index == 3)
             {
-                DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie, null, true));
+                if(wydarzenie.pracownicy is null)
+                {
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie, new StaticLine("Nie zatrudniono żadnych pracowników.", ConsoleColor.Red)));
+                }
+                else
+                {
+                    DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie, null, true));
+                }
             }
             if(listing && index > 3 && index < 4 + cnt)
             {

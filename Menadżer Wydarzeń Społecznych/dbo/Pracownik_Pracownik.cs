@@ -16,7 +16,7 @@ namespace MWS.dbo
 
             if (DataAccess.GetRecordById<Pracownik>(obj2.id) is null)
                 obj2 = DataAccess.Insert(obj2) as Pracownik;
-
+            
             DataAccess.Insert(obj1, obj2);
         }
     }

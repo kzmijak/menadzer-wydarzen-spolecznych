@@ -107,7 +107,7 @@ namespace MWS.Pages
             {
                 DataAccess.Delete(wiadomosc.wniosek);
                 DataAccess.Delete(wiadomosc);
-                DisplayAdapter.Display(new PanelSkrzynkaWiadomosci(logowanie, mode, new StaticLine("Wiadomość została usunięta.", ConsoleColor.Green)));
+                DisplayAdapter.Display(new PanelSkrzynkaWiadomosci(logowanie, mode, null, new StaticLine("Wiadomość została usunięta.", ConsoleColor.Green)));
             }
             else if (line.Index == Contents.Count - 2)
             {
@@ -119,20 +119,34 @@ namespace MWS.Pages
         private void Proceed(string action)
         {
             int div = action.IndexOf(":");
+            if(div == -1)
+            {
+                div = action.Length;
+                action += ":0";
+            }
+
             string type = action.Substring(0, div);
             int id;
-            int.TryParse(action.Substring(div+1), out id);
+
+            if(!int.TryParse(action.Substring(div+1), out id))
+            {
+                id = 0;
+            }
+
+            if(wiadomosc.wniosek != null )
+            {
+                var addition_old = DataAccess.GetRecordById<Wniosek>(wiadomosc.wniosek.id);
+                var addition_new = DataAccess.GetRecordById<Wniosek>(wiadomosc.wniosek.id);
+                addition_new.zatwierdzone = true;
+                DataAccess.Update(addition_old, addition_new);
+            }
 
             if(type == "donation")
             {
                 var donation_old = DataAccess.GetRecordById<Dotacja>(id);
                 var donation_new = DataAccess.GetRecordById<Dotacja>(id);
-                var addition_old = DataAccess.GetRecordById<Wniosek>(id);
-                var addition_new = DataAccess.GetRecordById<Wniosek>(id);
                 donation_new.zatwierdzone = true;
-                addition_new.zatwierdzone = true;
                 DataAccess.Update(donation_old, donation_new);
-                DataAccess.Update(addition_old, addition_new);
                 Wydarzenie_Sponsor.Add(donation_new.wydarzenie, wiadomosc.adresat.sponsor);
                 Wiadomosc.Send(
                             "DOTACJA ZOSTAŁA ZAAKCEPTOWANA",
@@ -141,7 +155,48 @@ namespace MWS.Pages
                         + $"\nKwota:       {donation_new.kwota}"
                         + $"\nOczekiwania: {donation_new.oczekiwania},",
                             logowanie, wiadomosc.adresat);
-                DisplayAdapter.Display(new PanelSkrzynkaWiadomosci(logowanie, mode));
+                DisplayAdapter.Display(new PanelSkrzynkaWiadomosc(logowanie, wiadomosc));
+            }
+            if(type=="gotoevent")
+            {
+                DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, DataAccess.GetRecordById<Wydarzenie>(id)));
+            }
+            if(type=="orgApp")
+            {
+                Pracownik organizator = DataAccess.GetRecordById<Pracownik>(wiadomosc.adresat.owner.id);
+                Wydarzenie wydarzenie = DataAccess.GetRecordById<Wydarzenie>(id);
+                Wydarzenie_Pracownik.Add(wydarzenie, organizator);
+                Wniosek wniosek = new Wniosek
+                {
+                    kwota = 0,
+                    akcja = $"gotoevent:{id}"
+                };
+                Wiadomosc.Send(
+                            "ZOSTAŁEŚ ORGANIZATOREM WYDARZENIA",
+                            $"Wydarzenie:  {wydarzenie.nazwa}"
+                        + $"\nOrganizator: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}"
+                        + $"\nPrzejść do wydarzenia?",
+                            logowanie, wiadomosc.adresat, wniosek);
+                DisplayAdapter.Display(new PanelSkrzynkaWiadomosc(logowanie, wiadomosc));
+            }
+            if(type=="contactsAdd")
+            {
+                Logowanie_Logowanie.Add(logowanie, wiadomosc.adresat);
+                string msg = "";
+                if (logowanie.owner is Sponsor)
+                {
+                    msg = $"Sponsor \"{logowanie.sponsor.nazwa}\" przyjął twoje zaproszenie do grona znajomych.";
+                }
+                else
+                {
+                    msg = $"Użytkownik {logowanie.owner.kontakt.imie} {logowanie.owner.kontakt.nazwisko} przyjął twoje zaproszenie do grona znajomych.";
+
+                }
+                Wiadomosc.Send("ZAPROSZENIE ZAAKCEPTOWANE",
+                    msg,
+                    logowanie, wiadomosc.adresat
+                    );
+                DisplayAdapter.Display(new PanelSkrzynkaWiadomosc(logowanie, wiadomosc, new StaticLine("Zaakceptowałeś zaproszenie.", ConsoleColor.Green)));
             }
         }
     }

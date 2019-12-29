@@ -64,7 +64,7 @@ namespace MWS.Pages
                     Wniosek wniosek = new Wniosek
                     {
                         kwota = donation,
-                        akcja = "PracownikApply"
+                        akcja = $"orgApp:{wydarzenie.id}"
                     };
                     Wiadomosc.Send($"APLIKACJA DO WYDARZENIA \"{wydarzenie.nazwa.ToUpper()}\"", str, sender, receiver, wniosek);
                     

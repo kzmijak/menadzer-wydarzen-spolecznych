@@ -94,65 +94,37 @@ namespace MWS.Pages
         {
             if(line.Index == 1)
             {
-                if (organizatorzy.Count == 0)
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, expandcode, message, new StaticLine("Nie masz kontaktów w tej sferze.", ConsoleColor.Red)));
-                }
-                else
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(0), message));
-                }
+                DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(0), message));                
             }
-            else if (line.Index > 1 && line.Index < 2 + Expand(organizatorzy))
+            else if (line.Index > 1 && line.Index < 2 + Expand(organizatorzy, expandcode[0], false))
             {
                 SendOrSelect(organizatorzy[line.Index - 2]);                
             }
-            else if (line.Index == 2 + Expand(organizatorzy))
+            else if (line.Index == 2 + Expand(organizatorzy, expandcode[0], false))
             {
-                if (organizatorzy.Count == 0)
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, expandcode, message, new StaticLine("Nie masz kontaktów w tej sferze.", ConsoleColor.Red)));
-                }
-                else
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(0), message));
-                }
+                DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(1), message));               
             }
-            else if(line.Index > 2 + Expand(organizatorzy) && line.Index < 3 + Expand(organizatorzy) + Expand(pracownicy))
+            else if(line.Index > 2 + Expand(organizatorzy, expandcode[0], false) && line.Index < 3 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false))
             {
-                SendOrSelect(pracownicy[line.Index - 3 + Expand(organizatorzy)]);
+                SendOrSelect(pracownicy[line.Index - 3 - Expand(organizatorzy, expandcode[0], false)]);
             }
-            else if(line.Index == 3 + Expand(organizatorzy) + Expand(pracownicy))
+            else if(line.Index == 3 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false))
             {
-                if (pracownicy.Count == 0)
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, expandcode, message, new StaticLine("Nie masz kontaktów w tej sferze.", ConsoleColor.Red)));
-                }
-                else
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(2), message));
-                }
+                DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(2), message));            
             }
-            else if(line.Index > 3 + Expand(organizatorzy) + Expand(pracownicy) && line.Index < 4 + Expand(organizatorzy) + Expand(pracownicy) + Expand(sponsorzy))
+            else if(line.Index > 3 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false) && line.Index < 4 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false) + Expand(sponsorzy, expandcode[2], false))
             {
-                SendOrSelect(pracownicy[line.Index - 4 + Expand(organizatorzy) + Expand(pracownicy)]);
+                SendOrSelect(sponsorzy[line.Index - 4 - Expand(organizatorzy, expandcode[0], false) - Expand(pracownicy, expandcode[1], false)]);
             }
-            else if(line.Index == 4 + Expand(organizatorzy) + Expand(pracownicy) + Expand(sponsorzy))
+            else if(line.Index == 4 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false) + Expand(sponsorzy, expandcode[2], false))
             {
-                if (sponsorzy.Count == 0)
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, expandcode, message, new StaticLine("Nie masz kontaktów w tej sferze.", ConsoleColor.Red)));
-                }
-                else
-                {
-                    DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(3), message));
-                }
+                 DisplayAdapter.Display(new PanelSkrzynkaKontakty(logowanie, Reverse(3), message));               
             }
-            else if(line.Index > 4 + Expand(organizatorzy) + Expand(pracownicy) + Expand(sponsorzy) && line.Index < 5 + Expand(organizatorzy) + Expand(pracownicy) + Expand(sponsorzy) + Expand(uczestnicy))
+            else if(line.Index > 4 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false) + Expand(sponsorzy, expandcode[2], false) && line.Index < 5 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false) + Expand(sponsorzy, expandcode[2], false) + Expand(uczestnicy, expandcode[3], false))
             {
-                SendOrSelect(pracownicy[line.Index - 5 + Expand(organizatorzy) + Expand(pracownicy) + Expand(sponsorzy)]);
+                SendOrSelect(uczestnicy[line.Index - 5 - Expand(organizatorzy, expandcode[0], false) - Expand(pracownicy, expandcode[1], false) - Expand(sponsorzy, expandcode[2], false)]);
             }
-            else if(line.Index == 6 + Expand(organizatorzy) + Expand(pracownicy) + Expand(sponsorzy) + Expand(uczestnicy))
+            else if(line.Index == 6 + Expand(organizatorzy, expandcode[0], false) + Expand(pracownicy, expandcode[1], false) + Expand(sponsorzy, expandcode[2], false) + Expand(uczestnicy, expandcode[3], false))
             {
                 DisplayAdapter.Display(new PanelSkrzynka(logowanie));
             }
@@ -162,7 +134,7 @@ namespace MWS.Pages
         {
             if (message is null)
             {
-                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, null, user));
+                DisplayAdapter.Display(new PanelSkrzynkaKontakt(logowanie, user));
             }
             else
             {
@@ -188,16 +160,22 @@ namespace MWS.Pages
             return new string(expandcode);            
         }
 
-        private int Expand<T>(List<T> users, int check = '2') where T: _CoreObject
+        private int Expand<T>(List<T> users, char check = '2', bool display = true) where T: _CoreObject
         {
             int cnt = 0;
             if(check=='1' || check =='2' && users.Count != 0)
             {
-                foreach(var user in users)
+                if (users is null || users.Count == 0)
                 {
-                    if(typeof(T) == typeof(Sponsor))
+                    if (check == '1' && display)
+                        Contents.Add(new StaticLine(" Brak danych do wyświetlenia"));
+                    cnt++;
+                }
+                foreach (var user in users)
+                {
+                    if (typeof(T) == typeof(Sponsor))
                     {
-                        if(check == '1')
+                        if(check == '1' && display)
                             Contents.Add(new ActiveLine(" " + (user as Sponsor).nazwa));
                         cnt++;
                     }
@@ -208,8 +186,8 @@ namespace MWS.Pages
                         {
                             role = $" ({(user as Pracownik).stanowisko})";
                         }
-                        if (check == '1')
-                            Contents.Add(new ActiveLine(" " + user.kontakt.imie + " " + user.kontakt.imie + role));
+                        if (check == '1' && display)
+                            Contents.Add(new ActiveLine(" " + user.kontakt.imie + " " + user.kontakt.nazwisko + role));
                         cnt++;
                     }
                 }
