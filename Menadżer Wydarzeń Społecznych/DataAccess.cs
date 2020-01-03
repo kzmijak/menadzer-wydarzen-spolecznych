@@ -31,29 +31,29 @@ namespace MWS
         private static JPSetWydarzenie_Uczestnik jpWydarzenie_Uczestnik { get; set; } = new JPSetWydarzenie_Uczestnik();
         private static JPSetLogowanie_Logowanie jpLogowanie_Logowanie { get; set; } = new JPSetLogowanie_Logowanie();
 
-        public static _DatabaseObject Insert(_DatabaseObject obj, _DatabaseObject jpobj = null)
+        public static T Insert<T>(T obj, _DatabaseObject jpobj = null) where T:_DatabaseObject
         {
             if (obj is Bilet)
             {
-                return bilet.Insert(obj);
+                return bilet.Insert(obj) as T;
             }
             else if (obj is Dotacja)
             {
-                return dotacja.Insert(obj);
+                return dotacja.Insert(obj) as T;
             }
             else if (obj is KartaPlatnicza)
             {
-                return kartaPlatnicza.Insert(obj);
+                return kartaPlatnicza.Insert(obj) as T;
             }
             else if (obj is Kontakt)
             {
-                return kontakt.Insert(obj);
+                return kontakt.Insert(obj) as T;
             }
             else if (obj is Logowanie)
             {
                 if (jpobj is null)
                 {
-                    return logowanie.Insert(obj);
+                    return logowanie.Insert(obj) as T;
                 }
                 else if (jpobj is Logowanie)
                 {
@@ -63,13 +63,13 @@ namespace MWS
             }
             else if (obj is Platnosc)
             {
-                return platnosc.Insert(obj);
+                return platnosc.Insert(obj) as T;
             }
             else if (obj is Pracownik)
             {
                 if (jpobj is null)
                 {
-                    return pracownik.Insert(obj);
+                    return pracownik.Insert(obj) as T;
                 }
                 else if (jpobj is Pracownik)
                 {
@@ -81,7 +81,7 @@ namespace MWS
             {
                 if (jpobj is null)
                 {
-                    return uczestnik.Insert(obj);
+                    return uczestnik.Insert(obj) as T;
                 }
                 else if (jpobj is Bilet)
                 {
@@ -91,13 +91,13 @@ namespace MWS
             }
             else if (obj is Sponsor)
             {
-                return sponsor.Insert(obj);
+                return sponsor.Insert(obj) as T;
             }
             else if (obj is Wydarzenie)
             {
                 if (jpobj is null)
                 {
-                    return wydarzenie.Insert(obj);
+                    return wydarzenie.Insert(obj) as T;
                 }
                 else if (jpobj is Pracownik)
                 {
@@ -117,11 +117,11 @@ namespace MWS
             }
             else if (obj is Wniosek)
             {
-                return wniosek.Insert(obj);
+                return wniosek.Insert(obj) as T;
             }
             else if (obj is Wiadomosc)
             {
-                return wiadomosc.Insert(obj);
+                return wiadomosc.Insert(obj) as T;
             }
             return null;
         }
@@ -450,5 +450,18 @@ namespace MWS
             }
             return null;
         }
+        public static bool IsInDb<T> (_DatabaseObject obj1, _DatabaseObject obj2) where T: _JoiningTable
+        {
+            bool output = false;
+            foreach(var set in DataAccess.GetConnections<T>())
+            {
+                if(set.id1 == obj1.id && set.id2 == obj2.id)
+                {
+                    output = true;
+                }
+            }
+            return output;
+        }
+
     }
 }

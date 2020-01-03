@@ -87,17 +87,17 @@ namespace MWS.Pages
         public override void React(_Line line)
         {
             int cnt = Expand(wydarzenia,listingcode[1], false);
-            if (line.Index == constructorLinesCount) // inne wydarzenia
+            if (line.Index == constructorLinesCount)
             {
                 DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, Reverse(1)));
             }
-            else if(line.Index > constructorLinesCount && line.Index < constructorLinesCount + Expand(wydarzenia, listingcode[1], false) + 1) // wydarzenie
+            else if (line.Index > constructorLinesCount && line.Index < constructorLinesCount + Expand(wydarzenia, listingcode[1], false) + 1) 
             {
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenia[line.Index - constructorLinesCount - 1]));
-            } // zaproś do kontaktów
+            }
             else if (line.Index == constructorLinesCount + Expand(wydarzenia, listingcode[1], false) + 1)
             {
-                if(selectedUser.id == logowanie.owner.id && selectedUser.GetType() == logowanie.owner.GetType())
+                if (selectedUser.id == logowanie.owner.id && selectedUser.GetType() == logowanie.owner.GetType())
                 {
                     DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, listingcode, new StaticLine("Nie możesz wysłać zaproszenia samemu sobie.", ConsoleColor.Red)));
                 }
@@ -110,7 +110,7 @@ namespace MWS.Pages
                     };
 
                     string msg = "";
-                    if(logowanie.owner is Sponsor)
+                    if (logowanie.owner is Sponsor)
                     {
                         msg = $"Sponsor \"{logowanie.sponsor.nazwa}\" zaprasza cię do grona znajomych.";
                     }
@@ -125,10 +125,10 @@ namespace MWS.Pages
                         );
                     DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, selectedEvent, selectedUser, listingcode, new StaticLine("Zaproszenie zostało wysłane.", ConsoleColor.Green)));
                 }
-            } // usuń z wydarzenia jeśli (isOrganizer == 1)
+            }
             else if (isOrganizer == 1 && line.Index == Contents.Count - 4)
             {
-                DataAccess.Delete(selectedEvent, selectedUser);                
+                DataAccess.Delete(selectedEvent, selectedUser);
                 Wiadomosc.Send("NIE BIERZESZ JUŻ UDZIAŁU W WYDARZENIU",
                     $"Nie bierzesz już udziału w wydarzeniu \"{selectedEvent.nazwa}\"."
                   + $"\nDecyzja podjęta przez: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}.",
@@ -136,7 +136,7 @@ namespace MWS.Pages
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, selectedEvent, new StaticLine("Użytkownik został usunięty z wydarzenia.", ConsoleColor.Green)));
 
             }
-            else if (line.Index == Contents.Count - 2) //powrót
+            else if (line.Index == Contents.Count - 2)
             {
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, selectedEvent));
             }

@@ -39,7 +39,7 @@ namespace MWS.Procedures
             {
                 try
                 {
-                    return connection.QuerySingle<Platnosc>("dbo.Platnosc_GetRecord @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                    return connection.QuerySingle<Platnosc>("dbo.Platnosc_GetRecord @idkarty, @idnadawcy, @kwota, @dzien, @godzina", dbobject);
                 }
                 catch (InvalidOperationException)
                 {
@@ -67,7 +67,7 @@ namespace MWS.Procedures
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                return connection.QuerySingle<Platnosc>("dbo.Platnosc_Insert @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject);
+                return connection.QuerySingle<Platnosc>("dbo.Platnosc_Insert @idkarty, @idnadawcy, @kwota, @dzien, @godzina", dbobject);
             }
         }
 
@@ -76,7 +76,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.Platnosc_Update @id, @idkarty, @idadresata, @kwota, @dzien, @godzina", dbobject_new);
+                connection.Execute("dbo.Platnosc_Update @id, @idkarty, @idnadawcy, @kwota, @dzien, @godzina", dbobject_new);
             }
         }
     }

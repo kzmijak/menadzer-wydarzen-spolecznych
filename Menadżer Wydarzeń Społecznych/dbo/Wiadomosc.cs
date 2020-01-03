@@ -6,7 +6,7 @@ namespace MWS.dbo
 {
     class Wiadomosc: _DatabaseObject
     {
-        public int idadresata { get; set; } = 0;
+        public int idnadawcy { get; set; } = 0;
         public int idodbiorcy { get; set; } = 0;
         public DateTime dzien { get; set; }
         public TimeSpan godzina { get; set; }
@@ -17,7 +17,7 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.GetRecordById<Logowanie>(idadresata) as Logowanie;
+                return DataAccess.GetRecordById<Logowanie>(idnadawcy) as Logowanie;
             }
             set
             {
@@ -68,7 +68,7 @@ namespace MWS.dbo
         {
             Wiadomosc wiadomosc = new Wiadomosc
             {
-                idadresata = sender.id,
+                idnadawcy = sender.id,
                 idodbiorcy = receiver.id,
                 dzien = DateTime.Now,
                 godzina = DateTime.Now.TimeOfDay,

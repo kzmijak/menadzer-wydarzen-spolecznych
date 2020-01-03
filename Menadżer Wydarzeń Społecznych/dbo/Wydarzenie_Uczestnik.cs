@@ -9,6 +9,29 @@ namespace MWS.dbo
         public int idwydarzenia { get; set; }
         public int iduczestnika { get; set; }
 
+        public int id1
+        {
+            get
+            {
+                return idwydarzenia;
+            }
+            set
+            {
+                idwydarzenia = value;
+            }
+        }
+        public int id2
+        {
+            get
+            {
+                return iduczestnika;
+            }
+            set
+            {
+                iduczestnika = value;
+            }
+        }
+
         public static void Add(_DatabaseObject obj1, _DatabaseObject obj2)
         {
             if (DataAccess.GetRecordById<Wydarzenie>(obj1.id) is null)
@@ -17,7 +40,14 @@ namespace MWS.dbo
             if (DataAccess.GetRecordById<Uczestnik>(obj2.id) is null)
                 obj2 = DataAccess.Insert(obj2) as Uczestnik;
 
-            DataAccess.Insert(obj1, obj2);
+            if (!DataAccess.IsInDb<Wydarzenie_Uczestnik>(obj1, obj2))
+            {
+                DataAccess.Insert(obj1, obj2);
+            }
+            else
+            {
+                throw new Exception("Jesteś już połączony z tym wydarzeniem");
+            }
         }
     }
 }

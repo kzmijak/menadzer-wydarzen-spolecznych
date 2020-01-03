@@ -7,7 +7,7 @@ namespace MWS.dbo
 {
     class KartaPlatnicza : _DatabaseObject
     {
-        public int wlasciciel { get; set; }
+        public string wlasciciel { get; set; }
         public string numer { get; set; }
         public string wygasniecie { get; set; }
         public string kbezpiecz { get; set; }
@@ -28,7 +28,7 @@ namespace MWS.dbo
                 var platnosci = DataAccess.GetCollection<Platnosc>();
                 foreach (Platnosc ob in platnosci)
                     if (ob.idkarty == id)
-                        output.Add(DataAccess.GetRecordById<Platnosc>(ob.idadresata) as Platnosc);
+                        output.Add(DataAccess.GetRecordById<Platnosc>(ob.idnadawcy) as Platnosc);
                 return output;
             }
         }

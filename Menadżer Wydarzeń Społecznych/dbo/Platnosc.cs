@@ -7,7 +7,7 @@ namespace MWS.dbo
     class Platnosc : _DatabaseObject
     {
         public int idkarty { get; set; }
-        public int idadresata { get; set; }
+        public int idnadawcy { get; set; }
         public decimal kwota { get; set; }
         public DateTime dzien { get; set; }
         public TimeSpan godzina { get; set; }
@@ -30,7 +30,7 @@ namespace MWS.dbo
         {
             get
             {
-                return DataAccess.GetRecordById<Kontakt>(idadresata) as Kontakt;
+                return DataAccess.GetRecordById<Kontakt>(idnadawcy) as Kontakt;
             }
             set
             {

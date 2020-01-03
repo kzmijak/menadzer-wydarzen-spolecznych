@@ -16,9 +16,9 @@ namespace MWS.Pages
             Contents.Add(new StaticLine(mode + " WIADOMOŚCI"));
             foreach(Wiadomosc wiadomosc in DataAccess.GetCollection<Wiadomosc>())
             {
-                if((mode == "ODEBRANE" && wiadomosc.idodbiorcy == logowanie.id) || (mode == "WYSŁANE" && wiadomosc.idadresata == logowanie.id))
+                if((mode == "ODEBRANE" && wiadomosc.idodbiorcy == logowanie.id) || (mode == "WYSŁANE" && wiadomosc.idnadawcy == logowanie.id))
                 {
-                    if (selectedUser != null && (wiadomosc.idadresata == selectedUser.id || wiadomosc.idodbiorcy == selectedUser.id))
+                    if (selectedUser != null && (wiadomosc.idnadawcy == selectedUser.id || wiadomosc.idodbiorcy == selectedUser.id))
                         continue;
                     Contents.Add(new ActiveLine($"({wiadomosc.dzien.ToShortDateString()} {wiadomosc.godzina.ToString("hh\\:mm")}) {wiadomosc.tytul}"));
                     messages.Add(wiadomosc);
@@ -40,7 +40,7 @@ namespace MWS.Pages
             {
                 foreach(Wiadomosc wiadomosc in DataAccess.GetCollection<Wiadomosc>())
                 {
-                    if((mode == "ODEBRANE" && wiadomosc.idodbiorcy == logowanie.id) || (mode == "WYSŁANE" && wiadomosc.idadresata == logowanie.id))
+                    if((mode == "ODEBRANE" && wiadomosc.idodbiorcy == logowanie.id) || (mode == "WYSŁANE" && wiadomosc.idnadawcy == logowanie.id))
                     {
                         DataAccess.Delete(wiadomosc.wniosek);
                         DataAccess.Delete(wiadomosc);

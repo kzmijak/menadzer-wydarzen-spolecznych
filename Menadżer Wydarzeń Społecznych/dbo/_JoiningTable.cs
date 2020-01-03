@@ -4,7 +4,9 @@ using System.Text;
 
 namespace MWS.dbo
 {
-    abstract class _JoiningTable
+    interface _JoiningTable
     {
+        int id1 { get; set; }
+        int id2 { get; set; }
     }
 }

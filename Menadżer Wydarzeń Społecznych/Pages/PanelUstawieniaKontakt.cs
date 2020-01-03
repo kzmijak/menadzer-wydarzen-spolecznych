@@ -39,14 +39,14 @@ namespace MWS.Pages
             }
             else if (logowanie.owner is Uczestnik)
             {
-                Contents.Add(new StaticLine(""));
+                Contents.Add(new ActiveLine("Karta płatnicza"));
             }
             Contents.Add(new StaticLine(""));
             Contents.Add(new ActiveLine("Resetuj"));
             Contents.Add(new ActiveLine("Zapisz"));
             Contents.Add(new ActiveLine("Powrót"));
             
-                
+              
             if (Update != null)
                 Contents.Add(note);
         }
@@ -105,6 +105,10 @@ namespace MWS.Pages
                         {
                             nazwa = Console.ReadLine()
                         };
+                    }
+                    if(logowanie.owner is Uczestnik)
+                    {
+                        DisplayAdapter.Display(new PanelUstawieniaKontaktKarta(logowanie, logowanie.owner.kontakt.kartaPlatnicza));
                     }
                     DisplayAdapter.Display(new PanelUstawieniaKontakt(logowanie, null, Update, Core));
                     break;

@@ -98,7 +98,7 @@ namespace MWS.Pages
             }
             if(index == 2)
             {
-                // REDIRECT TO PanelWydarzenieBilety
+                DisplayAdapter.Display(new PanelWydarzenieBilety(logowanie, wydarzenie));
             }
             if(index == 3)
             {
@@ -177,7 +177,7 @@ namespace MWS.Pages
         {
             string msg = "";
             if (logowanie.uczestnik.bilety.Count == 0)
-                msg = "(niedostępne)";
+                msg = " (niedostępne)";
 
             Contents.Add(new ActiveLine("Kup bilet"));
             Contents.Add(new ActiveLine("Moje bilety" + msg));
@@ -199,7 +199,7 @@ namespace MWS.Pages
 
             if(index == 1)
             {
-                    // REDIRECT TO THE TICKETS TAB PanelWydarzenieInterakcjaBilety
+                DisplayAdapter.Display(new PanelWydarzenieBilety(logowanie, wydarzenie));
             }
             if(index == 2)
             {
@@ -214,7 +214,7 @@ namespace MWS.Pages
             }
             if(listing && index > 2 && index < 3 + cnt)
             {
-                // REDIRECT TO THE TICKETS TAB PanelWydarzenieInterakcjaBilety
+                DisplayAdapter.Display(new PanelWydarzenieBilet(logowanie, wydarzenie, wydarzenie.bilety[index - 3]));
             }
         }
     }

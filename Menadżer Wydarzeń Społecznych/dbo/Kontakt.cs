@@ -73,6 +73,10 @@ namespace MWS.dbo
                 foreach (KartaPlatnicza karta in karty)
                     if (karta.kontakt == id)
                         output = karta;
+                if(karty.Count == 0)
+                {
+                    return null;
+                }
                 return output;
             }
             set

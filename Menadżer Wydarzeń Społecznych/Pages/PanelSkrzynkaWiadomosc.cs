@@ -13,7 +13,7 @@ namespace MWS.Pages
         {
             get
             {
-                if (logowanie.id == wiadomosc.idadresata)
+                if (logowanie.id == wiadomosc.idnadawcy)
                 {
                     return "WYSŁANE";
                 }
@@ -97,9 +97,10 @@ namespace MWS.Pages
             {
                 if(wiadomosc.idodbiorcy == logowanie.id)
                 {
-                    int tmp = wiadomosc.idadresata;
-                    wiadomosc.idadresata = wiadomosc.idodbiorcy;
+                    int tmp = wiadomosc.idnadawcy;
+                    wiadomosc.idnadawcy = wiadomosc.idodbiorcy;
                     wiadomosc.idodbiorcy = tmp;
+                    wiadomosc.tytul = "RE: " + wiadomosc.tytul;
                     DisplayAdapter.Display(new PanelSkrzynkaWyslij(logowanie, null, wiadomosc));
                 }
             }
@@ -146,8 +147,15 @@ namespace MWS.Pages
                 var donation_old = DataAccess.GetRecordById<Dotacja>(id);
                 var donation_new = DataAccess.GetRecordById<Dotacja>(id);
                 donation_new.zatwierdzone = true;
+                try
+                {
+                    Wydarzenie_Sponsor.Add(donation_new.wydarzenie, wiadomosc.adresat.sponsor);
+                }
+                catch (Exception e)
+                {
+                    DisplayAdapter.Display(new PanelSkrzynkaWiadomosc(logowanie, wiadomosc, new StaticLine(e.Message, ConsoleColor.Red)));
+                }
                 DataAccess.Update(donation_old, donation_new);
-                Wydarzenie_Sponsor.Add(donation_new.wydarzenie, wiadomosc.adresat.sponsor);
                 Wiadomosc.Send(
                             "DOTACJA ZOSTAŁA ZAAKCEPTOWANA",
                             $"Wydarzenie:  {donation_new.wydarzenie.nazwa}"
@@ -165,7 +173,14 @@ namespace MWS.Pages
             {
                 Pracownik organizator = DataAccess.GetRecordById<Pracownik>(wiadomosc.adresat.owner.id);
                 Wydarzenie wydarzenie = DataAccess.GetRecordById<Wydarzenie>(id);
-                Wydarzenie_Pracownik.Add(wydarzenie, organizator);
+                try
+                {
+                    Wydarzenie_Pracownik.Add(wydarzenie, organizator);
+                }
+                catch (Exception e)
+                {
+                    DisplayAdapter.Display(new PanelSkrzynkaWiadomosc(logowanie, wiadomosc, new StaticLine(e.Message, ConsoleColor.Red)));
+                }
                 Wniosek wniosek = new Wniosek
                 {
                     kwota = 0,
@@ -181,7 +196,14 @@ namespace MWS.Pages
             }
             if(type=="contactsAdd")
             {
-                Logowanie_Logowanie.Add(logowanie, wiadomosc.adresat);
+                try
+                {
+                    Logowanie_Logowanie.Add(logowanie, wiadomosc.adresat);
+                }
+                catch(Exception e)
+                {
+                    DisplayAdapter.Display(new PanelSkrzynkaWiadomosc(logowanie, wiadomosc, new StaticLine(e.Message, ConsoleColor.Red)));
+                }
                 string msg = "";
                 if (logowanie.owner is Sponsor)
                 {

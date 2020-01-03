@@ -100,5 +100,42 @@ namespace MWS.dbo
                 else return null;
             }
         }
+
+        public bool IsOrganizer()
+        {
+            if (this is Pracownik)
+            {
+                if ((this as Pracownik).stanowisko.ToLower() == "organizator")
+                    return true;
+            }
+            return false;
+        }
+
+        public bool IsOrganizer(Wydarzenie wydarzenie)
+        {
+            if(IsOrganizer())
+            {
+                foreach(var org in wydarzenie.organizatorzy)
+                {
+                    if(org.id == this.id)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool IsMainOrganizer(Wydarzenie wydarzenie)
+        {
+            if(IsOrganizer())
+            {
+                if (wydarzenie.organizatorzy[0].id == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

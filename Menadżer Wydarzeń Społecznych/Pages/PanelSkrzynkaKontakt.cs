@@ -63,7 +63,9 @@ namespace MWS.Pages
             }
 
             string pracownik_pracownik = "";
-            if(logowanie.owner is Pracownik)
+
+            bool Static = true;
+            if(logowanie.owner is Pracownik && user is Pracownik)
             {
                 if(logowanie.pracownik.stanowisko.ToLower() == "organizator" && (user as Pracownik).stanowisko.ToLower() != "organizator")
                 {
@@ -77,6 +79,7 @@ namespace MWS.Pages
                         pracownik_pracownik = $"Zmień wynagrodzenie (obecnie {this.salary}PLN)";
                         action = "changeHim";
                     }
+                    Static = false;
                 }
                 else if (logowanie.pracownik.stanowisko.ToLower() != "organizator" && (user as Pracownik).stanowisko.ToLower() == "organizator")
                 {
@@ -90,6 +93,7 @@ namespace MWS.Pages
                         pracownik_pracownik = $"Zmień wynagrodzenie (obecnie {this.salary}PLN)";
                         action = "changeMe";
                     }
+                    Static = false;
                 }
             }
 
@@ -99,7 +103,10 @@ namespace MWS.Pages
             Contents.Add(new ActiveLine("Wydarzenia użytkownika"));
             Expand(wydarzenia, listingcode[1]);
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine(pracownik_pracownik));
+            if(Static)
+                Contents.Add(new StaticLine(""));
+            else
+                Contents.Add(new ActiveLine(pracownik_pracownik));
             Contents.Add(new ActiveLine("Wyślij wiadomość"));
             Contents.Add(new ActiveLine("Odebrane wiadomości"));
             Contents.Add(new ActiveLine("Wysłane wiadomości"));
@@ -191,7 +198,12 @@ namespace MWS.Pages
             }
             else if (line.Index == Contents.Count - 7)
             {
-                // TO DO
+                Wiadomosc receiver = new Wiadomosc
+                {
+
+                    idodbiorcy = user.logowanie.id
+                };
+                DisplayAdapter.Display(new PanelSkrzynkaWyslij(logowanie, null, receiver));
             }
             else if (line.Index == Contents.Count - 6)
             {
@@ -212,7 +224,7 @@ namespace MWS.Pages
                     {
                         Wiadomosc.Send("ZMIANA STATUSU ZATRUDNIENIA",
                             "Nadawca wiadomości nie jest już twoim menadżerem." +
-                            "\nWiadomość wygenerowana automatycznie.",
+                            "\n(Wiadomość wygenerowana automatycznie)",
                             logowanie, user.logowanie);
                         (user as Pracownik).wynagrodzenie = 0;
                         DataAccess.Update(user, user);
@@ -227,7 +239,7 @@ namespace MWS.Pages
                     {
                         Wiadomosc.Send("ZMIANA STATUSU ZATRUDNIENIA",
                             "Nadawca wiadomości nie jest już przez ciebie zatrudniony." +
-                            "\nWiadomość wygenerowana automatycznie.",
+                            "\n(Wiadomość wygenerowana automatycznie)",
                             logowanie, user.logowanie);
                         logowanie.pracownik.wynagrodzenie = 0;
                         DataAccess.Update(logowanie.pracownik, logowanie.pracownik);

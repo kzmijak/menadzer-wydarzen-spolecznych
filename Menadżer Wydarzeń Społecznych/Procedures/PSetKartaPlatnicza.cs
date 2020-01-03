@@ -76,7 +76,7 @@ namespace MWS.Procedures
             dbobject_new.id = dbobject_old.id;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(DbHelper.CnnVal("cnMWS")))
             {
-                connection.Execute("dbo.KartaPlatnicza @id, @wlasciciel, @numer, @wygasniecie, @kbezpiecz, @kontakt", dbobject_new);
+                connection.Execute("dbo.KartaPlatnicza_Update @id, @wlasciciel, @numer, @wygasniecie, @kbezpiecz, @kontakt", dbobject_new);
             }
         }
     }

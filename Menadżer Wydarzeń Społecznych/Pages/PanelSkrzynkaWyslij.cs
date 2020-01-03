@@ -20,7 +20,7 @@ namespace MWS.Pages
             }
             if(replied != null)
             {
-                lines[0] = $"RE: {replied.tytul}";
+                lines[0] = $"{replied.tytul}";
                 this.idodbiorcy = replied.idodbiorcy;
             }
             this.lines = lines;
@@ -73,7 +73,7 @@ namespace MWS.Pages
                 }
                 Wiadomosc wiadomosc = new Wiadomosc
                 {
-                    idadresata = logowanie.id,
+                    idnadawcy = logowanie.id,
                     tytul = title,
                     tresc = content,
                     dzien = DateTime.Now,
