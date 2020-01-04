@@ -72,22 +72,22 @@ namespace MWS.Pages
         }
         private Wiadomosc message;
 
-        public PanelSkrzynkaKontakty(Logowanie logowanie, string expandcode = "0000", Wiadomosc message = null, StaticLine note = null) : base(logowanie)
+        public PanelSkrzynkaKontakty(Logowanie logowanie, string expandcode = "0000", Wiadomosc message = null, StaticLine note = null) : base(logowanie, note)
         {
             this.message = message;
             this.expandcode = expandcode;
             Contents.Add(new StaticLine("KONTAKTY" + ' ' + expandcode));
-            Contents.Add(new ActiveLine("Organizatorzy"));
+            Contents.Add(new ActiveLine("Organizatorzy", "Organizatorzy z którymi zawarłeś kontakt"));
             Expand(organizatorzy, expandcode[0]);
-            Contents.Add(new ActiveLine("Pracownicy"));
+            Contents.Add(new ActiveLine("Pracownicy", "Pracownicy z którymi zawarłeś kontakt"));
             Expand(pracownicy, expandcode[1]);
-            Contents.Add(new ActiveLine("Sponsorzy"));
+            Contents.Add(new ActiveLine("Sponsorzy", "Sponsorzy z którymi zawarłeś kontakt"));
             Expand(sponsorzy, expandcode[2]);
-            Contents.Add(new ActiveLine("Uczestnicy"));
+            Contents.Add(new ActiveLine("Uczestnicy", "Uczestnicy z którymi zawarłeś kontakt"));
             Expand(uczestnicy, expandcode[3]);
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Powrót", "Powrót do panelu Skrzynka Odbiorcza"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)
@@ -138,7 +138,7 @@ namespace MWS.Pages
             }
             else
             {
-                message.adresat = user.logowanie;
+                message.nadawca = user.logowanie;
                 message.godzina = DateTime.Now.TimeOfDay;
                 message.dzien = DateTime.Now;
                 DataAccess.Insert(message);

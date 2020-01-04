@@ -13,7 +13,7 @@ namespace MWS.Pages
         private Wydarzenie wydarzenie = new Wydarzenie();
         private bool isIn = false;
 
-        public PanelWydarzenieInterakcja(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null, string listing = null): base(logowanie)
+        public PanelWydarzenieInterakcja(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null, string listing = null): base(logowanie, note)
         {
             this.wydarzenie = wydarzenie;
 
@@ -29,7 +29,7 @@ namespace MWS.Pages
             Contents.Add(new StaticLine($"Budżet: \t\t{wydarzenie.budzet}PLN"));
             Contents.Add(new StaticLine(""));
             Contents.Add(new StaticLine("CZŁONKOWIE"));
-            Contents.Add(new ActiveLine("Organizatorzy")); 
+            Contents.Add(new ActiveLine("Organizatorzy", "Organizatorzy zarządzający wydarzeniem")); 
 
             if (listing == "organizator")
             {
@@ -38,14 +38,14 @@ namespace MWS.Pages
                     foreach (Pracownik p in wydarzenie.organizatorzy)
                     {
                         objects.Add(p);
-                        Contents.Add(new ActiveLine($" {p.kontakt.imie} {p.kontakt.nazwisko}"));
+                        Contents.Add(new ActiveLine($" {p.kontakt.imie} {p.kontakt.nazwisko}", "Przejdź do panelu wybranego użytkownika"));
                     }
                 }
                 else
                     Contents.Add(new StaticLine(" Organizatorzy są chwilowo niedostępni."));
             }
 
-            Contents.Add(new ActiveLine("Kadra"));
+            Contents.Add(new ActiveLine("Kadra", "Pracownicy podlegający organizatorom wydarzenia i biorący w nim udział"));
 
             if (listing == "pracownik")
             {
@@ -53,7 +53,7 @@ namespace MWS.Pages
                 {
                     foreach (Pracownik p in wydarzenie.pracownicy)
                     {
-                        Contents.Add(new ActiveLine($" {p.stanowisko} {p.kontakt.imie} {p.kontakt.nazwisko}"));
+                        Contents.Add(new ActiveLine($" {p.stanowisko} {p.kontakt.imie} {p.kontakt.nazwisko}", "Przejdź do panelu wybranego użytkownika"));
                         objects.Add(p);
                     }
                 }
@@ -61,7 +61,7 @@ namespace MWS.Pages
                     Contents.Add(new StaticLine(" Informacje o kadrze są obecnie niedostępne."));
             }
 
-            Contents.Add(new ActiveLine("Sponsorzy"));
+            Contents.Add(new ActiveLine("Sponsorzy", "Sponsorzy z potwierdzonymi dotacjami na to wydarzenie"));
 
             if (listing == "sponsor")
             {
@@ -69,7 +69,7 @@ namespace MWS.Pages
                 {
                     foreach (Sponsor p in wydarzenie.sponsorzy)
                     {
-                        Contents.Add(new ActiveLine($" {p.nazwa}"));
+                        Contents.Add(new ActiveLine($" {p.nazwa}", "Przejdź do panelu wybranego sponsora"));
                         objects.Add(p);
                     }
                 }
@@ -77,7 +77,7 @@ namespace MWS.Pages
                     Contents.Add(new StaticLine(" Informacje o sponsorach nie są obecnie dostępne."));
             }
 
-            Contents.Add(new ActiveLine("Uczestnicy"));
+            Contents.Add(new ActiveLine("Uczestnicy", "Uczestnicy posiadający bilety na to wydarzenie"));
 
             if (listing == "uczestnik")
             {
@@ -85,7 +85,7 @@ namespace MWS.Pages
                 {
                     foreach (Uczestnik p in wydarzenie.uczestnicy)
                     {
-                        Contents.Add(new ActiveLine($" {p.kontakt.imie} {p.kontakt.nazwisko}"));
+                        Contents.Add(new ActiveLine($" {p.kontakt.imie} {p.kontakt.nazwisko}", "Przejdź do panelu wybranego użytkownika"));
                         objects.Add(p);
                     }
                 }
@@ -95,7 +95,7 @@ namespace MWS.Pages
 
             Contents.Add(new StaticLine(""));
             if (logowanie.owner is Sponsor)
-                Contents.Add(new ActiveLine("Wyślij dotację"));
+                Contents.Add(new ActiveLine("Wyślij dotację", "Dotacja musi zostać potwierdzona przez głównego organizatora"));
             else
             {
                 foreach(var ob in wydarzenie.czlonkowie)
@@ -104,19 +104,18 @@ namespace MWS.Pages
                     {
                         if(ob.id == logowanie.owner.id)
                         {
-                            Contents.Add(new ActiveLine("Szczegóły członkostwa"));
+                            Contents.Add(new ActiveLine("Szczegóły członkostwa", "Panel interakcji z wydarzeniem"));
                             isIn = true;
                         }
                     }
                 }
                 if(!isIn)
-                    Contents.Add(new ActiveLine("Dołącz"));
+                    Contents.Add(new ActiveLine("Dołącz", "Kup bilet na wydarzenie\nMusisz mieć dodaną kartę kredytową"));
             }
-            Contents.Add(new ActiveLine("Powrót"));
-            if (note!=null)
-            {
-                Contents.Add(note);
-            }
+            Contents.Add(new ActiveLine("Powrót", "Powrót do listy wydarzeń"));
+            
+            Contents.Add(Note);
+            
         }
 
         public override void React(_Line line)

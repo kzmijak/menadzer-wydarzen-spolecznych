@@ -38,7 +38,7 @@ namespace MWS.Pages
         private string action;
         decimal salary = 0;
 
-        public PanelSkrzynkaKontakt(Logowanie logowanie, _CoreObject user, string listingcode = "00", StaticLine note = null, decimal salary = 0) : base(logowanie)
+        public PanelSkrzynkaKontakt(Logowanie logowanie, _CoreObject user, string listingcode = "00", StaticLine note = null, decimal salary = 0) : base(logowanie, note)
         {
             if(salary != 0)
             {
@@ -98,22 +98,22 @@ namespace MWS.Pages
             }
 
             Contents.Add(new StaticLine(staticline));
-            Contents.Add(new ActiveLine("O użytkowniku"));
+            Contents.Add(new ActiveLine("O użytkowniku", "Szczegółowe informacje o wybranym użytkowniku"));
             Expand(contact, listingcode[0]);
-            Contents.Add(new ActiveLine("Wydarzenia użytkownika"));
+            Contents.Add(new ActiveLine("Wydarzenia użytkownika", "Wydarzenia w których bierze udział wybrany użytkownik"));
             Expand(wydarzenia, listingcode[1]);
             Contents.Add(new StaticLine(""));
             if(Static)
                 Contents.Add(new StaticLine(""));
             else
-                Contents.Add(new ActiveLine(pracownik_pracownik));
-            Contents.Add(new ActiveLine("Wyślij wiadomość"));
-            Contents.Add(new ActiveLine("Odebrane wiadomości"));
-            Contents.Add(new ActiveLine("Wysłane wiadomości"));
+                Contents.Add(new ActiveLine(pracownik_pracownik, "Interakcja dostępna jedynie między organizatorem a pracownikiem"));
+            Contents.Add(new ActiveLine("Wyślij wiadomość", "Wyślij wiadomość do wybranego użytkownika"));
+            Contents.Add(new ActiveLine("Odebrane wiadomości", "Wiadomości odebrane od wybranego użytkownika"));
+            Contents.Add(new ActiveLine("Wysłane wiadomości", "Wiadomości wysłane do wybranego użytkwnika"));
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Usuń z kontaktów"));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Usuń z kontaktów", "Usuń wybranego użytkownika z kontaktów\n(UWAGA: Jeśli jesteś z tym użytkownikiem w relacji organizator-pracownik, zostanie ona przerwana)"));
+            Contents.Add(new ActiveLine("Powrót", "Powrót do panelu Skrzynka Odbiorcza"));
+            Contents.Add(Note);
 
         }
 
@@ -151,6 +151,7 @@ namespace MWS.Pages
                         };
                         Wiadomosc.Send("NOWA OFERTA PRACY",
                             $"Nadawca wiadomości oferuje pracę o wynagrodzeniu {salarytmp}PLN." +
+                            $"\nZaakceptować?" +
                             $"\n(Wiadomość wygenerowana automatycznie)",
                             logowanie, user.logowanie, addition);
 

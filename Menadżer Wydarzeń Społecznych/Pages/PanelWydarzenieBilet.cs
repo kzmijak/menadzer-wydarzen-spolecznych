@@ -11,7 +11,7 @@ namespace MWS.Pages
         Wydarzenie wydarzenie;
         Bilet bilet;
 
-        public PanelWydarzenieBilet(Logowanie logowanie, Wydarzenie wydarzenie, Bilet bilet = null, StaticLine note = null) : base(logowanie)
+        public PanelWydarzenieBilet(Logowanie logowanie, Wydarzenie wydarzenie, Bilet bilet = null, StaticLine note = null) : base(logowanie, note)
         {
             if (bilet is null)
                 bilet = new Bilet();
@@ -43,14 +43,14 @@ namespace MWS.Pages
             }
             
             Contents.Add(new StaticLine("INFORMACJE O BILECIE"));
-            Contents.Add(new ActiveLine("Nazwa: " + bilet.nazwa));
-            Contents.Add(new ActiveLine("Cena:  " + bilet.cena + "PLN"));
-            Contents.Add(new ActiveLine("Opis:  " + bilet.opis));
+            Contents.Add(new ActiveLine("Nazwa: " + bilet.nazwa, "Nazwa reprezentacyjna biletu"));
+            Contents.Add(new ActiveLine("Cena:  " + bilet.cena + "PLN", "Kwota za jaką będzie można zakupić bilet"));
+            Contents.Add(new ActiveLine("Opis:  " + bilet.opis, "Opis zawierający przywileje biletu"));
             Contents.Add(new StaticLine(""));
             if(logowanie.owner.IsOrganizer() || logowanie.owner is Uczestnik)
-                Contents.Add(new ActiveLine(BuyOrDelete));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+                Contents.Add(new ActiveLine(BuyOrDelete, "Interakcja z wybranym biletem"));
+            Contents.Add(new ActiveLine("Powrót", "Powrót do poprzedniego panelu"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)
@@ -91,7 +91,7 @@ namespace MWS.Pages
                     DataAccess.Insert<Platnosc>(new Platnosc
                     {
                         idkarty = logowanie.uczestnik.kontakt.kartaPlatnicza.id,
-                        idnadawcy = logowanie.uczestnik.id,
+                        idwydarzenia = logowanie.uczestnik.id,
                         kwota = bilet.cena,
                         dzien = DateTime.Now,
                         godzina = DateTime.Now.TimeOfDay
@@ -104,7 +104,7 @@ namespace MWS.Pages
                     DataAccess.Insert<Platnosc>(new Platnosc
                     {
                         idkarty = logowanie.uczestnik.kontakt.kartaPlatnicza.id,
-                        idnadawcy = logowanie.uczestnik.id,
+                        idwydarzenia = logowanie.uczestnik.id,
                         kwota = 0 - bilet.cena,
                         dzien = DateTime.Now,
                         godzina = DateTime.Now.TimeOfDay

@@ -13,7 +13,7 @@ namespace MWS.dbo
         public string tytul { get; set; }
         public string tresc { get; set; }
 
-        public Logowanie adresat
+        public Logowanie nadawca
         {
             get
             {
@@ -21,10 +21,10 @@ namespace MWS.dbo
             }
             set
             {
-                if (adresat is null)
+                if (nadawca is null)
                     DataAccess.Insert(value);
                 else
-                    DataAccess.Update(adresat, value);
+                    DataAccess.Update(nadawca, value);
             }
         }
         public Logowanie odbiorca

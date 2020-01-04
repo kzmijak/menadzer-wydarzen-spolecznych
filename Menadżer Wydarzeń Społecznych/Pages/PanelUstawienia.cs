@@ -8,14 +8,15 @@ namespace MWS.Pages
 {
     class PanelUstawienia : _Panel
     {
-        public PanelUstawienia(Logowanie logowanie, StaticLine note = null): base(logowanie)
+        public PanelUstawienia(Logowanie logowanie, StaticLine note = null): base(logowanie, note)
         {
             Contents.Add(new StaticLine("USTAWIENIA"));
-            Contents.Add(new ActiveLine("Edytuj opcje logowania"));
+            Contents.Add(new ActiveLine("Edytuj opcje logowania", "Edytuj dane, których używasz do logowania"));
             if(!(logowanie.owner is Sponsor))
-                Contents.Add(new ActiveLine("Edytuj formularz kontaktowy"));
-            Contents.Add(new ActiveLine("Usuń konto"));
-            Contents.Add(new ActiveLine("Powrót"));
+                Contents.Add(new ActiveLine("Edytuj formularz kontaktowy", "Edytuj kontaktowy i dodaj kartę płatniczą (tylko dla uczestników)"));
+            Contents.Add(new ActiveLine("Usuń konto", "Usuń konto i wszelkie powiązane z tobą informacje"));
+            Contents.Add(new ActiveLine("Powrót", "Powrót do panelu użytkownika"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

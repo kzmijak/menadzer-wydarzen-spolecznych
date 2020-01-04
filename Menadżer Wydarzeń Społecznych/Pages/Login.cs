@@ -9,15 +9,15 @@ namespace MWS.Pages
 {
     class Login : _Page
     {
-        public Login(StaticLine note = null): base()
+        public Login(StaticLine note = null): base(note)
         {
             this.Contents.Add(new StaticLine("MENDAŻER WYDARZEŃ SPOŁECZNYCH"));
             this.Contents.Add(new StaticLine("Logowanie użytkownika"));
-            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako pracownik"));
-            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako sponsor"));
-            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako uczestnik"));
+            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako pracownik", "Logowanie użytkownika o roli pracownika lub organizatora."));
+            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako sponsor",   "Logowanie użytkownika o roli sponsora"));
+            this.Contents.Add(new ActiveLine("Zaloguj lub zarejestruj jako uczestnik", "Logowanie użytkownika o roli uczestnika"));
             
-            this.Contents.Add(note);
+            this.Contents.Add(Note);
         }
 
         

@@ -10,27 +10,28 @@ namespace MWS.Pages
     {
         private bool organizatorCheck = false;
         private int notedependent = 1;
-        public PanelWydarzenia(Logowanie logowanie, StaticLine note = null): base(logowanie)
+        public PanelWydarzenia(Logowanie logowanie, StaticLine note = null): base(logowanie, note)
         {
             Contents.Add(new StaticLine("WYDARZENIA"));
             if (logowanie.owner is Pracownik)
                 if (logowanie.pracownik.stanowisko.ToLower() == "organizator")
                 {
-                    Contents.Add(new ActiveLine("Zorganizuj wydarzenie"));
+                    Contents.Add(new ActiveLine("Zorganizuj wydarzenie", "Zorganizuj nowe wydarzenie. Opcja dostępna jedynie dla organizatorów"));
                     this.organizatorCheck = true;
                 }
             Contents.Add(new StaticLine("Aktywne wydarzenia:"));
             foreach (_DatabaseObject wydarzenie in DataAccess.GetCollection<Wydarzenie>())
             {
-                Contents.Add(new ActiveLine((wydarzenie as Wydarzenie).nazwa));
+                Contents.Add(new ActiveLine((wydarzenie as Wydarzenie).nazwa, "Przejdź do panelu wybranego wydarzenia"));
             }
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Powrót"));
+            Contents.Add(new ActiveLine("Powrót", "Powrót do panelu użytkownika"));
             if (note != null)
             {
-                Contents.Add(note);
+                Contents.Add(Note);
                 notedependent++;
             }
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

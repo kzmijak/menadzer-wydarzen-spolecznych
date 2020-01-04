@@ -12,19 +12,19 @@ namespace MWS.Pages
         public ActiveLine login { get; set; }
         public ActiveLine password { get; set; }
 
-        public LoginLogowanie(_CoreObject caller, StaticLine note = null) : base()
+        public LoginLogowanie(_CoreObject caller, StaticLine note = null) : base(note)
         {
             this.caller = caller;
 
-            Contents.Add(new StaticLine("LOGOWANIE PRACOWNIKA"));
-            login = new ActiveLine("Login: ");
-            password = new ActiveLine("Haslo: ");
+            Contents.Add(new StaticLine("LOGOWANIE UŻYTKOWNIKA"));
+            login = new ActiveLine("Login: ", "Unikatowa nazwa użytkownika podawana podczas rejestracji");
+            password = new ActiveLine("Haslo: ", "Osobiste hasło użytkownika podawane podczas rejestracji");
             Contents.Add(login);
             Contents.Add(password);
-            Contents.Add(new ActiveLine("Zaloguj"));
-            Contents.Add(new ActiveLine("Zarejestruj"));
-            Contents.Add(new ActiveLine("Powrot"));
-            this.Contents.Add(note);
+            Contents.Add(new ActiveLine("Zaloguj", "Wypełnij wszystkie pola informacjami podanymi podczas rejestracji"));
+            Contents.Add(new ActiveLine("Zarejestruj", "Dokonaj rejestracji aby uzyskać pełny dostęp do aplikacji"));
+            Contents.Add(new ActiveLine("Powrot", "Powrót do panelu wyboru profilu"));
+            this.Contents.Add(Note);
         }
 
         public override void React(_Line line)

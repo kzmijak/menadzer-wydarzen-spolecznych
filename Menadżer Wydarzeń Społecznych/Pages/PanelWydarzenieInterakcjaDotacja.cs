@@ -10,7 +10,7 @@ namespace MWS.Pages
     {
         private Wydarzenie wydarzenie;
         private Dotacja dotacja;
-        public PanelWydarzenieInterakcjaDotacja(Logowanie logowanie, Wydarzenie wydarzenie, Dotacja dotacja = null, StaticLine note = null) : base(logowanie)
+        public PanelWydarzenieInterakcjaDotacja(Logowanie logowanie, Wydarzenie wydarzenie, Dotacja dotacja = null, StaticLine note = null) : base(logowanie, note)
         {
             this.wydarzenie = wydarzenie;
 
@@ -26,11 +26,12 @@ namespace MWS.Pages
                 this.dotacja = dotacja;
 
             Contents.Add(new StaticLine("DOTACJA"));
-            Contents.Add(new ActiveLine("Kwota dotacja:\t" + this.dotacja.kwota.ToString() + "PLN"));
-            Contents.Add(new ActiveLine("Oczekiwania:\t" + this.dotacja.oczekiwania));
+            Contents.Add(new ActiveLine("Kwota dotacja:\t" + this.dotacja.kwota.ToString() + "PLN", "Kwota jaka zostanie przekazana na potrzeby organizacji wydarzenia"));
+            Contents.Add(new ActiveLine("Oczekiwania:\t" + this.dotacja.oczekiwania, "Oczekiwania sponsorskie w zamian za otrzymanie dotacji"));
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Wyślij"));
-            Contents.Add(new ActiveLine("Powrót"));
+            Contents.Add(new ActiveLine("Wyślij", "Dotacja przed publikacją musi zostać potwierdzona przez głównego organizatora"));
+            Contents.Add(new ActiveLine("Powrót", "Powróć do panelu interakcji z wydarzeniem"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

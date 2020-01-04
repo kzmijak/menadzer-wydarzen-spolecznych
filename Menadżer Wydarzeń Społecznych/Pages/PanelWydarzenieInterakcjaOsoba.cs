@@ -55,7 +55,7 @@ namespace MWS.Pages
         }
         
 
-        public PanelWydarzenieInterakcjaOsoba(Logowanie logowanie, Wydarzenie selectedEvent, _CoreObject selectedUser, string listingcode = "00", StaticLine note = null) : base(logowanie)
+        public PanelWydarzenieInterakcjaOsoba(Logowanie logowanie, Wydarzenie selectedEvent, _CoreObject selectedUser, string listingcode = "00", StaticLine note = null) : base(logowanie, note)
         {
             this.selectedEvent = selectedEvent;
             this.selectedUser = selectedUser;
@@ -74,14 +74,14 @@ namespace MWS.Pages
 
             constructorLinesCount = Constructor(selectedUser);
             
-            Contents.Add(new ActiveLine("Inne wydarzenia"));
+            Contents.Add(new ActiveLine("Inne wydarzenia", "Inne wydarzenia w których bierze udział użytkownik"));
             Expand(wydarzenia, listingcode[1]);
-            Contents.Add(new ActiveLine("Zaproś do kontaktów"));
+            Contents.Add(new ActiveLine("Zaproś do kontaktów", "Zaproś użytkownika do kontaktów"));
             if(isOrganizer == 1)
-                Contents.Add(new ActiveLine("Usuń z wydarzenia"));
+                Contents.Add(new ActiveLine("Usuń z wydarzenia", "Usuń użytkownika z wydarzenia. Dostępne tylko dla organizatorów"));
             Contents.Add(new StaticLine(""));                       
-            Contents.Add(new ActiveLine("Powrót"));                 
-            Contents.Add(note);                                     
+            Contents.Add(new ActiveLine("Powrót", "Powrót do panelu interakcji z wydarzeniem"));                 
+            Contents.Add(Note);                                     
         }                                                           
 
         public override void React(_Line line)
@@ -152,13 +152,14 @@ namespace MWS.Pages
             {
                 ReactPracownik(line.Index);
             }
+            Contents.Add(Note);
         }
 
         private int ConstructorOrganizator()
         {
             Contents.Add(new StaticLine((selectedUser as Pracownik).kontakt.imie.ToUpper() + " " + (selectedUser as Pracownik).kontakt.nazwisko.ToUpper()));
             Contents.Add(new StaticLine("Telefon: " + (selectedUser as Pracownik).kontakt.telefon));
-            Contents.Add(new ActiveLine("Pracownicy"));
+            Contents.Add(new ActiveLine("Pracownicy", "Pracownicy biorący udział w wydarzeniu"));
             return 3 + Expand(pracownicy, listingcode[0]);
         }
         private void ReactOrganizator(int index)
@@ -177,7 +178,7 @@ namespace MWS.Pages
         {
             Contents.Add(new StaticLine((selectedUser as Pracownik).stanowisko.ToUpper() + " " + (selectedUser as Pracownik).kontakt.imie.ToUpper() + " " + (selectedUser as Pracownik).kontakt.nazwisko.ToUpper()));
             Contents.Add(new StaticLine("Telefon: " + (selectedUser as Pracownik).kontakt.telefon));
-            Contents.Add(new ActiveLine("Koordynator: " + (selectedUser as Pracownik).kadra[0].kontakt.imie + " " + (selectedUser as Pracownik).kadra[0].kontakt.nazwisko));
+            Contents.Add(new ActiveLine("Koordynator: " + (selectedUser as Pracownik).kadra[0].kontakt.imie + " " + (selectedUser as Pracownik).kadra[0].kontakt.nazwisko, "Przejdź do panelu twojego pracodawcy"));
             return ContactForm() + 3;
         }
         private void ReactPracownik(int index)
@@ -191,7 +192,7 @@ namespace MWS.Pages
         private int ConstructorSponsor()
         {
             Contents.Add(new StaticLine((selectedUser as Sponsor).nazwa.ToUpper()));
-            Contents.Add(new ActiveLine("Dotacje sponsorskie"));
+            Contents.Add(new ActiveLine("Dotacje sponsorskie", "Potwierdzone przez głównego organizatora dotacje"));
             return Expand(dotacje, listingcode[0]) + 2;
         }
         private void ReactSponsor(int index)
@@ -262,7 +263,7 @@ namespace MWS.Pages
                         if(obj is Wydarzenie)
                         {
                             if(check == '1' && display)
-                                Contents.Add(new ActiveLine(" " + (obj as Wydarzenie).nazwa));
+                                Contents.Add(new ActiveLine(" " + (obj as Wydarzenie).nazwa, "Szczegóły wybranego wydarzenia"));
                             cnt++;
                         }
                         if(obj is Dotacja)
@@ -274,7 +275,7 @@ namespace MWS.Pages
                         if(obj is Pracownik)
                         {
                             if (check == '1' && display)
-                                Contents.Add(new ActiveLine(" " + (obj as Dotacja).kwota + ": " + (obj as Dotacja).oczekiwania));
+                                Contents.Add(new ActiveLine(" " + (obj as Dotacja).kwota + ": " + (obj as Dotacja).oczekiwania, "Szczegóły wybranego użytkownika"));
                             cnt++;
                         }
                     }

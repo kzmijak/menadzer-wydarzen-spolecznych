@@ -11,7 +11,7 @@ namespace MWS.Pages
         private Wydarzenie wydarzenie;
         bool listing;
         List<Pracownik> pracownicy = new List<Pracownik>(9999);
-        public PanelWydarzenieInterakcjaCzlonek(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null, bool listing = false) : base(logowanie)
+        public PanelWydarzenieInterakcjaCzlonek(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null, bool listing = false) : base(logowanie, note)
         {
             this.wydarzenie = wydarzenie;
             if(listing && logowanie.uczestnik.bilety.Count != 0)
@@ -35,8 +35,8 @@ namespace MWS.Pages
             }
 
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Powrót", "Powróć do panelu interakcji z wydarzeniem"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)
@@ -65,19 +65,20 @@ namespace MWS.Pages
 
         private void ConstructorOrganizator()
         {
-            Contents.Add(new ActiveLine("Ustawienia wydarzenia"));
-            Contents.Add(new ActiveLine("Bilety"));
-            Contents.Add(new ActiveLine("Moja kadra"));
+            Contents.Add(new ActiveLine("Ustawienia wydarzenia", "Edytuj szczegóły wydarzenia. "));
+            Contents.Add(new ActiveLine("Bilety", "Lista dostępnych biletów na to wydarzenie"));
+            Contents.Add(new ActiveLine("Historia płatności", "Lista płatności za bilety na to wydarzenie"));
+            Contents.Add(new ActiveLine("Moja kadra", "Lista twoich pracowników"));
             if(listing is false)
             {
                 foreach(Pracownik pra in logowanie.pracownik.kadra)
                 {
-                    Contents.Add(new ActiveLine($"{pra.stanowisko} {pra.kontakt.imie} {pra.kontakt.nazwisko}, {pra.wynagrodzenie}"));
+                    Contents.Add(new ActiveLine($"{pra.stanowisko} {pra.kontakt.imie} {pra.kontakt.nazwisko}, {pra.wynagrodzenie}", "Przejdź do panelu interakcji z wybranym pracownikiem"));
                     pracownicy.Add(pra);
                 }
             }
-            Contents.Add(new ActiveLine("Zrezygnuj z wydarzenia"));
-            Contents.Add(new ActiveLine("Odwołaj wydarzenie"));
+            Contents.Add(new ActiveLine("Zrezygnuj z wydarzenia", "Usuń użytkownika z listy organizatorów wydarzenia"));
+            Contents.Add(new ActiveLine("Odwołaj wydarzenie", "Odwołaj wydarzenie i zerwij wszystkie istniejące połączenia"));
         }
         private void ReactOrganizator(int index)
         {
@@ -100,7 +101,11 @@ namespace MWS.Pages
             {
                 DisplayAdapter.Display(new PanelWydarzenieBilety(logowanie, wydarzenie));
             }
-            if(index == 3)
+            if (index == 3)
+            {
+                DisplayAdapter.Display(new PanelWydarzeniePlatnosci(logowanie, wydarzenie));
+            }
+            if (index == 4)
             {
                 if(wydarzenie.pracownicy is null)
                 {
@@ -111,11 +116,11 @@ namespace MWS.Pages
                     DisplayAdapter.Display(new PanelWydarzenieInterakcjaCzlonek(logowanie, wydarzenie, null, true));
                 }
             }
-            if(listing && index > 3 && index < 4 + cnt)
+            if(listing && index > 4 && index < 5 + cnt)
             {
-                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, wydarzenie, pracownicy[index - 4]));
+                DisplayAdapter.Display(new PanelWydarzenieInterakcjaOsoba(logowanie, wydarzenie, pracownicy[index - 5]));
             }
-            if(index == 4 + cnt)
+            if(index == 5 + cnt)
             {
                 if(wydarzenie.organizatorzy.Count>1 && wydarzenie.organizatorzy[0].id == logowanie.owner.id)
                 {
@@ -124,7 +129,7 @@ namespace MWS.Pages
                 DataAccess.Delete(wydarzenie, logowanie.pracownik);
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie, new StaticLine("Nie jesteś już organizatorem tego wydarzenia.", ConsoleColor.Green)));
             }
-            if(index == 5 + cnt)
+            if(index == 6 + cnt)
             {
                 if (wydarzenie.organizatorzy.Count > 1 && wydarzenie.organizatorzy[0].id == logowanie.owner.id) 
                 foreach(Wydarzenie_Pracownik jt in DataAccess.GetConnections<Wydarzenie_Pracownik>())
@@ -159,7 +164,7 @@ namespace MWS.Pages
 
         private void ConstructorPracownik()
         {
-            Contents.Add(new ActiveLine("Zrezygnuj z wydarzenia"));
+            Contents.Add(new ActiveLine("Zrezygnuj z wydarzenia", "Zrezygnuj z bieżącego wydarzenia (twój pracodawca zostanie poinformowany)"));
         }
         private void ReactPracownik(int index)
         {
@@ -179,8 +184,8 @@ namespace MWS.Pages
             if (logowanie.uczestnik.bilety.Count == 0)
                 msg = " (niedostępne)";
 
-            Contents.Add(new ActiveLine("Kup bilet"));
-            Contents.Add(new ActiveLine("Moje bilety" + msg));
+            Contents.Add(new ActiveLine("Kup bilet", "Przejdź do panelu dostępnych biletów na to wydarzenie"));
+            Contents.Add(new ActiveLine("Moje bilety" + msg, "Przejdź do panelu posiadanych przez użytkownika biletów na to wydarznie"));
             if(listing)
             {
                 foreach(var bilet in logowanie.uczestnik.bilety)

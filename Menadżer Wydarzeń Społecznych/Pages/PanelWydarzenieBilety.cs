@@ -10,7 +10,7 @@ namespace MWS.Pages
     {
         Wydarzenie wydarzenie;
 
-        public PanelWydarzenieBilety(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null) : base(logowanie)
+        public PanelWydarzenieBilety(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null) : base(logowanie, note)
         {
 
             this.wydarzenie = wydarzenie;
@@ -21,16 +21,16 @@ namespace MWS.Pages
             }
             foreach(Bilet bilet in wydarzenie.bilety)
             {
-                Contents.Add(new ActiveLine(bilet.nazwa + ", " + bilet.cena));
+                Contents.Add(new ActiveLine(bilet.nazwa + ", " + bilet.cena, "Przejdź szczegółów wybranego biletu"));
             }
             Contents.Add(new StaticLine(""));
 
             if (logowanie.owner.IsOrganizer(wydarzenie))
             {
-                Contents.Add(new ActiveLine("Nowy bilet"));
+                Contents.Add(new ActiveLine("Nowy bilet", "Wydaj nowy bilet"));
             }
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Powrót", "Powrót do panelu wydarzenia"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

@@ -11,7 +11,7 @@ namespace MWS.Pages
         _CoreObject Core = null;
         Kontakt Update = new Kontakt();
 
-        public PanelUstawieniaKontakt(Logowanie logowanie, StaticLine note = null, Kontakt update = null, _CoreObject core = null): base(logowanie)
+        public PanelUstawieniaKontakt(Logowanie logowanie, StaticLine note = null, Kontakt update = null, _CoreObject core = null): base(logowanie, note)
         {
             if (update == null)
                 Update = logowanie.owner.kontakt;
@@ -24,31 +24,29 @@ namespace MWS.Pages
 
             Contents.Add(new StaticLine("FORMULARZ KONTAKTOWY - EDYCJA"));
             Contents.Add(new StaticLine("Dane kontaktowe"));
-            Contents.Add(new ActiveLine("Imię: \t\t" + Update.imie));            
-            Contents.Add(new ActiveLine("Nazwisko: \t" + Update.nazwisko));      
-            Contents.Add(new ActiveLine("Telefon: \t" + Update.telefon));        
-            Contents.Add(new ActiveLine("Email: \t\t" + Update.email));              
-            Contents.Add(new ActiveLine("Miejscowość: \t" + Update.miejscowosc));    
-            Contents.Add(new ActiveLine("Numer domu: \t" + Update.nrdomu));          
-            Contents.Add(new ActiveLine("Miasto: \t" + Update.miasto));              
-            Contents.Add(new ActiveLine("Kod pocztowy: \t" + Update.poczta));              
-            Contents.Add(new ActiveLine("Ulica: \t\t" + Update.ulica));
+            Contents.Add(new ActiveLine("Imię: \t\t" + Update.imie, "Pierwsze imię użytkownika (do 16 znaków)"));            
+            Contents.Add(new ActiveLine("Nazwisko: \t" + Update.nazwisko, "Nazwisko użytkownika (do 16 znaków)"));      
+            Contents.Add(new ActiveLine("Telefon: \t" + Update.telefon, "Telefon kontaktowy (do 16 znaków)"));        
+            Contents.Add(new ActiveLine("Email: \t\t" + Update.email, "Adres poczty e-mail (do 32 znaków)"));              
+            Contents.Add(new ActiveLine("Miejscowość: \t" + Update.miejscowosc, "Aktualna miejscowość zameldowania użytkownika (do 16 znaków)"));    
+            Contents.Add(new ActiveLine("Numer domu: \t" + Update.nrdomu, "Aktualny numer domu użytkownika (do 8 znaków)"));          
+            Contents.Add(new ActiveLine("Miasto: \t" + Update.miasto, "Miasto w którym urzęduje poczta (do 32 znaków)"));              
+            Contents.Add(new ActiveLine("Kod pocztowy: \t" + Update.poczta, "Kod pocztowy użytkownika w formacie XX-YYY (do 6 znaków)"));              
+            Contents.Add(new ActiveLine("Ulica: \t\t" + Update.ulica, "Aktualna ulica zameldowania użytkownika (do 16 znaków)"));
             if(logowanie.owner is Pracownik)
             {
-                Contents.Add(new ActiveLine("Stanowisko: \t" + (Core as Pracownik).stanowisko));
+                Contents.Add(new ActiveLine("Stanowisko: \t" + (Core as Pracownik).stanowisko, "Stanowisko, na którym użytkownik chce podjąć pracę.\n\"Organizator\" odblokowuje zawartość menadżerską."));
             }
             else if (logowanie.owner is Uczestnik)
             {
-                Contents.Add(new ActiveLine("Karta płatnicza"));
+                Contents.Add(new ActiveLine("Karta płatnicza", "Dodaj lub zmień kartę płatniczą (niezbędne by zakupić bilet na wydarzenie)"));
             }
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Resetuj"));
-            Contents.Add(new ActiveLine("Zapisz"));
-            Contents.Add(new ActiveLine("Powrót"));
+            Contents.Add(new ActiveLine("Resetuj", "Cofnij zmiany do stanu poprzednio zaakceptowanego"));
+            Contents.Add(new ActiveLine("Zapisz", "Zapisz zmiany do bazy danych"));
+            Contents.Add(new ActiveLine("Powrót", "Powróć do panelu ustawień"));
             
-              
-            if (Update != null)
-                Contents.Add(note);
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

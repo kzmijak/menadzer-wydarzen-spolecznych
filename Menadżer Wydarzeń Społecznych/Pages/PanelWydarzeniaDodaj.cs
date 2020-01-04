@@ -13,7 +13,7 @@ namespace MWS.Pages
         private Wydarzenie wydarzenie;
         int updatecaller;
 
-        public PanelWydarzeniaDodaj(Logowanie logowanie, StaticLine note = null, Wydarzenie update = null, int updatecaller = 0): base(logowanie)
+        public PanelWydarzeniaDodaj(Logowanie logowanie, StaticLine note = null, Wydarzenie update = null, int updatecaller = 0): base(logowanie, note)
         {
             if (updatecaller != 0)
             {
@@ -41,21 +41,18 @@ namespace MWS.Pages
             string sgodzina = wydarzenie.godzina.ToString("hh\\:mm");
 
             Contents.Add(new StaticLine("KREATOR WYDARZEŃ"));
-            Contents.Add(new ActiveLine("Nazwa:\t\t" + wydarzenie.nazwa));
-            Contents.Add(new ActiveLine("Opis:\t\t" + wydarzenie.opis));
-            Contents.Add(new ActiveLine("Miejsce:\t" + wydarzenie.miejsce));
-            Contents.Add(new ActiveLine("Dzien:\t\t" + wydarzenie.dzien.ToShortDateString()));
-            Contents.Add(new ActiveLine("Godzina:\t" + sgodzina));
-            Contents.Add(new ActiveLine("Budżet (PLN):\t" + wydarzenie.budzet));
+            Contents.Add(new ActiveLine("Nazwa:\t\t" + wydarzenie.nazwa, "Nazwa wydarzenia (do 64 znaków)"));
+            Contents.Add(new ActiveLine("Opis:\t\t" + wydarzenie.opis, "Opis wydarzenia (do 256 znaków)"));
+            Contents.Add(new ActiveLine("Miejsce:\t" + wydarzenie.miejsce, "Miejsce wydarzenia (do 64 znaków)"));
+            Contents.Add(new ActiveLine("Dzien:\t\t" + wydarzenie.dzien.ToShortDateString(), "Dzień wydarzenia w formacje DD-MM-RRRR"));
+            Contents.Add(new ActiveLine("Godzina:\t" + sgodzina, "Godzina rozpoczęcia wydarzenia w formacie GG:MM"));
+            Contents.Add(new ActiveLine("Budżet (PLN):\t" + wydarzenie.budzet, "Budżet wydarzenia (tylko liczba)"));
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Opublikuj"));
-            Contents.Add(new ActiveLine("Wyczyść pola"));
-            Contents.Add(new ActiveLine("Wróć"));
-
-            if(note != null)
-            {
-                Contents.Add(note);
-            }
+            Contents.Add(new ActiveLine("Opublikuj", "Opublikuj wydarzenie i dodaj do listy bieżących wydarzeń"));
+            Contents.Add(new ActiveLine("Wyczyść pola", "Wykasuj wszystkie dane z pól"));
+            Contents.Add(new ActiveLine("Wróć", "Powrót do listy wydarzeń"));
+            
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

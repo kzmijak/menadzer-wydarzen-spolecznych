@@ -132,5 +132,17 @@ namespace MWS.dbo
                 return output;
             }
         }
+        public List<Platnosc> platnosci
+        {
+            get
+            {
+                var output = new List<Platnosc>(9999);
+                var ddb = DataAccess.GetCollection<Platnosc>();
+                foreach (Platnosc p in ddb)
+                    if (p.idwydarzenia == id)
+                        output.Add(p);
+                return output;
+            }
+        }
     }
 }

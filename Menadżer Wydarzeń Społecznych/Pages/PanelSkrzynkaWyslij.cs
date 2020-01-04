@@ -11,7 +11,7 @@ namespace MWS.Pages
         private List<string> lines;
         private int idodbiorcy;
         private Wiadomosc wiadomosc;
-        public PanelSkrzynkaWyslij(Logowanie logowanie, List<string> lines = null, Wiadomosc replied = null, StaticLine note = null) : base(logowanie)
+        public PanelSkrzynkaWyslij(Logowanie logowanie, List<string> lines = null, Wiadomosc replied = null, StaticLine note = null) : base(logowanie, note)
         {
             wiadomosc = replied;
             if(lines == null)
@@ -26,24 +26,24 @@ namespace MWS.Pages
             this.lines = lines;
 
             Contents.Add(new StaticLine("WYSYŁANIE WIADOMOŚCI"));
-            Contents.Add(new ActiveLine("Tytuł: "+ this.lines[0]));
+            Contents.Add(new ActiveLine("Tytuł: "+ this.lines[0], "Tytuł wiadomości, którą dostanie odbiorca"));
             foreach(string line in lines)
             {
                 if(line == this.lines[0])
                 {
                     continue;
                 }
-                Contents.Add(new ActiveLine("* " + line));
+                Contents.Add(new ActiveLine("* " + line, "Treść wiadomości, którą dostanie odbiorca"));
                 if(line == "")
                 {
                     break;
                 }
             }
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Wyślij"));
-            Contents.Add(new ActiveLine("Wyczyść"));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Wyślij", "Potwierdź wysłanie wiadomości"));
+            Contents.Add(new ActiveLine("Wyczyść", "Resetuj wiadomość"));
+            Contents.Add(new ActiveLine("Powrót", "Powrót do poprzedniego panelu"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

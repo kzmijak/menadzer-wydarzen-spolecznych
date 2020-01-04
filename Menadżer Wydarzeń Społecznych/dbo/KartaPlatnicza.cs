@@ -28,7 +28,7 @@ namespace MWS.dbo
                 var platnosci = DataAccess.GetCollection<Platnosc>();
                 foreach (Platnosc ob in platnosci)
                     if (ob.idkarty == id)
-                        output.Add(DataAccess.GetRecordById<Platnosc>(ob.idnadawcy) as Platnosc);
+                        output.Add(DataAccess.GetRecordById<Platnosc>(ob.idwydarzenia) as Platnosc);
                 return output;
             }
         }

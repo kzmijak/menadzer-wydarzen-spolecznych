@@ -16,7 +16,7 @@ namespace MWS.Pages
         private string Haslo3;
 
 
-        public PanelUstawieniaLogowanie(Logowanie logowanie, StaticLine note=null, Logowanie update=null, _CoreObject core=null, string haslo1 = "", string haslo2 = "", string haslo3 = ""): base(logowanie)
+        public PanelUstawieniaLogowanie(Logowanie logowanie, StaticLine note=null, Logowanie update=null, _CoreObject core=null, string haslo1 = "", string haslo2 = "", string haslo3 = ""): base(logowanie, note)
         {
             if (update != null)
                 Update = update;
@@ -32,24 +32,21 @@ namespace MWS.Pages
             Haslo3 = haslo3;
 
             Contents.Add(new StaticLine("DANE LOGOWANIA - EDYCJA"));
-            Contents.Add(new ActiveLine("Login: \t\t\t" + Update.login));
+            Contents.Add(new ActiveLine("Login: \t\t\t" + Update.login, "Zmień login wykorzystywany do logowania"));
             if (logowanie.owner is Sponsor)
-                Contents.Add(new ActiveLine("Nazwa organizacji: \t" + (Core as Sponsor).nazwa));
+                Contents.Add(new ActiveLine("Nazwa organizacji: \t" + (Core as Sponsor).nazwa, "Nazwa organizacji reprezentowanej przez sponsora"));
             else
                 Contents.Add(new StaticLine(""));
             Contents.Add(new StaticLine("Zmiana hasła:"));
-            Contents.Add(new ActiveLine("Stare hasło (wymagane): " + encode(Haslo1)));
-            Contents.Add(new ActiveLine("Nowe hasło: \t\t" + encode(Haslo2)));
-            Contents.Add(new ActiveLine("Potwierdź hasło: \t" + encode(Haslo3)));
+            Contents.Add(new ActiveLine("Obecne hasło (wymagane): " + encode(Haslo1), "Hasło obecnie wykorzystywane do logowania"));
+            Contents.Add(new ActiveLine("Nowe hasło: \t\t" + encode(Haslo2), "Nowe hasło, które zastąpi obecne hasło do logowania"));
+            Contents.Add(new ActiveLine("Potwierdź hasło: \t" + encode(Haslo3), "Potwierdź nowe hasło"));
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Resetuj"));
-            Contents.Add(new ActiveLine("Zapisz"));
-            Contents.Add(new ActiveLine("Powrót"));
+            Contents.Add(new ActiveLine("Resetuj", "Cofnij zmiany do stanu poprzednio zatwierdzonego"));
+            Contents.Add(new ActiveLine("Zapisz", "Wypełnij wszystkie pola by zapisać zmiany"));
+            Contents.Add(new ActiveLine("Powrót", "Powróć do panelu ustawień"));
             
-            if (note != null)
-            {
-                Contents.Add(note);
-            }
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

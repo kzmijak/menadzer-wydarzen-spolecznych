@@ -11,7 +11,7 @@ namespace MWS.Pages
         private string message;
         private decimal donation;
         private Wydarzenie wydarzenie;
-        public PanelWydarzenieInterakcjaAplikacja(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null, string message = null, decimal donation = 0) : base(logowanie)
+        public PanelWydarzenieInterakcjaAplikacja(Logowanie logowanie, Wydarzenie wydarzenie, StaticLine note = null, string message = null, decimal donation = 0) : base(logowanie, note)
         {
             if (message is null)
                 this.message = $"(Wiadomość do głównego organizatora - {wydarzenie.organizatorzy[0].kontakt.imie} {wydarzenie.organizatorzy[0].kontakt.imie})";
@@ -25,13 +25,13 @@ namespace MWS.Pages
             Contents.Add(new StaticLine("APLIKACJA DO WYDARZENIA"));
             Contents.Add(new StaticLine($"Wydarzenie: \"{wydarzenie.nazwa}\""));
             Contents.Add(new StaticLine($"Kandydat: {logowanie.pracownik.kontakt.imie} {logowanie.pracownik.kontakt.nazwisko}"));
-            Contents.Add(new ActiveLine(this.message));
-            Contents.Add(new ActiveLine("Dotacja: " + donation.ToString() + "PLN"));
+            Contents.Add(new ActiveLine(this.message, "Wiadomość do organizatora"));
+            Contents.Add(new ActiveLine("Dotacja: " + donation.ToString() + "PLN", "Dotacja dla wydarzenia. Pole może być puste."));
             Contents.Add(new StaticLine($"{wydarzenie.miejsce}, dnia {DateTime.Now}"));
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Wyślij"));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Wyślij", "Wyślij aplikację do głównego organizatora"));
+            Contents.Add(new ActiveLine("Powrót", "Powrót do wydarzenia"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

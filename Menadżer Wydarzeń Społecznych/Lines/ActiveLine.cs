@@ -7,10 +7,12 @@ namespace MWS.Lines
     class ActiveLine: _Line
     {
         public bool Selected { get; set; }
+        public string Description { get; set; }
 
-        public ActiveLine(string Content, ConsoleColor color = ConsoleColor.White)
+        public ActiveLine(string Content, string Description = "", ConsoleColor color = ConsoleColor.White)
         {
             this.Content = Content;
+            this.Description = Description;
             this.Index = LastIndex;
             this.Selected = false;
             this.Color = color;

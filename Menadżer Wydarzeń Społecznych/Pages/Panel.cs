@@ -9,7 +9,7 @@ namespace MWS.Pages
     class Panel : _Panel
     {
 
-        public Panel (Logowanie logowanie, StaticLine note = null): base(logowanie)
+        public Panel (Logowanie logowanie, StaticLine note = null): base(logowanie, note)
         {
             if(logowanie.owner is Pracownik && logowanie.pracownik.stanowisko == "Organizator")
                 Contents.Add(new StaticLine("PANEL ORGANIZATORA"));
@@ -21,10 +21,12 @@ namespace MWS.Pages
                 Contents.Add(new StaticLine("PANEL UCZESTNIKA"));
 
 
-            Contents.Add(new ActiveLine("Moje wydarzenia"));
-            Contents.Add(new ActiveLine("Skrzynka odbiorcza"));
-            Contents.Add(new ActiveLine("Ustawienia konta"));
-            Contents.Add(new ActiveLine("Wyloguj"));
+            Contents.Add(new ActiveLine("Moje wydarzenia", "Lista dostępnych wydarzeń"));
+            Contents.Add(new ActiveLine("Skrzynka odbiorcza", "Wysyłanie wiadomości, historia wiadomości, lista kontaktów"));
+            Contents.Add(new ActiveLine("Ustawienia konta", "Edytuj formularz kontaktowy, dodaj kartę płatniczą (tylko dla uczestników)"));
+            Contents.Add(new ActiveLine("Wyloguj", "Wyloguj użytkownika"));
+
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

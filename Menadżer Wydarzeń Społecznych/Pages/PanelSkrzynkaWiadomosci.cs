@@ -10,7 +10,7 @@ namespace MWS.Pages
     {
         private List<Wiadomosc> messages = new List<Wiadomosc>(9999);
         private string mode;
-        public PanelSkrzynkaWiadomosci(Logowanie logowanie, string mode, Logowanie selectedUser = null, StaticLine note = null) : base(logowanie)
+        public PanelSkrzynkaWiadomosci(Logowanie logowanie, string mode, Logowanie selectedUser = null, StaticLine note = null) : base(logowanie, note)
         {
             this.mode = mode;
             Contents.Add(new StaticLine(mode + " WIADOMOŚCI"));
@@ -20,14 +20,14 @@ namespace MWS.Pages
                 {
                     if (selectedUser != null && (wiadomosc.idnadawcy == selectedUser.id || wiadomosc.idodbiorcy == selectedUser.id))
                         continue;
-                    Contents.Add(new ActiveLine($"({wiadomosc.dzien.ToShortDateString()} {wiadomosc.godzina.ToString("hh\\:mm")}) {wiadomosc.tytul}"));
+                    Contents.Add(new ActiveLine($"({wiadomosc.dzien.ToShortDateString()} {wiadomosc.godzina.ToString("hh\\:mm")}) {wiadomosc.tytul}", "Tytuł wiadomości"));
                     messages.Add(wiadomosc);
                 }
             }
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Usuń wszystkie"));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Usuń wszystkie", "Usuń wszystkie wiadomości znajdujące się w skrzynce"));
+            Contents.Add(new ActiveLine("Powrót", "Powrót do skrzynki odbiorczej"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

@@ -9,7 +9,7 @@ namespace MWS.Pages
     class PanelUstawieniaKontaktKarta : _Panel
     {
         private KartaPlatnicza karta = new KartaPlatnicza();
-        public PanelUstawieniaKontaktKarta(Logowanie logowanie, KartaPlatnicza update, StaticLine note = null) : base(logowanie)
+        public PanelUstawieniaKontaktKarta(Logowanie logowanie, KartaPlatnicza update, StaticLine note = null) : base(logowanie, note)
         {
             string saveOrUpdate = "Aktualizuj";
             if(logowanie.owner.kontakt.kartaPlatnicza is null)
@@ -21,15 +21,15 @@ namespace MWS.Pages
             if (update != null)
                 karta = update;
             Contents.Add(new StaticLine("KARTA PŁATNICZA "));
-            Contents.Add(new ActiveLine("Właściciel: " + '\t' + '\t' + karta.wlasciciel));
-            Contents.Add(new ActiveLine("Numer karty: " + '\t' + '\t' + karta.numer));
-            Contents.Add(new ActiveLine("Rok wygaśnięcia: " + '\t' + karta.wygasniecie));
-            Contents.Add(new ActiveLine("Kod bezpieczeństwa: " + '\t' + karta.kbezpiecz));
+            Contents.Add(new ActiveLine("Właściciel: " + '\t' + '\t' + karta.wlasciciel, "Właściciel podany na karcie płatniczej"));
+            Contents.Add(new ActiveLine("Numer karty: " + '\t' + '\t' + karta.numer, "16-znakowy numer karty płatniczej"));
+            Contents.Add(new ActiveLine("Rok wygaśnięcia: " + '\t' + karta.wygasniecie, "Rok wygaśnięcia karty płatniczej"));
+            Contents.Add(new ActiveLine("Kod bezpieczeństwa: " + '\t' + karta.kbezpiecz, "Kod bezpieczeństwa podany na odwrocie karty płatniczej"));
             Contents.Add(new StaticLine(""));
-            Contents.Add(new ActiveLine("Resetuj"));
+            Contents.Add(new ActiveLine("Resetuj", "Cofa zmiany do stanu poprzednio zatwierdzonego"));
             Contents.Add(new ActiveLine(saveOrUpdate));
-            Contents.Add(new ActiveLine("Powrót"));
-            Contents.Add(note);
+            Contents.Add(new ActiveLine("Powrót", "Powrót do panelu ustawień kontaktu"));
+            Contents.Add(Note);
         }
 
         public override void React(_Line line)

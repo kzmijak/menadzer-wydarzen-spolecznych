@@ -26,7 +26,7 @@ namespace MWS
                     if (CurrentPage.Contents[CurrentPage.Contents.Count - 1] is ActiveLine)
                     {
                         CurrentLine = CurrentPage.Contents[CurrentPage.Contents.Count - 1];
-                        (CurrentLine as ActiveLine).Toggle();
+                        (CurrentLine as ActiveLine).Toggle();                       
                         Refresh(CurrentPage);
                         break;
                     }
@@ -59,6 +59,7 @@ namespace MWS
 
         public static void Display(_Page Page, _Line cl = null)
         {
+            
             CurrentPage = Page;
             CurrentLine = cl;
             Refresh(Page);
@@ -94,18 +95,26 @@ namespace MWS
                 {
                     (Line as ActiveLine).Toggle();
                     CurrentLine = Line;
+                    
                 }
-                if(Line != null)
+
+                if (CurrentLine != null && Page.Contents[Page.Contents.Count - 1].Content != (CurrentLine as ActiveLine).Description && CurrentPage.Note.Content == "")
+                {
+                    Page.Contents[Page.Contents.Count - 1] = new StaticLine((CurrentLine as ActiveLine).Description, ConsoleColor.Blue);
+                    Refresh(Page);
+                    break;
+                }
+
+                if (Line != null)
                 {
                     Console.BackgroundColor = Line.Background;
                     Console.ForegroundColor = Line.Color;
                     Console.WriteLine(Line.Text());
 
                 }
-                
-
                 Console.ResetColor();
             }
+            
         }
 
         public static void Trigger()

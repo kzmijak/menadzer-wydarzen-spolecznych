@@ -32,7 +32,7 @@ namespace MWS.Pages
 
         LoginRejestracja() { }
 
-        public LoginRejestracja(_CoreObject caller, StaticLine note = null, LoginRejestracja update = null): base()
+        public LoginRejestracja(_CoreObject caller, StaticLine note = null, LoginRejestracja update = null): base(note)
         {
             if(update is null)
                 update = new LoginRejestracja();
@@ -60,36 +60,36 @@ namespace MWS.Pages
 
             Contents.Add(new StaticLine("REJESTRACJA UŻYTKOWNIKA"));             
             Contents.Add(new StaticLine("Dane logowania"));                      
-            Contents.Add(new ActiveLine("Login: \t\t" + login));                
-            Contents.Add(new ActiveLine("Hasło: \t\t" + encode(haslo)));        
-            Contents.Add(new ActiveLine("Powtórz hasło: \t" + encode(haslo2))); 
+            Contents.Add(new ActiveLine("Login: \t\t" + login, "Unikatowa nazwa użytkownika używana podczas logowania"));
+            Contents.Add(new ActiveLine("Hasło: \t\t" + encode(haslo), "Osobiste hasło użytkownika"));        
+            Contents.Add(new ActiveLine("Powtórz hasło: \t" + encode(haslo2), "Powtórz hasło")); 
 
             if(!(caller is Sponsor))
             {
                 Contents.Add(new StaticLine("Dane kontaktowe"));                
-                Contents.Add(new ActiveLine("Imię: \t\t" + imie));              
-                Contents.Add(new ActiveLine("Nazwisko: \t" + nazwisko));        
-                Contents.Add(new ActiveLine("Telefon: \t" + telefon));          
-                Contents.Add(new ActiveLine("Email: \t\t" + email));            
-                Contents.Add(new ActiveLine("Miejscowość: \t" + miejscowosc));  
-                Contents.Add(new ActiveLine("Numer domu: \t" + nrdomu));        
-                Contents.Add(new ActiveLine("Miasto: \t" + miasto));            
-                Contents.Add(new ActiveLine("Kod pocztowy: \t" + poczta));      
-                Contents.Add(new ActiveLine("Ulica: \t\t" + ulica));            
+                Contents.Add(new ActiveLine("Imię: \t\t" + imie, "Pierwsze imię użytkownika (do 16 znaków)"));              
+                Contents.Add(new ActiveLine("Nazwisko: \t" + nazwisko, "Nazwisko użytkownika (do 16 znaków)"));        
+                Contents.Add(new ActiveLine("Telefon: \t" + telefon, "Telefon kontaktowy (do 16 znaków)"));          
+                Contents.Add(new ActiveLine("Email: \t\t" + email, "Adres poczty e-mail (do 32 znaków)"));            
+                Contents.Add(new ActiveLine("Miejscowość: \t" + miejscowosc, "Aktualna miejscowość zameldowania użytkownika (do 16 znaków)"));  
+                Contents.Add(new ActiveLine("Numer domu: \t" + nrdomu, "Aktualny numer domu użytkownika (do 8 znaków)"));        
+                Contents.Add(new ActiveLine("Poczta: \t" + miasto, "Miasto w którym urzęduje poczta (do 32 znaków)")); 
+                Contents.Add(new ActiveLine("Kod pocztowy: \t" + poczta, "Kod pocztowy użytkownika w formacie XX-YYY (do 6 znaków)"));      
+                Contents.Add(new ActiveLine("Ulica: \t\t" + ulica, "Aktualna ulica zameldowania użytkownika (do 16 znaków)"));            
             }
             if(caller is Pracownik)
             {
-                Contents.Add(new ActiveLine("Stanowisko: \t" + update.stanowisko));    
+                Contents.Add(new ActiveLine("Stanowisko: \t" + update.stanowisko, "Stanowisko, na którym użytkownik chce podjąć pracę.\n\"Organizator\" odblokowuje zawartość menadżerską."));    
             }
             if(caller is Sponsor)
             {
-                Contents.Add(new ActiveLine("Nazwa organizacji: \t" + update.nazwa));  
+                Contents.Add(new ActiveLine("Nazwa organizacji: \t" + update.nazwa, "Nazwa organizacji reprezentowanej przez konto sponsorskie"));  
             }
             Contents.Add(new StaticLine(""));                                 
-            Contents.Add(new ActiveLine("Zarejestruj"));                      
-            Contents.Add(new ActiveLine("Cofnij zmiany"));                    
-            Contents.Add(new ActiveLine("Anuluj"));                           
-            this.Contents.Add(note);
+            Contents.Add(new ActiveLine("Zarejestruj", "By dokończyć rejestrację wszystkie pola muszą być wypełnione"));                      
+            Contents.Add(new ActiveLine("Cofnij zmiany", "Resetuje wszystkie pola"));                    
+            Contents.Add(new ActiveLine("Anuluj", "Powrót do panelu logowania wybranego profilu"));                           
+            this.Contents.Add(Note);
         }
         
         public override void React(_Line line)
