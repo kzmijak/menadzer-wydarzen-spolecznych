@@ -13,7 +13,14 @@ namespace MWS
 
         static void Main(string[] args)
         {
-            Display(new Login());   
+            if(DbHelper.CheckConnection())
+            {
+                Display(new Login());   
+            }
+            else
+            {
+                Display(new DBConfig(new StaticLine("Przed rozpoczęciem należy utworzyć bazę danych i procedury.", ConsoleColor.Blue)));
+            }
         }
 
         public static void FindNextValidLine(_Line currentline, int direction)

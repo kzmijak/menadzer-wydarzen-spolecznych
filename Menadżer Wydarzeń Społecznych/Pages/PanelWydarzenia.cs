@@ -9,7 +9,6 @@ namespace MWS.Pages
     class PanelWydarzenia : _Panel
     {
         private bool organizatorCheck = false;
-        private int notedependent = 1;
         public PanelWydarzenia(Logowanie logowanie, StaticLine note = null): base(logowanie, note)
         {
             Contents.Add(new StaticLine("WYDARZENIA"));
@@ -26,11 +25,6 @@ namespace MWS.Pages
             }
             Contents.Add(new StaticLine(""));
             Contents.Add(new ActiveLine("Powrót", "Powrót do panelu użytkownika"));
-            if (note != null)
-            {
-                Contents.Add(Note);
-                notedependent++;
-            }
             Contents.Add(Note);
         }
 
@@ -40,7 +34,7 @@ namespace MWS.Pages
             {
                 DisplayAdapter.Display(new PanelWydarzeniaDodaj(logowanie));
             }
-            else if(line.Index == Contents.Count - notedependent )
+            else if(line.Index == Contents.Count - 2)
             {
                 DisplayAdapter.Display(new Panel(logowanie));
             }
@@ -49,7 +43,7 @@ namespace MWS.Pages
                 int organizatordependent = 2;
                 if (organizatorCheck == true)
                     organizatordependent = 3;
-                Wydarzenie wydarzenie = DataAccess.GetCollection<Wydarzenie>()[DisplayAdapter.CurrentLine.Index - organizatordependent] as Wydarzenie;
+                Wydarzenie wydarzenie = DataAccess.GetCollection<Wydarzenie>()[DisplayAdapter.CurrentLine.Index - organizatordependent ] as Wydarzenie;
                 DisplayAdapter.Display(new PanelWydarzenieInterakcja(logowanie, wydarzenie));
             }
         }
