@@ -11,3 +11,6 @@ TRYB ORGANIZATORA
  
 TROUBLESHOOTING
  W przypadku, gdy aplikacja zwraca wyjątek w chwili wykonywania polecenia tworzącego bazę danych, należy ręcznie wykonać skrypt MWS.SQL oraz Procedures.SQL znajdujące się w folderze z plikiem .exe.
+ 
+KOD ŹRÓDŁOWY
+ Kod źródłowy znajduje się pod commitem "Source Code" dostępnym w historii
